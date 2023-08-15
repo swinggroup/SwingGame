@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Rope rope;
     State state;
     LineRenderer ropeLine;
+    Vector2 spinVelocity;
 
     private class Rope
     {
@@ -35,11 +36,18 @@ public class PlayerController : MonoBehaviour
                 return false;
             }
         }
+
+        public Vector2 NormalizedPlayerToAnchor()
+        {
+            Vector2 playerPos = new Vector2(player.transform.position.x, player.transform.position.y);
+            Vector2 vec = (anchorPoint - playerPos).normalized;
+            return vec;
+        }
     }
 
     enum State
     {
-        Grounded, Airborne, Attached, Swinging 
+        Grounded, Airborne, Attached, Swinging, Test
     }
 
     // Start is called before the first frame update
@@ -53,6 +61,11 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+
+    }
+
+    void FixedUpdate()
     {
         switch (state)
         {
@@ -87,7 +100,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
 
-
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -110,6 +122,24 @@ public class PlayerController : MonoBehaviour
         // if rope is taut, go into swinging
         if (rope.IsTaut())
         {
+            Debug.Log("gravity off");
+            rb.gravityScale = 0;
+            spinVelocity = rb.velocity;
+
+            // set initial velocity to be tangent to circle
+            Vector2 vec1 = new(-spinVelocity.x, -spinVelocity.y); // inverse of initial velocity
+            Vector2 vec2 = rope.NormalizedPlayerToAnchor(); // rope vector
+            float rotation = Vector2.SignedAngle(vec1, vec2);
+            if (rotation > 0)
+            {
+                rotation += 90;
+            } else
+            {
+                rotation -= 90;
+            }
+            vec1 = Quaternion.Euler(0, 0, rotation) * vec1;
+            rb.velocity = vec1;
+
             state = State.Swinging;
         }
     }
@@ -117,12 +147,18 @@ public class PlayerController : MonoBehaviour
     void HandleSwinging()
     {
         UpdateRope();
+        
+        double forceMagnitude = rb.mass * Vector2.SqrMagnitude(spinVelocity) / rope.length;
+        Vector2 force = rope.NormalizedPlayerToAnchor();
+        force = new Vector2(force.x * (float) forceMagnitude, force.y * (float) forceMagnitude);
+        Debug.Log(force.magnitude);
+        rb.AddForce(force, ForceMode2D.Force);
     }
 
     private void UpdateRope()
     {
-        Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        List<Vector3> pos = new List<Vector3>();
+        Vector2 ourPos = new(this.transform.position.x, this.transform.position.y);
+        List<Vector3> pos = new();
         pos.Add(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y));
         pos.Add(new Vector3(ourPos.x, ourPos.y));
         ropeLine.startWidth = 0.2f;
