@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     State state;
     LineRenderer ropeLine;
     Vector2 spinVelocity;
+    const float gravity = 3;
+    bool canSwing = true;
 
     private class Rope
     {
@@ -57,15 +59,11 @@ public class PlayerController : MonoBehaviour
         ropeLine.enabled = false;
         rb = this.GetComponent<Rigidbody2D>();        
         rope = new(this.gameObject, this.rb);
+        rb.gravityScale = gravity;
     }
 
     // Update is called once per frame
     void Update()
-    {
-
-    }
-
-    void FixedUpdate()
     {
         switch (state)
         {
@@ -76,13 +74,37 @@ public class PlayerController : MonoBehaviour
                 HandleAirborne();
                 break;
             case State.Attached:
-                HandleAttached();
                 break;
             case State.Swinging:
                 HandleSwinging();
+                UpdateRopeRender();
                 break;
             default:
                 break;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        
+        switch (state)
+        {
+            case State.Grounded:
+                break; 
+            case State.Airborne:
+                break;
+            case State.Attached:
+                HandleAttachedPhysics();
+                break;
+            case State.Swinging:
+                HandleSwingingPhysics();
+                break;
+            default:
+                break;
+        }
+        if (rb.velocity.magnitude > 20f)
+        {
+            rb.velocity = rb.velocity.normalized * 20f;
         }
     }
 
@@ -93,32 +115,51 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, 1000));
             state = State.Airborne;
-        } 
-    }
-
-    void HandleAirborne()
-    {
-        Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            rope.anchorPoint = new Vector2(mousePos.x, mousePos.y);
-            Debug.Log("anchor point: " + rope.anchorPoint);
-            Debug.Log("our pos: " + ourPos);
-            rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
-            Debug.Log("rope length: " + rope.length);
-
-            state = State.Attached;
-
-            // Draw line from player to anchor
-            ropeLine.enabled = true;
         }
     }
 
-    void HandleAttached()
+    IEnumerator DelaySwing()
     {
-        UpdateRope();
+        yield return new WaitForSeconds(1);
+        canSwing = true;
+    }
+  
+    void HandleAirborne()
+    {
+        rb.gravityScale = gravity;
+        Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
+
+        if (Input.GetMouseButtonDown(0) && canSwing)
+        {
+            canSwing = false;
+            Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D hit = Physics2D.OverlapPoint(mouse_position);
+
+            if (hit && hit.CompareTag("Hookable"))
+            {
+                Debug.Log("Hit: " + hit.transform.name);
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                rope.anchorPoint = new Vector2(mousePos.x, mousePos.y);
+                Debug.Log("anchor point: " + rope.anchorPoint);
+                Debug.Log("our pos: " + ourPos);
+                rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
+                Debug.Log("rope length: " + rope.length);
+
+                state = State.Attached;
+
+                // Draw line from player to anchor
+                ropeLine.enabled = true;
+            }
+            else
+            {
+                StartCoroutine(DelaySwing());
+            }
+        }
+    }
+
+    void HandleAttachedPhysics()
+    {
+        UpdateRopeRender();
         // if rope is taut, go into swinging
         if (rope.IsTaut())
         {
@@ -146,16 +187,28 @@ public class PlayerController : MonoBehaviour
 
     void HandleSwinging()
     {
-        UpdateRope();
-        
-        double forceMagnitude = rb.mass * Vector2.SqrMagnitude(spinVelocity) / rope.length;
+        if (Input.GetMouseButtonUp(0))
+        {
+            StartCoroutine(DelaySwing());
+            state = State.Airborne;
+            rb.gravityScale = gravity;
+        }
+    }
+
+    void HandleSwingingPhysics()
+    {
+        if (rb.velocity.magnitude * 1.035f < 20f)
+        {
+            rb.velocity *= 1.035f;
+        }
+        double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
         force = new Vector2(force.x * (float) forceMagnitude, force.y * (float) forceMagnitude);
-        Debug.Log(force.magnitude);
+        // Debug.Log(force.magnitude);
         rb.AddForce(force, ForceMode2D.Force);
     }
 
-    private void UpdateRope()
+    private void UpdateRopeRender()
     {
         Vector2 ourPos = new(this.transform.position.x, this.transform.position.y);
         List<Vector3> pos = new();
@@ -169,7 +222,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        StartCoroutine(DelaySwing());
+        Debug.Log("state: " + state);
+        rb.gravityScale = gravity;
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
         state = State.Grounded;        
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        state = State.Airborne;
+    }
 }
