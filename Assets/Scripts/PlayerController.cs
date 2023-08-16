@@ -13,6 +13,13 @@ public class PlayerController : MonoBehaviour
     const float gravity = 3;
     bool canSwing = true;
 
+    private class RevolutionData
+    {
+        public static float threshold;
+        public static int positionRelativeToThreshold;
+        public static int positionSwitchCount;
+    }
+
     private class Rope
     {
         public double length;
@@ -120,7 +127,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DelaySwing()
     {
-        yield return new WaitForSeconds(1);
+        this.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.7f);
+        this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
     }
   
@@ -145,6 +154,10 @@ public class PlayerController : MonoBehaviour
                 rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
                 Debug.Log("rope length: " + rope.length);
 
+                if (rb.velocity.magnitude < 5f)
+                {
+                    rb.velocity = rb.velocity.normalized * 5f;
+                }
                 state = State.Attached;
 
                 // Draw line from player to anchor
@@ -181,14 +194,63 @@ public class PlayerController : MonoBehaviour
             vec1 = Quaternion.Euler(0, 0, rotation) * vec1;
             rb.velocity = vec1;
 
+            // record initial y pos and reset flag / flag switches
+            RevolutionData.threshold = this.transform.position.y;
+            RevolutionData.positionRelativeToThreshold = 0;
+            RevolutionData.positionSwitchCount = 0;
+
             state = State.Swinging;
+        }
+    }
+
+    private void RevolutionCheck()
+    {
+        // revolution check: if we cross the threshold twice, we completed
+        // a full revolution
+        if (this.transform.position.y > RevolutionData.threshold)
+        {
+            if (RevolutionData.positionRelativeToThreshold >= 0)
+            {
+                RevolutionData.positionRelativeToThreshold = 1;
+            } else // crossThreshold is -1
+            {
+                RevolutionData.positionRelativeToThreshold = 1;
+                RevolutionData.positionSwitchCount++;
+            }
+        } else // position is less than threshold
+        {
+            if (RevolutionData.positionRelativeToThreshold <= 0)
+            {
+                RevolutionData.positionRelativeToThreshold = -1;
+            } else // position is 1
+            {
+                RevolutionData.positionRelativeToThreshold = -1;
+                RevolutionData.positionSwitchCount++;
+            }
         }
     }
 
     void HandleSwinging()
     {
+        // set player's rotation
+        Vector2 ropeVec = rope.NormalizedPlayerToAnchor();
+        float zRotation = Vector2.SignedAngle(Vector2.up, ropeVec);
+        this.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+
+        RevolutionCheck();
+
+        if (RevolutionData.positionSwitchCount == 2) // we crossed the y threshold twice, so stop swinging
+        {
+            ropeLine.enabled = false;
+            StartCoroutine(DelaySwing());
+            state = State.Airborne;
+            rb.gravityScale = gravity;
+            return;
+        }
+        
         if (Input.GetMouseButtonUp(0))
         {
+            ropeLine.enabled = false;
             StartCoroutine(DelaySwing());
             state = State.Airborne;
             rb.gravityScale = gravity;
@@ -204,13 +266,28 @@ public class PlayerController : MonoBehaviour
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
         force = new Vector2(force.x * (float) forceMagnitude, force.y * (float) forceMagnitude);
-        // Debug.Log(force.magnitude);
         rb.AddForce(force, ForceMode2D.Force);
+    }
+
+    private Vector2 GetHandPosition()
+    {
+        Quaternion rotation = this.transform.rotation;
+        if (rb.velocity.x > 0)
+        {
+            rotation *= Quaternion.Euler(Vector3.forward * -90);
+        } else
+        {
+            rotation *= Quaternion.Euler(Vector3.forward * 90);
+        }
+        Vector3 direction = Vector3.up;
+        direction = rotation * direction;
+        direction = 0.5f * direction.normalized;
+        return this.transform.position + direction;
     }
 
     private void UpdateRopeRender()
     {
-        Vector2 ourPos = new(this.transform.position.x, this.transform.position.y);
+        Vector2 ourPos = GetHandPosition();
         List<Vector3> pos = new();
         pos.Add(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y));
         pos.Add(new Vector3(ourPos.x, ourPos.y));
@@ -222,6 +299,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        ropeLine.enabled = false;
         StartCoroutine(DelaySwing());
         Debug.Log("state: " + state);
         rb.gravityScale = gravity;
