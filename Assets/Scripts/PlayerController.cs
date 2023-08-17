@@ -1,6 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,7 +17,9 @@ public class PlayerController : MonoBehaviour
     Vector2 spinVelocity;
     const float gravity = 3;
     bool canSwing = true;
-
+    public Tilemap cloudMap;
+    public Tilemap cloudDistanceMap;
+    SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
     private class RevolutionData
     {
         public static float threshold;
@@ -67,11 +74,21 @@ public class PlayerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();        
         rope = new(this.gameObject, this.rb);
         rb.gravityScale = gravity;
+        CloudDistanceList = new();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
+        {
+            foreach (var pair in CloudDistanceList[CloudDistanceList.Keys.First()])
+            {
+                cloudDistanceMap.SetTile(pair.Item1, pair.Item2);
+            }
+            CloudDistanceList.Remove(CloudDistanceList.Keys.First());
+        }
+
         switch (state)
         {
             case State.Grounded:
@@ -127,11 +144,62 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DelaySwing()
     {
+        List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
+        List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
+
+        // If we hook onto a Cloud
+        if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
+        {
+            Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
+            Debug.Log("cloudPos:" + cloudPos);
+
+            
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+        }
+
+        // If we hook onto a CloudDistance
+        if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
+        {
+            Vector3Int cloudPos = cloudDistanceMap.WorldToCell(rope.anchorPoint);
+            Debug.Log("cloudPos:" + cloudPos);
+
+            
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudDistanceTiles, cloudPos, visited, cloudDistanceMap);
+
+            CloudDistanceList.Add(rope.anchorPoint.y + 30, cloudDistanceTiles);
+        }
+       
+        rope.anchorPoint = new();
+        
         this.GetComponent<SpriteRenderer>().color = Color.red;
         yield return new WaitForSeconds(0.7f);
+        foreach (var pair in cloudTiles)
+        {
+            cloudMap.SetTile(pair.Item1, pair.Item2);
+        }
         this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
     }
+
+    void RemoveCloud(List<Tuple<Vector3Int, TileBase>> cloudTiles, Vector3Int position, HashSet<Tuple<int, int>> visited, Tilemap map)
+    {
+        if (map.GetTile(position) == null || visited.Contains(Tuple.Create(position.x, position.y)))
+        {
+            return;
+        }
+        TileBase cloudTile = map.GetTile(position);
+        cloudTiles.Add(Tuple.Create(position, cloudTile));
+        map.SetTile(position, null);
+        visited.Add(Tuple.Create(position.x, position.y));
+        RemoveCloud(cloudTiles, new Vector3Int(position.x - 1, position.y), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x + 1, position.y), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y - 1), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y + 1), visited, map);
+    }
+
+
   
     void HandleAirborne()
     {
@@ -144,7 +212,7 @@ public class PlayerController : MonoBehaviour
             Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D hit = Physics2D.OverlapPoint(mouse_position);
 
-            if (hit && hit.CompareTag("Hookable"))
+            if (hit && (hit.CompareTag("Hookable") || hit.CompareTag("Cloud") || hit.CompareTag("CloudDistance")) && Vector2.Distance(mouse_position, ourPos) <= 10)
             {
                 Debug.Log("Hit: " + hit.transform.name);
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

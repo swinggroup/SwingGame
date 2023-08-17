@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hookable
+  - Cloud
+  - CloudLongDisappear
+  - CloudDistance
   layers:
   - Default
   - TransparentFX
