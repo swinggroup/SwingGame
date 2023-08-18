@@ -10,6 +10,8 @@ using UnityEngine.WSA;
 public class PlayerController : MonoBehaviour
 {
 
+    public static readonly float GRAPPLE_RANGE = 6;
+
     Rigidbody2D rb;
     Rope rope;
     State state;
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
     enum State
     {
-        Grounded, Airborne, Attached, Swinging, Test
+        Grounded, Airborne, Attached, Swinging
     }
 
     // Start is called before the first frame update
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
                 HandleAirborne();
                 break;
             case State.Attached:
+                HandleAttached();
                 break;
             case State.Swinging:
                 HandleSwinging();
@@ -212,20 +215,12 @@ public class PlayerController : MonoBehaviour
             Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D hit = Physics2D.OverlapPoint(mouse_position);
 
-            if (hit && (hit.CompareTag("Hookable") || hit.CompareTag("Cloud") || hit.CompareTag("CloudDistance")) && Vector2.Distance(mouse_position, ourPos) <= 10)
+            if (hit && (hit.CompareTag("Hookable") || hit.CompareTag("Cloud") || hit.CompareTag("CloudDistance")) && Vector2.Distance(mouse_position, ourPos) <= GRAPPLE_RANGE)
             {
-                Debug.Log("Hit: " + hit.transform.name);
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 rope.anchorPoint = new Vector2(mousePos.x, mousePos.y);
-                Debug.Log("anchor point: " + rope.anchorPoint);
-                Debug.Log("our pos: " + ourPos);
                 rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
-                Debug.Log("rope length: " + rope.length);
 
-                if (rb.velocity.magnitude < 5f)
-                {
-                    rb.velocity = rb.velocity.normalized * 5f;
-                }
                 state = State.Attached;
 
                 // Draw line from player to anchor
@@ -235,6 +230,16 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(DelaySwing());
             }
+        }
+    }
+
+    void HandleAttached()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            ropeLine.enabled = false;
+            StartCoroutine(DelaySwing());
+            state = State.Airborne;
         }
     }
 
@@ -327,6 +332,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleSwingingPhysics()
     {
+        if (rb.velocity.magnitude < 5f)
+        {
+            rb.velocity = rb.velocity.normalized * 5f;
+        }
         if (rb.velocity.magnitude * 1.035f < 20f)
         {
             rb.velocity *= 1.035f;
@@ -368,8 +377,11 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         ropeLine.enabled = false;
-        StartCoroutine(DelaySwing());
-        Debug.Log("state: " + state);
+        if (state == State.Swinging)
+        {
+            StartCoroutine(DelaySwing());
+        }
+        state = State.Airborne;
         rb.gravityScale = gravity;
     }
     private void OnCollisionStay2D(Collision2D collision)
