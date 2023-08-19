@@ -12,17 +12,18 @@ public class PlayerController : MonoBehaviour
 {
 
     public static readonly float GRAPPLE_RANGE = 6;
-
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.7f;
+    public static readonly int MAX_JUMP_FRAMES = 23;
 
-    bool delaying;
+    int jumpFixedFrames;
+    // bool delaying; on hold for now
     Rigidbody2D rb;
     Rope rope;
     State state;
     LineRenderer ropeLine;
     Vector2 spinVelocity;
-    const float gravity = 3;
+    const float gravity = 4f;
     bool canSwing = true;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
@@ -115,8 +116,8 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        //Debug.Log("CanSwing "+canSwing);
-
+        Debug.Log("CanSwing "+canSwing);
+        Debug.Log("State "+ state);
     }
 
     void FixedUpdate()
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour
             case State.Grounded:
                 break; 
             case State.Airborne:
+                HandleAirbornePhysics();
                 break;
             case State.Attached:
                 HandleAttachedPhysics();
@@ -148,76 +150,11 @@ public class PlayerController : MonoBehaviour
         ropeLine.enabled = false;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(new Vector2(0, 1000));
+            jumpFixedFrames = MAX_JUMP_FRAMES;
+            rb.AddForce(new Vector2(0, 500));
             state = State.Airborne;
         }
     }
-
-    IEnumerator DelaySwing(float delay)
-    {
-
-        List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
-        List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
-
-        // If we hook onto a Cloud
-        if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
-        {
-            Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
-            Debug.Log("cloudPos:" + cloudPos);
-
-            
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
-
-        // If we hook onto a CloudDistance
-        if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
-        {
-            Vector3Int cloudPos = cloudDistanceMap.WorldToCell(rope.anchorPoint);
-            Debug.Log("cloudPos:" + cloudPos);
-
-            
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudDistanceTiles, cloudPos, visited, cloudDistanceMap);
-
-            CloudDistanceList.Add(rope.anchorPoint.y + 30, cloudDistanceTiles);
-        }
-       
-        rope.anchorPoint = new();
-        
-        this.GetComponent<SpriteRenderer>().color = Color.red;
-        yield return new WaitForSeconds(delay);
-        foreach (var pair in cloudTiles)
-        {
-            cloudMap.SetTile(pair.Item1, pair.Item2);
-        }
-
-
-
-        this.GetComponent<SpriteRenderer>().color = Color.white;
-        canSwing = true;
-
-        
-
-    }
-
-    void RemoveCloud(List<Tuple<Vector3Int, TileBase>> cloudTiles, Vector3Int position, HashSet<Tuple<int, int>> visited, Tilemap map)
-    {
-        if (map.GetTile(position) == null || visited.Contains(Tuple.Create(position.x, position.y)))
-        {
-            return;
-        }
-        TileBase cloudTile = map.GetTile(position);
-        cloudTiles.Add(Tuple.Create(position, cloudTile));
-        map.SetTile(position, null);
-        visited.Add(Tuple.Create(position.x, position.y));
-        RemoveCloud(cloudTiles, new Vector3Int(position.x - 1, position.y), visited, map);
-        RemoveCloud(cloudTiles, new Vector3Int(position.x + 1, position.y), visited, map);
-        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y - 1), visited, map);
-        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y + 1), visited, map);
-    }
-
-
   
     void HandleAirborne()
     {
@@ -245,6 +182,18 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
+        }
+    }
+    
+    void HandleAirbornePhysics()
+    {
+        if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
+        {
+            rb.AddForce(new Vector2(0, jumpFixedFrames * 2.5f));
+            jumpFixedFrames--;
+        } else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            jumpFixedFrames = 0;
         }
     }
 
@@ -376,6 +325,66 @@ public class PlayerController : MonoBehaviour
         direction = 0.5f * direction.normalized;
         return this.transform.position + direction;
     }
+    IEnumerator DelaySwing(float delay)
+    {
+
+        List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
+        List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
+
+        // If we hook onto a Cloud
+        if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
+        {
+            Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
+            Debug.Log("cloudPos:" + cloudPos);
+
+            
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+        }
+
+        // If we hook onto a CloudDistance
+        if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
+        {
+            Vector3Int cloudPos = cloudDistanceMap.WorldToCell(rope.anchorPoint);
+            Debug.Log("cloudPos:" + cloudPos);
+
+            
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudDistanceTiles, cloudPos, visited, cloudDistanceMap);
+
+            CloudDistanceList.Add(rope.anchorPoint.y + 30, cloudDistanceTiles);
+        }
+       
+        rope.anchorPoint = new();
+        
+        this.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(delay);
+        foreach (var pair in cloudTiles)
+        {
+            cloudMap.SetTile(pair.Item1, pair.Item2);
+        }
+
+        this.GetComponent<SpriteRenderer>().color = Color.white;
+        canSwing = true;
+
+    }
+
+    void RemoveCloud(List<Tuple<Vector3Int, TileBase>> cloudTiles, Vector3Int position, HashSet<Tuple<int, int>> visited, Tilemap map)
+    {
+        if (map.GetTile(position) == null || visited.Contains(Tuple.Create(position.x, position.y)))
+        {
+            return;
+        }
+        TileBase cloudTile = map.GetTile(position);
+        cloudTiles.Add(Tuple.Create(position, cloudTile));
+        map.SetTile(position, null);
+        visited.Add(Tuple.Create(position.x, position.y));
+        RemoveCloud(cloudTiles, new Vector3Int(position.x - 1, position.y), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x + 1, position.y), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y - 1), visited, map);
+        RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y + 1), visited, map);
+    }
+
 
     private void UpdateRopeRender()
     {
@@ -400,10 +409,25 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
         }
+        /*
         else if (state == State.Airborne)
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
         }
+        */
+
+        Debug.Log("this collider: " + collision.collider);
+        Debug.Log("other collider: " + collision.otherCollider);
+
+        Debug.Log("ground contact point: " + collision.contactCount);
+        ContactPoint2D[] points = new ContactPoint2D[10];
+        collision.GetContacts(points);
+        /*
+        foreach (ContactPoint2D point in points)
+        {
+            Debug.Log(point.point);
+        }
+        */
 
         state = State.Airborne;
         rb.gravityScale = gravity;
