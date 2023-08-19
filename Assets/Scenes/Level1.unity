@@ -630,6 +630,7 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: a674dbb37aeee114498480ac07f2c7e1, type: 3}
   cloudMap: {fileID: 1943476992}
   cloudDistanceMap: {fileID: 655991175}
+  wallMap: {fileID: 0}
 --- !u!95 &638207815
 Animator:
   serializedVersion: 5
@@ -15398,7 +15399,7 @@ GameObject:
   - component: {fileID: 936822949}
   m_Layer: 0
   m_Name: WallMap
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

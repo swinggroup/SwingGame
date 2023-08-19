@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     bool canSwing = true;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
+    public Tilemap wallMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
     private class RevolutionData
     {
@@ -120,8 +122,8 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        Debug.Log("CanSwing "+canSwing);
-        Debug.Log("State "+ state);
+        //Debug.Log("CanSwing "+canSwing);
+        //Debug.Log("State "+ state);
     }
 
     void FixedUpdate()
@@ -163,6 +165,7 @@ public class PlayerController : MonoBehaviour
   
     void HandleAirborne()
     {
+
         rb.gravityScale = gravity;
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
 
@@ -411,17 +414,33 @@ public class PlayerController : MonoBehaviour
         if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
+            if (collision.collider.transform.CompareTag("Wall"))
+            {
+                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
+
+            }
         }
         else if (state == State.Attached)
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
+            if (collision.collider.transform.CompareTag("Wall"))
+            {
+                rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
+
+            }
         }
-        /*
         else if (state == State.Airborne)
         {
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            TilemapCollider2D tilemapCollider = (TilemapCollider2D)collision.collider;
+            //tilemapCollider
+            if (collision.collider.transform.CompareTag("Wall"))
+            {
+                rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
+
+            }
+            //StartCoroutine(DelaySwing(DELAY_NORMAL));
         }
-        */
+
 
         Debug.Log("this collider: " + collision.collider);
         Debug.Log("other collider: " + collision.otherCollider);
@@ -429,12 +448,12 @@ public class PlayerController : MonoBehaviour
         Debug.Log("ground contact point: " + collision.contactCount);
         ContactPoint2D[] points = new ContactPoint2D[10];
         collision.GetContacts(points);
-        /*
-        foreach (ContactPoint2D point in points)
+        
+        /*foreach (ContactPoint2D point in points)
         {
             Debug.Log(point.point);
-        }
-        */
+        }*/
+        
 
         state = State.Airborne;
         rb.gravityScale = gravity;
