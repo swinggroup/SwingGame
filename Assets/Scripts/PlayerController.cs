@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -12,6 +13,10 @@ public class PlayerController : MonoBehaviour
 
     public static readonly float GRAPPLE_RANGE = 6;
 
+    public static readonly float DELAY_NORMAL = 0.4f;
+    public static readonly float DELAY_SWING = 0.7f;
+
+    bool delaying;
     Rigidbody2D rb;
     Rope rope;
     State state;
@@ -36,10 +41,10 @@ public class PlayerController : MonoBehaviour
         GameObject player;
         Rigidbody2D rb;
 
-        public Rope(GameObject player, Rigidbody2D rb)
+        public Rope(GameObject player)
         {
             this.player = player;
-            this.rb = rb;
+            this.rb = player.GetComponent<Rigidbody2D>();
         }
 
         public bool IsTaut()
@@ -74,7 +79,7 @@ public class PlayerController : MonoBehaviour
         ropeLine = this.gameObject.AddComponent<LineRenderer>();
         ropeLine.enabled = false;
         rb = this.GetComponent<Rigidbody2D>();        
-        rope = new(this.gameObject, this.rb);
+        rope = new(this.gameObject);
         rb.gravityScale = gravity;
         CloudDistanceList = new();
     }
@@ -109,6 +114,9 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+
+        //Debug.Log("CanSwing "+canSwing);
+
     }
 
     void FixedUpdate()
@@ -145,8 +153,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator DelaySwing()
+    IEnumerator DelaySwing(float delay)
     {
+
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
 
@@ -177,13 +186,19 @@ public class PlayerController : MonoBehaviour
         rope.anchorPoint = new();
         
         this.GetComponent<SpriteRenderer>().color = Color.red;
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(delay);
         foreach (var pair in cloudTiles)
         {
             cloudMap.SetTile(pair.Item1, pair.Item2);
         }
+
+
+
         this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
+
+        
+
     }
 
     void RemoveCloud(List<Tuple<Vector3Int, TileBase>> cloudTiles, Vector3Int position, HashSet<Tuple<int, int>> visited, Tilemap map)
@@ -228,7 +243,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                StartCoroutine(DelaySwing());
+                StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
         }
     }
@@ -238,7 +253,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             ropeLine.enabled = false;
-            StartCoroutine(DelaySwing());
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
         }
     }
@@ -315,7 +330,7 @@ public class PlayerController : MonoBehaviour
         if (RevolutionData.positionSwitchCount == 2) // we crossed the y threshold twice, so stop swinging
         {
             ropeLine.enabled = false;
-            StartCoroutine(DelaySwing());
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
             return;
@@ -324,7 +339,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             ropeLine.enabled = false;
-            StartCoroutine(DelaySwing());
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
         }
@@ -379,8 +394,17 @@ public class PlayerController : MonoBehaviour
         ropeLine.enabled = false;
         if (state == State.Swinging)
         {
-            StartCoroutine(DelaySwing());
+            StartCoroutine(DelaySwing(DELAY_SWING));
         }
+        else if (state == State.Attached)
+        {
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
+        }
+        else if (state == State.Airborne)
+        {
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
+        }
+
         state = State.Airborne;
         rb.gravityScale = gravity;
     }
