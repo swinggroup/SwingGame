@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     public static readonly float DELAY_SWING = 0.7f;
     public static readonly int MAX_JUMP_FRAMES = 23;
 
+    public AudioClip grappleSound;
+    public AudioClip whiffSound;
+    public AudioClip jumpSound;
+
     int jumpFixedFrames;
     // bool delaying; on hold for now
     Rigidbody2D rb;
@@ -150,6 +154,7 @@ public class PlayerController : MonoBehaviour
         ropeLine.enabled = false;
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 500));
             state = State.Airborne;
@@ -169,6 +174,7 @@ public class PlayerController : MonoBehaviour
 
             if (hit && (hit.CompareTag("Hookable") || hit.CompareTag("Cloud") || hit.CompareTag("CloudDistance")) && Vector2.Distance(mouse_position, ourPos) <= GRAPPLE_RANGE)
             {
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 rope.anchorPoint = new Vector2(mousePos.x, mousePos.y);
                 rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
@@ -180,6 +186,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
         }
