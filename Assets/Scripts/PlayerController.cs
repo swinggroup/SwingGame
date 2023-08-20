@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Debug.Log("State: " + state);
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
             foreach (var pair in CloudDistanceList[CloudDistanceList.Keys.First()])
@@ -438,13 +439,26 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
 
             }
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            // TODO: Reevaluate if we want to have no delay for ceiling collision.
+            if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
+            {
+                StartCoroutine(DelaySwing(DELAY_NORMAL));
+            }
+            
         }
         state = State.Airborne;
         rb.gravityScale = gravity;
     }
 
-    private void OnCollisionStay2D(Collision2D collision) { 
+    private void OnCollisionStay2D(Collision2D collision) {
+        Debug.Log("Collision: " + collision.collider.name);
+        Debug.Log("wallCollision: " + wallCollision);
+        Debug.Log("floorCollision: " + floorCollision);
+        foreach (var collisionPoint in collision.contacts)
+        {
+            Debug.Log("point: " +  collisionPoint.point);
+        }
+        Debug.Log("----------------------------------------------");
         if (IsFloorCollision(collision))
         {
             floorCollision = true;
@@ -482,15 +496,15 @@ public class PlayerController : MonoBehaviour
         ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
         collision.GetContacts(points);
         float playerY = this.transform.position.y;
-        
+        int floorCollisionContacts = 0;
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.y >= playerY)
+            if (contactPoint.point.y < playerY)
             {
-                return false;
+                floorCollisionContacts++;
             }
         }
-        return true;
+        return floorCollisionContacts >= 2;
     }
 
 
