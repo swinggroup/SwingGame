@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
         // set player's rotation
         Vector2 ropeVec = rope.NormalizedPlayerToAnchor();
         float zRotation = Vector2.SignedAngle(Vector2.up, ropeVec);
-        this.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+        // this.transform.rotation = Quaternion.Euler(0, 0, zRotation);
 
         RevolutionCheck();
 
@@ -410,14 +410,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(IsWallCollision(collision));
         ropeLine.enabled = false;
         if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
             if (collision.collider.transform.CompareTag("Wall"))
             {
+                Debug.Log("why");
                 rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
-
             }
         }
         else if (state == State.Attached)
@@ -426,7 +427,6 @@ public class PlayerController : MonoBehaviour
             if (collision.collider.transform.CompareTag("Wall"))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
-
             }
         }
         else if (state == State.Airborne)
@@ -438,33 +438,96 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
 
             }
-            //StartCoroutine(DelaySwing(DELAY_NORMAL));
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
         }
-
-
-        Debug.Log("this collider: " + collision.collider);
-        Debug.Log("other collider: " + collision.otherCollider);
-
-        Debug.Log("ground contact point: " + collision.contactCount);
-        ContactPoint2D[] points = new ContactPoint2D[10];
-        collision.GetContacts(points);
-        
-        /*foreach (ContactPoint2D point in points)
-        {
-            Debug.Log(point.point);
-        }*/
-        
-
         state = State.Airborne;
         rb.gravityScale = gravity;
     }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
-        state = State.Grounded;        
+        if (IsFloorCollision(collision) && IsWallCollision(collision).Item1)
+        {
+            Debug.Log("wall cooll");
+            if (IsWallCollision(collision).Item2)
+            {
+                this.transform.position += new Vector3(0.01f, 0, 0);
+            } else
+            {
+                this.transform.position -= new Vector3(0.01f, 0, 0);
+            }
+            state = State.Grounded;
+        } else if (IsFloorCollision(collision))
+        {
+            state = State.Grounded;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         state = State.Airborne;
+    }
+
+    private bool IsFloorCollision(Collision2D collision)
+    {
+        ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(points);
+        float colliderWidth = this.GetComponent<BoxCollider2D>().size.x;
+        float hypotenuse = Mathf.Sqrt(colliderWidth * colliderWidth / 2);
+        foreach (ContactPoint2D contactPoint in points)
+        {
+            if (Vector2.Distance(this.transform.position, contactPoint.point) > hypotenuse * 0.9f)
+            {
+                continue;
+            }
+            float colliderHeight = this.GetComponent<BoxCollider2D>().size.y;
+            float colliderPos = (this.transform.position.y - (colliderHeight / 2.0f));
+            float collisionPos = contactPoint.point.y;
+            if (collisionPos < colliderPos) return true;
+        }
+        return false;
+    }
+
+    // returns: if is wall collision, and if is left side collision
+    private (bool, bool) IsWallCollision(Collision2D collision)
+    {
+        ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(points);
+        float colliderWidth = this.GetComponent<BoxCollider2D>().size.x;
+        float hypotenuse = Mathf.Sqrt(colliderWidth * colliderWidth / 2);
+        foreach (ContactPoint2D contactPoint in points)
+        {
+            if (Vector2.Distance(this.transform.position, contactPoint.point) > hypotenuse * 0.9f)
+            {
+                continue;
+            }
+            float leftColliderPoint = this.transform.position.x - (colliderWidth / 2.0f);
+            float rightColliderPoint = this.transform.position.x + (colliderWidth / 2.0f);
+            float collisionPos = contactPoint.point.x;
+            if (collisionPos < leftColliderPoint) return (true, true);
+            if (collisionPos > rightColliderPoint) return (true, false);
+        }
+        return (false, false);
+}
+
+    private bool IsCeilingCollision(Collision2D collision)
+    {
+        ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(points);
+
+        float colliderWidth = this.GetComponent<BoxCollider2D>().size.x;
+        float hypotenuse = Mathf.Sqrt(colliderWidth * colliderWidth / 2);
+        foreach (ContactPoint2D contactPoint in points)
+        {
+            if (Vector2.Distance(this.transform.position, contactPoint.point) > hypotenuse * 0.9f)
+            {
+                continue;
+            }
+            float colliderHeight = this.GetComponent<BoxCollider2D>().size.y;
+            float colliderPos = (this.transform.position.y + (colliderHeight / 2.0f));
+            float collisionPos = contactPoint.point.y;
+            if (collisionPos > colliderPos) return true;
+        }
+        return false;
     }
 }
