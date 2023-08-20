@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     public Tilemap cloudDistanceMap;
     public Tilemap wallMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
+
+    public (bool,bool) wallCollision = (false,false);
+    public bool floorCollision = false;
     private class RevolutionData
     {
         public static float threshold;
@@ -85,11 +88,18 @@ public class PlayerController : MonoBehaviour
     {
         ropeLine = this.gameObject.AddComponent<LineRenderer>();
         ropeLine.enabled = false;
-        rb = this.GetComponent<Rigidbody2D>();        
+        rb = this.GetComponent<Rigidbody2D>();
         rope = new(this.gameObject);
         rb.gravityScale = gravity;
         CloudDistanceList = new();
     }
+
+    private void LateUpdate()
+    {
+        wallCollision = (false, false);
+        floorCollision = false;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -445,22 +455,31 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (IsFloorCollision(collision) && IsWallCollision(collision).Item1)
+    {  
+        if (IsFloorCollision(collision))
         {
-            Debug.Log("wall cooll");
-            if (IsWallCollision(collision).Item2)
+            floorCollision = true;
+        }
+        if (IsWallCollision(collision).Item1)
+        {
+            wallCollision = IsWallCollision(collision);
+        }
+        if (floorCollision)
+        {
+            if (wallCollision.Item1)
             {
-                this.transform.position += new Vector3(0.01f, 0, 0);
-            } else
-            {
-                this.transform.position -= new Vector3(0.01f, 0, 0);
+                Debug.Log("floor and wall");
+                if (wallCollision.Item2)
+                {
+                    this.transform.position += new Vector3(0.01f, 0, 0);
+                }
+                else
+                {
+                    this.transform.position -= new Vector3(0.01f, 0, 0);
+                }
             }
             state = State.Grounded;
-        } else if (IsFloorCollision(collision))
-        {
-            state = State.Grounded;
-        }
+        } 
     }
 
     private void OnCollisionExit2D(Collision2D collision)
