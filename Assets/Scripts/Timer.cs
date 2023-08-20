@@ -29,6 +29,6 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.SetText(timer.Elapsed.ToString("hh\\:mm\\:ss"));
+        text.SetText(timer.Elapsed.ToString("mm\\:ss\\.ff"));
     }
 }
