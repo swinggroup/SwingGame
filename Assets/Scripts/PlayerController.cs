@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public static readonly float DELAY_SWING = 0.7f;
     public static readonly int MAX_JUMP_FRAMES = 23;
 
+    GameObject swingedObject;
+
     public AudioClip grappleSound;
     public AudioClip whiffSound;
     public AudioClip jumpSound;
@@ -191,6 +193,8 @@ public class PlayerController : MonoBehaviour
                 // Get the hit coordinate
 
                 Vector2 swingPoint = hit.point;
+
+                swingedObject = hit.collider.gameObject;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 rope.anchorPoint = new Vector2(swingPoint.x, swingPoint.y);
