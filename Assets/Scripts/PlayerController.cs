@@ -451,14 +451,6 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionStay2D(Collision2D collision) {
-        Debug.Log("Collision: " + collision.collider.name);
-        Debug.Log("wallCollision: " + wallCollision);
-        Debug.Log("floorCollision: " + floorCollision);
-        foreach (var collisionPoint in collision.contacts)
-        {
-            Debug.Log("point: " +  collisionPoint.point);
-        }
-        Debug.Log("----------------------------------------------");
         if (IsFloorCollision(collision))
         {
             floorCollision = true;
@@ -482,7 +474,15 @@ public class PlayerController : MonoBehaviour
             }
             state = State.Grounded;
         }
-        
+
+        Debug.Log("Collision: " + collision.collider.name);
+        Debug.Log("wallCollision: " + wallCollision);
+        Debug.Log("floorCollision: " + floorCollision);
+        foreach (var collisionPoint in collision.contacts)
+        {
+            Debug.Log("point: " +  collisionPoint.point);
+        }
+        Debug.Log("----------------------------------------------");
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -502,7 +502,7 @@ public class PlayerController : MonoBehaviour
         List<ContactPoint2D> possibleFloorPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.y < playerY - (colliderHeight / 2))
+            if (contactPoint.point.y < playerY - (0.98f * colliderHeight / 2))
             {
                 possibleFloorPoints.Add(contactPoint); 
             }
@@ -540,7 +540,7 @@ public class PlayerController : MonoBehaviour
         List<ContactPoint2D> possibleWallPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.x < playerX - (colliderWidth / 2))
+            if (contactPoint.point.x < playerX - (0.98f * colliderWidth / 2))
             {
                 possibleWallPoints.Add(contactPoint);
             }
@@ -577,7 +577,7 @@ public class PlayerController : MonoBehaviour
         List<ContactPoint2D> possibleWallPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.x > playerX + (colliderWidth / 2))
+            if (contactPoint.point.x > playerX + (0.98f * colliderWidth / 2))
             {
                 possibleWallPoints.Add(contactPoint);
             }
@@ -614,7 +614,7 @@ public class PlayerController : MonoBehaviour
         List<ContactPoint2D> possibleCeilingPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.y > playerY + (colliderHeight / 2))
+            if (contactPoint.point.y > playerY + (0.98f * colliderHeight / 2))
             {
                 possibleCeilingPoints.Add(contactPoint); 
             }
