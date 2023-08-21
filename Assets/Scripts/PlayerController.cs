@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("State: " + state);
+        // //Debug.Log("State: " + state);
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
             foreach (var pair in CloudDistanceList[CloudDistanceList.Keys.First()])
@@ -173,21 +173,27 @@ public class PlayerController : MonoBehaviour
   
     void HandleAirborne()
     {
-
         rb.gravityScale = gravity;
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
 
         if (Input.GetMouseButtonDown(0) && canSwing)
         {
             canSwing = false;
-            Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D hit = Physics2D.OverlapPoint(mouse_position);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            if (hit && (hit.CompareTag("Hookable") || hit.CompareTag("Cloud") || hit.CompareTag("CloudDistance")) && Vector2.Distance(mouse_position, ourPos) <= GRAPPLE_RANGE)
+            // Get the unit vector towards the mouse
+            Vector2 unitVector = (mousePos - ourPos).normalized;
+            // Raycast to first platform hit
+            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, GRAPPLE_RANGE, LayerMask.GetMask("Hookables"));
+
+            if (hit && (hit.collider.CompareTag("Hookable") || hit.collider.CompareTag("Cloud") || hit.collider.CompareTag("CloudDistance")))
             {
+                // Get the hit coordinate
+
+                Vector2 swingPoint = hit.point;
+
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                rope.anchorPoint = new Vector2(mousePos.x, mousePos.y);
+                rope.anchorPoint = new Vector2(swingPoint.x, swingPoint.y);
                 rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
 
                 state = State.Attached;
@@ -444,7 +450,7 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
-            
+
         }
         state = State.Airborne;
         rb.gravityScale = gravity;
@@ -475,14 +481,14 @@ public class PlayerController : MonoBehaviour
             state = State.Grounded;
         }
 
-        Debug.Log("Collision: " + collision.collider.name);
-        Debug.Log("wallCollision: " + wallCollision);
-        Debug.Log("floorCollision: " + floorCollision);
+        //Debug.Log("Collision: " + collision.collider.name);
+        //Debug.Log("wallCollision: " + wallCollision);
+        //Debug.Log("floorCollision: " + floorCollision);
         foreach (var collisionPoint in collision.contacts)
         {
-            Debug.Log("point: " +  collisionPoint.point);
+            //Debug.Log("point: " +  collisionPoint.point);
         }
-        Debug.Log("----------------------------------------------");
+        //Debug.Log("----------------------------------------------");
     }
 
     private void OnCollisionExit2D(Collision2D collision)
