@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
     public (bool,bool) wallCollision = (false,false);
     public bool floorCollision = false;
+
+    public GameObject winScreen;
+
     private class RevolutionData
     {
         public static float threshold;
@@ -500,6 +503,20 @@ public class PlayerController : MonoBehaviour
         state = State.Airborne;
     }
 
+    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("OnTriggerEnter2d called.");
+        Debug.Log("collision tag: " + collision.transform.tag);
+        if (collision.transform.CompareTag("FinishPlatform"))
+        {
+            // Victory screen to pop up
+            winScreen.SetActive(true);
+
+            // A button to move to the next scene
+        }
+    }
 
     private bool IsFloorCollision(Collision2D collision)
     {

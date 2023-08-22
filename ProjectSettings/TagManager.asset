@@ -9,6 +9,7 @@ TagManager:
   - CloudLongDisappear
   - CloudDistance
   - Wall
+  - FinishPlatform
   layers:
   - Default
   - TransparentFX
