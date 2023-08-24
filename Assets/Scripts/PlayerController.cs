@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         rope = new(this.gameObject);
         rb.gravityScale = gravity;
         CloudDistanceList = new();
+        state = State.Airborne;
     }
 
     private void LateUpdate()
@@ -451,7 +452,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Floor Collision: " + IsFloorCollision(collision));
         Debug.Log("canSwing: " + canSwing);
         */
-        ropeLine.enabled = false;
         if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
@@ -465,6 +465,10 @@ public class PlayerController : MonoBehaviour
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
+                return;
+            } else if (IsFloorCollision(collision))
+            {
+                StartCoroutine(DelaySwing(DELAY_SWING));
             }
         }
         else if (state == State.Airborne)
@@ -472,7 +476,7 @@ public class PlayerController : MonoBehaviour
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
-
+                Debug.Log("backward");
             }
             // TODO: Reevaluate if we want to have no delay for ceiling collision.
             if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
@@ -493,6 +497,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+        ropeLine.enabled = false;
         state = State.Airborne;
         rb.gravityScale = gravity;
     }
@@ -506,7 +511,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("-----------------------------------------------------");
 
         }
-        if (state == State.Swinging || state == State.Attached)
+        if (state == State.Swinging)
         {
             state = State.Airborne;
             StartCoroutine(DelaySwing(DELAY_NORMAL));
@@ -547,7 +552,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        state = State.Airborne;
+        switch (state) 
+        {
+            case State.Attached:
+                break;
+            case State.Grounded:
+                state = State.Airborne;
+                break;
+            case State.Airborne:
+                state = State.Airborne;
+                break;
+            case State.Swinging:
+                state = State.Airborne;
+                break;
+            default:
+                Debug.LogError("OnCollisionExit2D broke");
+                break;
+        }
     }
 
     
