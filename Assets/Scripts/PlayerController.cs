@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
     public (bool,bool) wallCollision = (false,false);
     public bool floorCollision = false;
+    public bool delayingSwing = false;
 
     public GameObject winScreen;
 
@@ -109,6 +110,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         // //Debug.Log("State: " + state);
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
@@ -125,12 +127,15 @@ public class PlayerController : MonoBehaviour
                 HandleGrounded();
                 break;
             case State.Airborne:
+                Debug.Log("===================================================");
                 HandleAirborne();
                 break;
             case State.Attached:
+                Debug.Log("===================================================");
                 HandleAttached();
                 break;
             case State.Swinging:
+                Debug.Log("===================================================");
                 HandleSwinging();
                 UpdateRopeRender();
                 break;
@@ -183,6 +188,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && canSwing)
         {
+            Debug.Log("Attempted swing");
             canSwing = false;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -357,6 +363,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator DelaySwing(float delay)
     {
+        delayingSwing = true;
 
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
@@ -394,6 +401,7 @@ public class PlayerController : MonoBehaviour
 
         this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
+        delayingSwing = false;
 
     }
 
@@ -428,6 +436,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
+        Debug.Log("OnCollisionEnter2D state: " + state);
+
+        Debug.Log("Wall Collision: " + IsLeftCollision(collision));
+        Debug.Log("Ceiling Collision: " + IsCeilingCollision(collision));
+        Debug.Log("Floor Collision: " + IsFloorCollision(collision));
+        Debug.Log("canSwing: " + canSwing);
+        */
         ropeLine.enabled = false;
         if (state == State.Swinging)
         {
@@ -439,7 +455,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (state == State.Attached)
         {
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
@@ -455,7 +470,19 @@ public class PlayerController : MonoBehaviour
             // TODO: Reevaluate if we want to have no delay for ceiling collision.
             if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
             {
+                /*
+                Debug.Log("OnCollisionEnter2D IsCeilingCollision: " + IsCeilingCollision(collision));
+                Debug.Log("OnCollisionEnter2D IsFloorCollision: " + IsFloorCollision(collision));
+                */
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
+            }
+            if (IsCeilingCollision(collision) )
+            {
+                jumpFixedFrames = 0;
+                if (delayingSwing == false)
+                {
+                    canSwing = true;
+                }
             }
 
         }
@@ -464,6 +491,11 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionStay2D(Collision2D collision) {
+        if (state == State.Swinging)
+        {
+            state = State.Airborne;
+            StartCoroutine(DelaySwing(DELAY_NORMAL));
+        }
         if (IsFloorCollision(collision))
         {
             floorCollision = true;
