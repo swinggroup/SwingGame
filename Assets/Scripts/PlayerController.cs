@@ -110,7 +110,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            Debug.Log("-----------------------------------------------------");
+            Debug.Log("Player State: " + state);
+            Debug.Log("canSwing: " + canSwing);
+            Debug.Log("-----------------------------------------------------");
+        }
         // //Debug.Log("State: " + state);
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
@@ -127,15 +134,15 @@ public class PlayerController : MonoBehaviour
                 HandleGrounded();
                 break;
             case State.Airborne:
-                Debug.Log("===================================================");
+                //Debug.Log("===================================================");
                 HandleAirborne();
                 break;
             case State.Attached:
-                Debug.Log("===================================================");
+                //Debug.Log("===================================================");
                 HandleAttached();
                 break;
             case State.Swinging:
-                Debug.Log("===================================================");
+                //Debug.Log("===================================================");
                 HandleSwinging();
                 UpdateRopeRender();
                 break;
@@ -491,7 +498,15 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionStay2D(Collision2D collision) {
-        if (state == State.Swinging)
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            Debug.Log("-----------------------------------------------------");
+            Debug.Log("IsFloorCollision: " + IsFloorCollision(collision) );
+            Debug.Log("IsCeilingCollision: " + IsCeilingCollision(collision));
+            Debug.Log("-----------------------------------------------------");
+
+        }
+        if (state == State.Swinging || state == State.Attached)
         {
             state = State.Airborne;
             StartCoroutine(DelaySwing(DELAY_NORMAL));
