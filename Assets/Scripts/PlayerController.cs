@@ -12,7 +12,9 @@ using UnityEngine.WSA;
 public class PlayerController : MonoBehaviour
 {
 
-    public static readonly float GRAPPLE_RANGE = 6;
+    public Animator animator;
+
+    public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.7f;
     public static readonly int MAX_JUMP_FRAMES = 23;
@@ -154,18 +156,31 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+        if(rb.velocity.x>0)
+        {
+            animator.SetBool("right", true);
+            GetComponent<SpriteRenderer>().flipX=false;
+        } else
+        {
+            animator.SetBool("right", false);
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+
         switch (state)
         {
             case State.Grounded:
+                animator.SetBool("jump", false);
                 break; 
             case State.Airborne:
+                animator.SetBool("jump", true);
                 HandleAirbornePhysics();
                 break;
             case State.Attached:
+                animator.SetBool("jump", true);
                 HandleAttachedPhysics();
                 break;
             case State.Swinging:
+                animator.SetBool("jump", true);
                 HandleSwingingPhysics();
                 break;
             default:
