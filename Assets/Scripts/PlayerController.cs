@@ -452,8 +452,8 @@ public class PlayerController : MonoBehaviour
         List<Vector3> pos = new();
         pos.Add(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y));
         pos.Add(new Vector3(ourPos.x, ourPos.y));
-        ropeLine.startWidth = 0.2f;
-        ropeLine.endWidth = 0.2f;
+        ropeLine.startWidth = 0.05f;
+        ropeLine.endWidth = 0.05f;
         ropeLine.SetPositions(pos.ToArray());
         ropeLine.useWorldSpace = true;
     }
