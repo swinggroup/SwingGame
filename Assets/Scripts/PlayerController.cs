@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
-    public static readonly float DELAY_SWING = 0.7f;
+    public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
 
     GameObject swingedObject;
@@ -32,7 +32,8 @@ public class PlayerController : MonoBehaviour
     State state;
     LineRenderer ropeLine;
     Vector2 spinVelocity;
-    const float gravity = 4f;
+    const float gravity = 5.5f;
+    const float terminalVelocity = 22.5f;
     bool canSwing = true;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
@@ -186,9 +187,9 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
-        if (rb.velocity.magnitude > 20f)
+        if (rb.velocity.magnitude > terminalVelocity)
         {
-            rb.velocity = rb.velocity.normalized * 20f;
+            rb.velocity = rb.velocity.normalized * terminalVelocity;
         }
     }
 
@@ -199,7 +200,7 @@ public class PlayerController : MonoBehaviour
         {
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
-            rb.AddForce(new Vector2(0, 500));
+            rb.AddForce(new Vector2(0, 650));
             state = State.Airborne;
         }
     }
@@ -359,7 +360,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * 5f;
         }
-        if (rb.velocity.magnitude * 1.035f < 20f)
+        if (rb.velocity.magnitude * 1.035f < terminalVelocity)
         {
             rb.velocity *= 1.035f;
         }
