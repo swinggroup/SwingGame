@@ -40,7 +40,9 @@ public class PlayerController : MonoBehaviour
     public Tilemap wallMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
-    public (bool,bool) wallCollision = (false,false);
+    public bool leftCollision = false;
+    public bool rightCollision = false;
+    public bool ceilingCollision = false;
     public bool floorCollision = false;
     public bool delayingSwing = false;
 
@@ -106,7 +108,9 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        wallCollision = (false, false);
+        leftCollision = false;
+        rightCollision = false;
+        ceilingCollision = false;
         floorCollision = false;
     }
 
@@ -201,6 +205,7 @@ public class PlayerController : MonoBehaviour
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 650));
+            Debug.Log("jump: go airborne");
             state = State.Airborne;
         }
     }
@@ -503,7 +508,7 @@ public class PlayerController : MonoBehaviour
                 */
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
-            if (IsCeilingCollision(collision) )
+            if (IsCeilingCollision(collision))
             {
                 jumpFixedFrames = 0;
                 if (delayingSwing == false)
@@ -527,10 +532,27 @@ public class PlayerController : MonoBehaviour
             Debug.Log("-----------------------------------------------------");
 
         }
-        if (state == State.Swinging)
+        switch (state)
         {
-            state = State.Airborne;
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            case State.Grounded:
+                break;
+            case State.Airborne:
+                break;
+            case State.Attached:
+                state = State.Airborne;
+                StartCoroutine(DelaySwing(DELAY_NORMAL));
+               break;
+            case State.Swinging:
+                state = State.Airborne;
+                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                break;
+            default:
+                Debug.LogError("broke oncollisionstay");
+                break;
+        }
+        if (IsCeilingCollision(collision))
+        {
+            ceilingCollision = true;
         }
         if (IsFloorCollision(collision))
         {
@@ -538,48 +560,48 @@ public class PlayerController : MonoBehaviour
         }
         if (IsLeftCollision(collision))
         {
-            wallCollision = (true, true);
-        } else if (IsRightCollision(collision))
+            leftCollision = true;
+        } 
+        if (IsRightCollision(collision))
         {
-            wallCollision = (true, false);
+            rightCollision = true;
+        }
+        if (leftCollision && rightCollision)
+        {
+            Debug.Log("left right grounded");
+            state = State.Grounded;
+        } else
+        {
+            state = State.Airborne;
         }
         if (floorCollision)
         {
-            if (wallCollision.Item1 && wallCollision.Item2)
+            if (leftCollision)
             {
                 this.transform.position += new Vector3(0.01f, 0, 0);
             }
-            else if (wallCollision.Item1 && !wallCollision.Item2)
+            else if (rightCollision)
             {
                 this.transform.position -= new Vector3(0.01f, 0, 0);
             }
             state = State.Grounded;
-        }
-
-        //Debug.Log("Collision: " + collision.collider.name);
-        //Debug.Log("wallCollision: " + wallCollision);
-        //Debug.Log("floorCollision: " + floorCollision);
-        foreach (var collisionPoint in collision.contacts)
-        {
-            //Debug.Log("point: " +  collisionPoint.point);
-        }
-        //Debug.Log("----------------------------------------------");
+        } 
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         switch (state) 
         {
-            case State.Attached:
-                break;
             case State.Grounded:
+                Debug.Log("collision exit: airborne");
                 state = State.Airborne;
                 break;
             case State.Airborne:
                 state = State.Airborne;
                 break;
+            case State.Attached:
+                break;
             case State.Swinging:
-                state = State.Airborne;
                 break;
             default:
                 Debug.LogError("OnCollisionExit2D broke");
@@ -602,154 +624,66 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool IsFloorCollision(Collision2D collision)
-    {
-        ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
-        collision.GetContacts(points);
-        float colliderHeight = this.GetComponent<BoxCollider2D>().size.y;
-        float deltaHeight = colliderHeight * 0.025f;
-        float playerY = this.transform.position.y;
-
-        List<ContactPoint2D> possibleFloorPoints = new();
-        foreach (ContactPoint2D contactPoint in points)
-        {
-            if (contactPoint.point.y < playerY - (0.98f * colliderHeight / 2))
-            {
-                possibleFloorPoints.Add(contactPoint); 
-            }
-        }
-
-        if (possibleFloorPoints.Count < 2)
-        {
-            return false;
-        }
-        float maxX = float.NegativeInfinity;
-        float minX = float.PositiveInfinity;
-        foreach (ContactPoint2D point in possibleFloorPoints)
-        {
-            if (point.point.x > maxX)
-            {
-                maxX = point.point.x;
-            } 
-            if (point.point.x < minX)
-            {
-                minX = point.point.x;
-            }
-        }
-        return (maxX - minX > deltaHeight);
-    }
-
-
     private bool IsLeftCollision(Collision2D collision)
     {
         ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
         collision.GetContacts(points);
-        float colliderWidth = this.GetComponent<BoxCollider2D>().size.x;
-        float deltaWidth = colliderWidth * 0.025f;
-        float playerX = this.transform.position.x;
 
-        List<ContactPoint2D> possibleWallPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.x < playerX - (0.98f * colliderWidth / 2))
+            if (Vector2.Dot(contactPoint.normal, Vector2.right) > .707f)
             {
-                possibleWallPoints.Add(contactPoint);
+                return true;
             }
         }
-
-        if (possibleWallPoints.Count < 2)
-        {
-            return false;
-        }
-        float maxY = float.NegativeInfinity;
-        float minY = float.PositiveInfinity;
-        foreach (ContactPoint2D point in possibleWallPoints)
-        {
-            if (point.point.y > maxY)
-            {
-                maxY = point.point.y;
-            }
-            if (point.point.y < minY)
-            {
-                minY = point.point.y;
-            }
-        }
-        return (maxY - minY > deltaWidth);
+        return false;
     }
 
     private bool IsRightCollision(Collision2D collision)
     {
         ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
         collision.GetContacts(points);
-        float colliderWidth = this.GetComponent<BoxCollider2D>().size.x;
-        float deltaWidth = colliderWidth * 0.025f;
-        float playerX = this.transform.position.x;
 
-        List<ContactPoint2D> possibleWallPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.x > playerX + (0.98f * colliderWidth / 2))
+            if (Vector2.Dot(contactPoint.normal, Vector2.left) > .707f)
             {
-                possibleWallPoints.Add(contactPoint);
+                return true;
             }
         }
+        return false;
+    }
 
-        if (possibleWallPoints.Count < 2)
+    private bool IsFloorCollision(Collision2D collision)
+    {
+        ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(points);
+
+        foreach (ContactPoint2D contactPoint in points)
         {
-            return false;
-        }
-        float maxY = float.NegativeInfinity;
-        float minY = float.PositiveInfinity;
-        foreach (ContactPoint2D point in possibleWallPoints)
-        {
-            if (point.point.y > maxY)
+            if (Vector2.Dot(contactPoint.normal, Vector2.up) > .707f)
             {
-                maxY = point.point.y;
-            }
-            if (point.point.y < minY)
-            {
-                minY = point.point.y;
+                return true;
             }
         }
-        return (maxY - minY > deltaWidth);
+        return false;
     }
 
     private bool IsCeilingCollision(Collision2D collision)
     {
         ContactPoint2D[] points = new ContactPoint2D[collision.contactCount];
         collision.GetContacts(points);
-        float colliderHeight = this.GetComponent<BoxCollider2D>().size.y;
-        float deltaHeight = colliderHeight * 0.025f;
-        float playerY = this.transform.position.y;
 
-        List<ContactPoint2D> possibleCeilingPoints = new();
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (contactPoint.point.y > playerY + (0.98f * colliderHeight / 2))
+            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .707f)
             {
-                possibleCeilingPoints.Add(contactPoint); 
+                return true;
             }
         }
-
-        if (possibleCeilingPoints.Count < 2)
-        {
-            return false;
-        }
-        float maxX = float.NegativeInfinity;
-        float minX = float.PositiveInfinity;
-        foreach (ContactPoint2D point in possibleCeilingPoints)
-        {
-            if (point.point.x > maxX)
-            {
-                maxX = point.point.x;
-            } 
-            if (point.point.x < minX)
-            {
-                minX = point.point.x;
-            }
-        }
-        return (maxX - minX > deltaHeight);
+        return false;
     }
+
 }
 
 
