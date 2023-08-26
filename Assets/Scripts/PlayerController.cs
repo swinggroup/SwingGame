@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -47,6 +49,8 @@ public class PlayerController : MonoBehaviour
     public bool delayingSwing = false;
 
     public GameObject winScreen;
+
+    public GameObject screenDebug;
 
     private class RevolutionData
     {
@@ -108,6 +112,18 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
+        // Update debug on screen
+        TextMeshProUGUI debugLogs = screenDebug.GetComponent<TextMeshProUGUI>();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("leftCollision: " + leftCollision + "\n");
+        stringBuilder.Append("rightCollision: " + rightCollision + "\n");
+        stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
+        stringBuilder.Append("floorCollision: " + floorCollision + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
+
+
         leftCollision = false;
         rightCollision = false;
         ceilingCollision = false;
@@ -161,11 +177,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(rb.velocity.x>0)
+        if (rb.velocity.x > 0.1f)
         {
             animator.SetBool("right", true);
-            GetComponent<SpriteRenderer>().flipX=false;
-        } else
+            GetComponent<SpriteRenderer>().flipX = false;
+        } else if (rb.velocity.x < -0.1f)
         {
             animator.SetBool("right", false);
             GetComponent<SpriteRenderer>().flipX = true;
