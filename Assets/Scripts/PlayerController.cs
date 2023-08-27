@@ -13,6 +13,12 @@ using UnityEngine.WSA;
 
 public class PlayerController : MonoBehaviour
 {
+    // Debug vars
+    int updateCount = 0;
+    int collisionEnterCount = 0;
+    int collisionStayCount = 0;
+    int collisionExitCount = 0;
+    // Debug vars^
 
     public Animator animator;
 
@@ -47,6 +53,7 @@ public class PlayerController : MonoBehaviour
     public bool ceilingCollision = false;
     public bool floorCollision = false;
     public bool delayingSwing = false;
+    public bool delayingJumpAnimation = false;
 
     public GameObject winScreen;
 
@@ -118,6 +125,7 @@ public class PlayerController : MonoBehaviour
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
 
         leftCollision = false;
@@ -130,15 +138,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            Debug.Log("-----------------------------------------------------");
-            Debug.Log("Player State: " + state);
-            Debug.Log("canSwing: " + canSwing);
-            Debug.Log("-----------------------------------------------------");
-        }
-        // //Debug.Log("State: " + state);
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
             foreach (var pair in CloudDistanceList[CloudDistanceList.Keys.First()])
@@ -154,15 +153,12 @@ public class PlayerController : MonoBehaviour
                 HandleGrounded();
                 break;
             case State.Airborne:
-                //Debug.Log("===================================================");
                 HandleAirborne();
                 break;
             case State.Attached:
-                //Debug.Log("===================================================");
                 HandleAttached();
                 break;
             case State.Swinging:
-                //Debug.Log("===================================================");
                 HandleSwinging();
                 UpdateRopeRender();
                 break;
@@ -177,11 +173,9 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.x > 0.1f)
         {
-            animator.SetBool("right", true);
             GetComponent<SpriteRenderer>().flipX = false;
         } else if (rb.velocity.x < -0.1f)
         {
-            animator.SetBool("right", false);
             GetComponent<SpriteRenderer>().flipX = true;
         }
 
@@ -191,7 +185,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("jump", false);
                 break; 
             case State.Airborne:
-                animator.SetBool("jump", true);
+                StartCoroutine(DelayJumpAnimation(0.07f));
                 HandleAirbornePhysics();
                 break;
             case State.Attached:
@@ -449,6 +443,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    IEnumerator DelayJumpAnimation(float delay)
+    {
+        if (!delayingJumpAnimation)
+        {
+            delayingJumpAnimation = true;
+            yield return new WaitForSeconds(delay);
+            delayingJumpAnimation = false;
+            if (state == State.Airborne)
+            {
+                Debug.Log("inner if " + Time.time);
+                animator.SetBool("jump", true);
+            }
+        }
+    }
+
     void RemoveCloud(List<Tuple<Vector3Int, TileBase>> cloudTiles, Vector3Int position, HashSet<Tuple<int, int>> visited, Tilemap map)
     {
         if (map.GetTile(position) == null || visited.Contains(Tuple.Create(position.x, position.y)))
@@ -531,6 +540,10 @@ public class PlayerController : MonoBehaviour
                     canSwing = true;
                 }
             }
+            if (IsFloorCollision(collision))
+            {
+                state = State.Grounded;
+            }
 
         }
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionEnter");
@@ -542,6 +555,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
         stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
         stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
         ropeLine.enabled = false;
         state = State.Airborne;
@@ -613,6 +627,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("rightCollision: " + rightCollision + "\n");
         stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
         stringBuilder.Append("floorCollision: " + floorCollision + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
         
     }
@@ -622,7 +637,6 @@ public class PlayerController : MonoBehaviour
         switch (state) 
         {
             case State.Grounded:
-                Debug.Log("collision exit: airborne");
                 state = State.Airborne;
                 break;
             case State.Airborne:
@@ -636,6 +650,17 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("OnCollisionExit2D broke");
                 break;
         }
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionExit");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("OnCollisionExit\n");
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
+        stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
+        stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
+        stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
     }
 
     
