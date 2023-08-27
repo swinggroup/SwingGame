@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject screenDebug;
 
+
     private class RevolutionData
     {
         public static float threshold;
@@ -113,16 +114,11 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         // Update debug on screen
-        TextMeshProUGUI debugLogs = screenDebug.GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x=>x.name=="State");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
-        stringBuilder.Append("leftCollision: " + leftCollision + "\n");
-        stringBuilder.Append("rightCollision: " + rightCollision + "\n");
-        stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
-        stringBuilder.Append("floorCollision: " + floorCollision + "\n");
         debugLogs.SetText(stringBuilder.ToString());
-
 
         leftCollision = false;
         rightCollision = false;
@@ -173,6 +169,8 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+        
+        
     }
 
     void FixedUpdate()
@@ -220,7 +218,8 @@ public class PlayerController : MonoBehaviour
         {
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
-            rb.AddForce(new Vector2(0, 650));
+            rb.AddForce(new Vector2(0, 2600));
+            //rb.AddForce(new Vector2(0, 650));
             Debug.Log("jump: go airborne");
             state = State.Airborne;
         }
@@ -271,7 +270,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
-            rb.AddForce(new Vector2(0, jumpFixedFrames * 2.5f));
+            rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
             jumpFixedFrames--;
         } else if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -534,20 +533,22 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionEnter");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("OnCollisionEnter\n");
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
+        stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
+        stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
+        stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
         ropeLine.enabled = false;
         state = State.Airborne;
         rb.gravityScale = gravity;
     }
 
     private void OnCollisionStay2D(Collision2D collision) {
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            Debug.Log("-----------------------------------------------------");
-            Debug.Log("IsFloorCollision: " + IsFloorCollision(collision) );
-            Debug.Log("IsCeilingCollision: " + IsCeilingCollision(collision));
-            Debug.Log("-----------------------------------------------------");
-
-        }
         switch (state)
         {
             case State.Grounded:
@@ -601,7 +602,19 @@ public class PlayerController : MonoBehaviour
                 this.transform.position -= new Vector3(0.01f, 0, 0);
             }
             state = State.Grounded;
-        } 
+        }
+        
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionStay");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("OnCollisionStay\n");
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("leftCollision: " + leftCollision + "\n");
+        stringBuilder.Append("rightCollision: " + rightCollision + "\n");
+        stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
+        stringBuilder.Append("floorCollision: " + floorCollision + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
+        
     }
 
     private void OnCollisionExit2D(Collision2D collision)
