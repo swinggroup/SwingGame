@@ -570,8 +570,8 @@ public class PlayerController : MonoBehaviour
             case State.Airborne:
                 break;
             case State.Attached:
-                state = State.Airborne;
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                //state = State.Airborne;
+                //StartCoroutine(DelaySwing(DELAY_NORMAL));
                break;
             case State.Swinging:
                 state = State.Airborne;
@@ -597,7 +597,7 @@ public class PlayerController : MonoBehaviour
         {
             rightCollision = true;
         }
-        if (leftCollision && rightCollision)
+        if ((leftCollision && rightCollision) || floorCollision)
         {
             Debug.Log("left right grounded");
             state = State.Grounded;
@@ -605,17 +605,13 @@ public class PlayerController : MonoBehaviour
         {
             state = State.Airborne;
         }
-        if (floorCollision)
+        if (leftCollision)
         {
-            if (leftCollision)
-            {
-                this.transform.position += new Vector3(0.01f, 0, 0);
-            }
-            else if (rightCollision)
-            {
-                this.transform.position -= new Vector3(0.01f, 0, 0);
-            }
-            state = State.Grounded;
+            this.transform.position += new Vector3(0.01f, 0, 0);
+        }
+        else if (rightCollision)
+        {
+            this.transform.position -= new Vector3(0.01f, 0, 0);
         }
         
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionStay");
