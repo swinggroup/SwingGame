@@ -40,8 +40,12 @@ public class PlayerController : MonoBehaviour
     State state;
     LineRenderer ropeLine;
     Vector2 spinVelocity;
-    const float gravity = 5.5f;
-    const float terminalVelocity = 22.5f;
+    [SerializeField] 
+    float gravity = 5.5f;
+    [SerializeField] 
+    float terminalVelocity = 22.5f;
+    [SerializeField] 
+    float accelFactor = 1.035f;
     bool canSwing = true;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
@@ -58,6 +62,8 @@ public class PlayerController : MonoBehaviour
     public GameObject winScreen;
 
     public GameObject screenDebug;
+
+    private Vector2 spawnZone;
 
 
     private class RevolutionData
@@ -109,6 +115,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        spawnZone = this.gameObject.transform.position;
         ropeLine = this.gameObject.AddComponent<LineRenderer>();
         ropeLine.enabled = false;
         rb = this.GetComponent<Rigidbody2D>();
@@ -138,6 +145,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            this.transform.position = spawnZone;
+            rb.velocity = new Vector2();
+        }
+
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
             foreach (var pair in CloudDistanceList[CloudDistanceList.Keys.First()])
@@ -374,9 +387,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * 5f;
         }
-        if (rb.velocity.magnitude * 1.035f < terminalVelocity)
+        if (rb.velocity.magnitude * accelFactor < terminalVelocity)
         {
-            rb.velocity *= 1.035f;
+            rb.velocity *= accelFactor;
+        } else
+        {
+            rb.velocity = rb.velocity.normalized * terminalVelocity;
         }
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
