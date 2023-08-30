@@ -10,6 +10,7 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class Timer : MonoBehaviour
 {
+    public PlayerController playerController;
     public Stopwatch timer;
 
     // Use this later: timer.End();
@@ -29,6 +30,12 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            timer = new Stopwatch();
+            timer.Start();
+
+        }
         text.SetText(timer.Elapsed.ToString("mm\\:ss\\.ff"));
     }
 }
