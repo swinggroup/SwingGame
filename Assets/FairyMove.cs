@@ -19,7 +19,8 @@ public class FairyMove : MonoBehaviour
         if (player.state == PlayerController.State.Attached || player.state == PlayerController.State.Swinging)
         {
             runeRope.SetActive(true);
-            runeRope.transform.LookAt(player.transform.position,new Vector3(1,0,0));
+            runeRope.transform.right = player.transform.position - runeRope.transform.position;
+            runeRope.transform.position = transform.position;
 
             Vector2 anchorPoint = player.rope.anchorPoint;
 
