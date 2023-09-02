@@ -36,16 +36,18 @@ public class PlayerController : MonoBehaviour
     int jumpFixedFrames;
     // bool delaying; on hold for now
     Rigidbody2D rb;
-    Rope rope;
-    State state;
+    public Rope rope;
+    public State state;
     LineRenderer ropeLine;
     Vector2 spinVelocity;
-    [SerializeField] 
-    float gravity = 5.5f;
-    [SerializeField] 
-    float terminalVelocity = 22.5f;
-    [SerializeField] 
-    float accelFactor = 1.035f;
+
+    public bool ropeShow;
+
+    //[SerializeField] 
+    public float gravity = 6f; //5.5f;
+    //[SerializeField] 
+    public float terminalVelocity = 35f;//22.5f;
+    public float accelFactor = 1.035f;
     bool canSwing = true;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
@@ -73,7 +75,7 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
 
-    private class Rope
+    public class Rope
     {
         public double length;
         public Vector2 anchorPoint;
@@ -107,7 +109,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    enum State
+    public enum State
     {
         Grounded, Airborne, Attached, Swinging
     }
@@ -148,7 +150,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = spawnZone;
-            rb.velocity = new Vector2();
+            rb.velocity = new Vector2();          
         }
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
@@ -263,7 +265,10 @@ public class PlayerController : MonoBehaviour
                 state = State.Attached;
 
                 // Draw line from player to anchor
-                ropeLine.enabled = true;
+                if (ropeShow == true)
+                {
+                    ropeLine.enabled = true;
+                }
             }
             else
             {
@@ -390,9 +395,6 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.magnitude * accelFactor < terminalVelocity)
         {
             rb.velocity *= accelFactor;
-        } else
-        {
-            rb.velocity = rb.velocity.normalized * terminalVelocity;
         }
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
