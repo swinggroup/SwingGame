@@ -10,30 +10,29 @@ public class FairyMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //runeRope.SetActive(false);
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.position = mousePos;
         if (player.state == PlayerController.State.Attached || player.state == PlayerController.State.Swinging)
         {
-            runeRope.SetActive(true);
-            runeRope.transform.right = player.transform.position - runeRope.transform.position;
-            runeRope.transform.position = transform.position;
-
             Vector2 anchorPoint = player.rope.anchorPoint;
+            runeRope.transform.right = player.transform.position - runeRope.transform.position;
+            runeRope.transform.position = Vector3.Lerp(anchorPoint, player.transform.position, 0.5f);
+
+            runeRope.SetActive(true);
 
             // Get in between player and mouse
-            transform.position = Vector3.Lerp(anchorPoint, player.transform.position, 0.5f);
+            // transform.position = Vector3.Lerp(anchorPoint, player.transform.position, 0.5f);
         } else
         {
             runeRope.SetActive(false);
-
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
             // Get in between player and mouse
-            transform.position = Vector3.Lerp(mousePos, player.transform.position, 0.5f);
+            // transform.position = Vector3.Lerp(mousePos, player.transform.position, 0.5f);
         }
 
         
