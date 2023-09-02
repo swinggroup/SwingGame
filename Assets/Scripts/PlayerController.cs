@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     int collisionExitCount = 0;
     // Debug vars^
 
+    public bool debugOn;
     public Animator animator;
 
     public static readonly float GRAPPLE_RANGE = 9;
@@ -125,6 +126,13 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
         CloudDistanceList = new();
         state = State.Airborne;
+        if(debugOn == true)
+        {
+            screenDebug.SetActive(true);
+        } else
+        {
+            screenDebug.SetActive(false);
+        }
     }
 
     private void LateUpdate()

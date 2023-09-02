@@ -95,7 +95,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638291887578747086
+  platformSettingsDirtyTick: 638292059712043978
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -122,13 +122,13 @@ ScriptedImporter:
   - name: runeRope
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 76
+      width: 37
       height: 38
     spriteID: f211c2d036daeec4dbc4d05690d71f35
     spriteBone: []
@@ -142,13 +142,13 @@ ScriptedImporter:
   - name: runeRope_Frame_1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 50
-      width: 76
+      width: 37
       height: 38
     spriteID: 126acdfd868ad3247999131f77f37965
     spriteBone: []
@@ -162,13 +162,13 @@ ScriptedImporter:
   - name: runeRope_Frame_2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 96
-      width: 76
+      width: 36
       height: 38
     spriteID: 35c4110a1d1ba524098239edeb289d98
     spriteBone: []
@@ -182,13 +182,13 @@ ScriptedImporter:
   - name: runeRope_Frame_3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 142
-      width: 76
+      width: 36
       height: 38
     spriteID: efa28f400a2d06748b53996e10948df4
     spriteBone: []
@@ -202,13 +202,13 @@ ScriptedImporter:
   - name: runeRope_Frame_4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 188
-      width: 76
+      width: 36
       height: 38
     spriteID: 9dafdc8e0ee291f439817c5e27befadf
     spriteBone: []
@@ -222,13 +222,13 @@ ScriptedImporter:
   - name: runeRope_Frame_5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 234
-      width: 76
+      x: 49
+      y: 4
+      width: 36
       height: 38
     spriteID: 84048e9888d02cb4b86c0b05fa353529
     spriteBone: []
@@ -238,17 +238,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 234}
+    uvTransform: {x: 49, y: 4}
   - name: runeRope_Frame_6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 280
-      width: 76
+      x: 49
+      y: 50
+      width: 36
       height: 38
     spriteID: 9e35034c300d36c479de063c2e6ab39e
     spriteBone: []
@@ -258,17 +258,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 280}
+    uvTransform: {x: 49, y: 50}
   - name: runeRope_Frame_7
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 326
-      width: 76
+      x: 49
+      y: 96
+      width: 36
       height: 38
     spriteID: 7724a02ca1624af4a87f03c3aec3c37e
     spriteBone: []
@@ -278,17 +278,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 326}
+    uvTransform: {x: 49, y: 96}
   - name: runeRope_Frame_8
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 372
-      width: 76
+      x: 49
+      y: 142
+      width: 36
       height: 38
     spriteID: 183eb99f80b00d74085655a6f846e88a
     spriteBone: []
@@ -298,17 +298,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 372}
+    uvTransform: {x: 49, y: 142}
   - name: runeRope_Frame_9
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 418
-      width: 76
+      x: 49
+      y: 188
+      width: 36
       height: 38
     spriteID: 29868506b2d8b844d909383d86cb2ce7
     spriteBone: []
@@ -318,17 +318,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 418}
+    uvTransform: {x: 49, y: 188}
   - name: runeRope_Frame_10
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 464
-      width: 76
+      x: 93
+      y: 4
+      width: 36
       height: 38
     spriteID: b2c41d2b06348d848ada70679c87e5a5
     spriteBone: []
@@ -338,17 +338,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 464}
+    uvTransform: {x: 93, y: 4}
   - name: runeRope_Frame_11
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 4
-      width: 76
+      x: 93
+      y: 50
+      width: 36
       height: 38
     spriteID: a018ab4c95450c341853007d4f3cce80
     spriteBone: []
@@ -358,17 +358,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 4}
+    uvTransform: {x: 93, y: 50}
   - name: runeRope_Frame_12
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 50
-      width: 76
+      x: 93
+      y: 96
+      width: 36
       height: 38
     spriteID: 85284e7d78e79e241a1caca66e9c6aa5
     spriteBone: []
@@ -378,17 +378,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 50}
+    uvTransform: {x: 93, y: 96}
   - name: runeRope_Frame_13
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 96
-      width: 76
+      x: 93
+      y: 142
+      width: 36
       height: 38
     spriteID: 1289b6c911474374b9d7c1470754b8c8
     spriteBone: []
@@ -398,17 +398,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 96}
+    uvTransform: {x: 93, y: 142}
   - name: runeRope_Frame_14
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 142
-      width: 76
+      x: 93
+      y: 188
+      width: 36
       height: 38
     spriteID: b22e2076bd85cca47a332b5e1564eec5
     spriteBone: []
@@ -418,17 +418,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 142}
+    uvTransform: {x: 93, y: 188}
   - name: runeRope_Frame_15
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 188
-      width: 76
+      x: 137
+      y: 4
+      width: 36
       height: 38
     spriteID: ee153ee58b8a48645858a3146297d590
     spriteBone: []
@@ -438,17 +438,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 188}
+    uvTransform: {x: 137, y: 4}
   - name: runeRope_Frame_16
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 88
-      y: 234
-      width: 76
+      x: 137
+      y: 50
+      width: 36
       height: 38
     spriteID: 40042cec0911ceb4a913a391e3a68d3b
     spriteBone: []
@@ -458,7 +458,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 88, y: 234}
+    uvTransform: {x: 137, y: 50}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -471,137 +471,137 @@ ScriptedImporter:
     - name: runeRope_Frame_0
       frameIndex: 0
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 37
         height: 38
       spriteId: f211c2d036daeec4dbc4d05690d71f35
     - name: runeRope_Frame_1
       frameIndex: 1
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 37
         height: 38
       spriteId: 126acdfd868ad3247999131f77f37965
     - name: runeRope_Frame_2
       frameIndex: 2
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 35c4110a1d1ba524098239edeb289d98
     - name: runeRope_Frame_3
       frameIndex: 3
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: efa28f400a2d06748b53996e10948df4
     - name: runeRope_Frame_4
       frameIndex: 4
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 9dafdc8e0ee291f439817c5e27befadf
     - name: runeRope_Frame_5
       frameIndex: 5
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 84048e9888d02cb4b86c0b05fa353529
     - name: runeRope_Frame_6
       frameIndex: 6
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 9e35034c300d36c479de063c2e6ab39e
     - name: runeRope_Frame_7
       frameIndex: 7
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 7724a02ca1624af4a87f03c3aec3c37e
     - name: runeRope_Frame_8
       frameIndex: 8
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 183eb99f80b00d74085655a6f846e88a
     - name: runeRope_Frame_9
       frameIndex: 9
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 29868506b2d8b844d909383d86cb2ce7
     - name: runeRope_Frame_10
       frameIndex: 10
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: b2c41d2b06348d848ada70679c87e5a5
     - name: runeRope_Frame_11
       frameIndex: 11
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: a018ab4c95450c341853007d4f3cce80
     - name: runeRope_Frame_12
       frameIndex: 12
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 85284e7d78e79e241a1caca66e9c6aa5
     - name: runeRope_Frame_13
       frameIndex: 13
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 1289b6c911474374b9d7c1470754b8c8
     - name: runeRope_Frame_14
       frameIndex: 14
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: b22e2076bd85cca47a332b5e1564eec5
     - name: runeRope_Frame_15
       frameIndex: 15
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: ee153ee58b8a48645858a3146297d590
     - name: runeRope_Frame_16
       frameIndex: 16
       cellRect:
-        x: 2
+        x: 40
         y: 1
-        width: 76
+        width: 36
         height: 38
       spriteId: 40042cec0911ceb4a913a391e3a68d3b
     linkedCells: []
@@ -644,6 +644,18 @@ ScriptedImporter:
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
   - name: iPhone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
     overridden: 0
     ignorePlatformSupport: 0
     maxTextureSize: 2048
