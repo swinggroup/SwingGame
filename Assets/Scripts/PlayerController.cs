@@ -237,7 +237,6 @@ public class PlayerController : MonoBehaviour
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 2600));
             //rb.AddForce(new Vector2(0, 650));
-            Debug.Log("jump: go airborne");
             state = State.Airborne;
         }
     }
@@ -249,7 +248,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && canSwing)
         {
-            Debug.Log("Attempted swing");
             canSwing = false;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -478,7 +476,6 @@ public class PlayerController : MonoBehaviour
             delayingJumpAnimation = false;
             if (state == State.Airborne)
             {
-                Debug.Log("inner if " + Time.time);
                 animator.SetBool("jump", true);
             }
         }
@@ -547,7 +544,6 @@ public class PlayerController : MonoBehaviour
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
-                Debug.Log("backward");
             }
             // TODO: Reevaluate if we want to have no delay for ceiling collision.
             if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
@@ -625,7 +621,6 @@ public class PlayerController : MonoBehaviour
         }
         if ((leftCollision && rightCollision) || floorCollision)
         {
-            Debug.Log("left right grounded");
             state = State.Grounded;
         } else
         {
@@ -689,8 +684,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2d called.");
-        Debug.Log("collision tag: " + collision.transform.tag);
         if (collision.transform.CompareTag("FinishPlatform"))
         {
             // Victory screen to pop up
