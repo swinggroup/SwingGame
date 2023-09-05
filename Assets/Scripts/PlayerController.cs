@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip grappleSound;
     public AudioClip whiffSound;
     public AudioClip jumpSound;
+    public AudioClip thudSound;
 
     int jumpFixedFrames;
     // bool delaying; on hold for now
@@ -512,14 +513,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        /*
-        Debug.Log("OnCollisionEnter2D state: " + state);
-
-        Debug.Log("Wall Collision: " + IsLeftCollision(collision));
-        Debug.Log("Ceiling Collision: " + IsCeilingCollision(collision));
-        Debug.Log("Floor Collision: " + IsFloorCollision(collision));
-        Debug.Log("canSwing: " + canSwing);
-        */
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
         if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
