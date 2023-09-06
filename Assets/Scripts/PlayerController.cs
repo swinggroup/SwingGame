@@ -399,9 +399,9 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * 5f;
         }
-        if (rb.velocity.magnitude * accelFactor < terminalVelocity)
+        if ((rb.velocity + (rb.velocity.normalized * accelFactor)).magnitude < terminalVelocity)
         {
-            rb.velocity *= accelFactor;
+            rb.velocity += rb.velocity.normalized * accelFactor;
         }
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
