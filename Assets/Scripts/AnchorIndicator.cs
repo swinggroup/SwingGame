@@ -5,6 +5,7 @@ using UnityEngine;
 public class anchorIndicator : MonoBehaviour
 {
     public PlayerController player;
+    public GameObject endMarker;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,11 +23,21 @@ public class anchorIndicator : MonoBehaviour
         {
             this.GetComponent<SpriteRenderer>().color = Color.red;
             this.transform.position = hit.point;
+            endMarker.SetActive(false);
         } 
         else
         {
             this.GetComponent<SpriteRenderer>().color = Color.black;
             this.transform.position = mousePos;
+            if ((ourPos - mousePos).magnitude > PlayerController.GRAPPLE_RANGE)
+            {
+                endMarker.SetActive(true);
+                endMarker.transform.position = ourPos + (unitVector * PlayerController.GRAPPLE_RANGE);
+            }
+            else
+            {
+                endMarker.SetActive(false);
+            }
         }
     }
 }
