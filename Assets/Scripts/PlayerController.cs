@@ -97,7 +97,8 @@ public class PlayerController : MonoBehaviour
             if (Vector2.Dot(playerToAnchor, rb.velocity) <= 0)
             {
                 return Vector2.Distance(playerPos, anchorPoint) >= length;
-            } else
+            }
+            else
             {
                 return false;
             }
@@ -127,10 +128,11 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
         CloudDistanceList = new();
         state = State.Airborne;
-        if(debugOn == true)
+        if (debugOn == true)
         {
             screenDebug.SetActive(true);
-        } else
+        }
+        else
         {
             screenDebug.SetActive(false);
         }
@@ -139,7 +141,7 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         // Update debug on screen
-        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x=>x.name=="State");
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "State");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
@@ -159,7 +161,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = spawnZone;
-            rb.velocity = new Vector2();          
+            rb.velocity = new Vector2();
         }
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
@@ -189,8 +191,8 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
-        
-        
+
+
     }
 
     void FixedUpdate()
@@ -198,7 +200,8 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.x > 0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = false;
-        } else if (rb.velocity.x < -0.1f)
+        }
+        else if (rb.velocity.x < -0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = true;
         }
@@ -207,7 +210,7 @@ public class PlayerController : MonoBehaviour
         {
             case State.Grounded:
                 animator.SetBool("jump", false);
-                break; 
+                break;
             case State.Airborne:
                 StartCoroutine(DelayJumpAnimation(0.07f));
                 HandleAirbornePhysics();
@@ -241,7 +244,7 @@ public class PlayerController : MonoBehaviour
             state = State.Airborne;
         }
     }
-  
+
     void HandleAirborne()
     {
         rb.gravityScale = gravity;
@@ -284,14 +287,15 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
+
     void HandleAirbornePhysics()
     {
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
             rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
             jumpFixedFrames--;
-        } else if (Input.GetKeyUp(KeyCode.Space))
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
         {
             jumpFixedFrames = 0;
         }
@@ -323,7 +327,8 @@ public class PlayerController : MonoBehaviour
             if (rotation > 0)
             {
                 rotation += 90;
-            } else
+            }
+            else
             {
                 rotation -= 90;
             }
@@ -348,17 +353,20 @@ public class PlayerController : MonoBehaviour
             if (RevolutionData.positionRelativeToThreshold >= 0)
             {
                 RevolutionData.positionRelativeToThreshold = 1;
-            } else // crossThreshold is -1
+            }
+            else // crossThreshold is -1
             {
                 RevolutionData.positionRelativeToThreshold = 1;
                 RevolutionData.positionSwitchCount++;
             }
-        } else // position is less than threshold
+        }
+        else // position is less than threshold
         {
             if (RevolutionData.positionRelativeToThreshold <= 0)
             {
                 RevolutionData.positionRelativeToThreshold = -1;
-            } else // position is 1
+            }
+            else // position is 1
             {
                 RevolutionData.positionRelativeToThreshold = -1;
                 RevolutionData.positionSwitchCount++;
@@ -383,7 +391,7 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravity;
             return;
         }
-        
+
         if (Input.GetMouseButtonUp(0))
         {
             ropeLine.enabled = false;
@@ -405,7 +413,7 @@ public class PlayerController : MonoBehaviour
         }
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
-        force = new Vector2(force.x * (float) forceMagnitude, force.y * (float) forceMagnitude);
+        force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
         rb.AddForce(force, ForceMode2D.Force);
     }
 
@@ -415,7 +423,8 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.x > 0)
         {
             rotation *= Quaternion.Euler(Vector3.forward * -90);
-        } else
+        }
+        else
         {
             rotation *= Quaternion.Euler(Vector3.forward * 90);
         }
@@ -436,7 +445,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
 
-            
+
             HashSet<Tuple<int, int>> visited = new();
             RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
         }
@@ -446,15 +455,15 @@ public class PlayerController : MonoBehaviour
         {
             Vector3Int cloudPos = cloudDistanceMap.WorldToCell(rope.anchorPoint);
 
-            
+
             HashSet<Tuple<int, int>> visited = new();
             RemoveCloud(cloudDistanceTiles, cloudPos, visited, cloudDistanceMap);
 
             CloudDistanceList.Add(rope.anchorPoint.y + 30, cloudDistanceTiles);
         }
-       
+
         rope.anchorPoint = new();
-        
+
         this.GetComponent<SpriteRenderer>().color = Color.red;
         yield return new WaitForSeconds(delay);
         foreach (var pair in cloudTiles)
@@ -526,9 +535,10 @@ public class PlayerController : MonoBehaviour
         {
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
-                rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
+                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 return;
-            } else if (IsFloorCollision(collision))
+            }
+            else if (IsFloorCollision(collision))
             {
                 StartCoroutine(DelaySwing(DELAY_SWING));
             }
@@ -537,7 +547,7 @@ public class PlayerController : MonoBehaviour
         {
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
-                rb.velocity = new Vector2(collision.relativeVelocity.x/2, rb.velocity.y);
+                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
             }
             // TODO: Reevaluate if we want to have no delay for ceiling collision.
             if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
@@ -578,7 +588,8 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
     }
 
-    private void OnCollisionStay2D(Collision2D collision) {
+    private void OnCollisionStay2D(Collision2D collision)
+    {
         switch (state)
         {
             case State.Grounded:
@@ -588,7 +599,7 @@ public class PlayerController : MonoBehaviour
             case State.Attached:
                 //state = State.Airborne;
                 //StartCoroutine(DelaySwing(DELAY_NORMAL));
-               break;
+                break;
             case State.Swinging:
                 state = State.Airborne;
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
@@ -608,7 +619,7 @@ public class PlayerController : MonoBehaviour
         if (IsLeftCollision(collision))
         {
             leftCollision = true;
-        } 
+        }
         if (IsRightCollision(collision))
         {
             rightCollision = true;
@@ -616,7 +627,8 @@ public class PlayerController : MonoBehaviour
         if ((leftCollision && rightCollision) || floorCollision)
         {
             state = State.Grounded;
-        } else
+        }
+        else
         {
             state = State.Airborne;
         }
@@ -628,7 +640,7 @@ public class PlayerController : MonoBehaviour
         {
             this.transform.position -= new Vector3(0.01f, 0, 0);
         }
-        
+
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionStay");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append("OnCollisionStay\n");
@@ -640,12 +652,12 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("floorCollision: " + floorCollision + "\n");
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
-        
+
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        switch (state) 
+        switch (state)
         {
             case State.Grounded:
                 state = State.Airborne;
@@ -674,7 +686,7 @@ public class PlayerController : MonoBehaviour
         debugLogs.SetText(stringBuilder.ToString());
     }
 
-    
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

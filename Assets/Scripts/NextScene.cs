@@ -9,7 +9,7 @@ public class NextScene : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this; 
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
     public void SceneTwo()

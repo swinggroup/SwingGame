@@ -12,7 +12,7 @@ public class FollowPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
         cam = GetComponent<Camera>();
         GoAgain();
     }
@@ -36,8 +36,8 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        
-        if(goStart)
+
+        if (goStart)
         {
             this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
 

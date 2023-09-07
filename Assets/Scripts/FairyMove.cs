@@ -29,17 +29,19 @@ public class FairyMove : MonoBehaviour
             //runeRope2.transform.right = runeRope.transform.position - runeRope2.transform.position;
             runeRope2.transform.position = player.transform.position;//Vector3.Lerp(anchorPoint, player.transform.position, 0.5f);
 
-            hum.loop= true;
-            if(!hum.isPlaying) {
+            hum.loop = true;
+            if (!hum.isPlaying)
+            {
                 hum.Play();
             }
-            
+
             runeRope.SetActive(true);
             runeRope2.SetActive(true);
 
             // Get in between player and mouse
             // transform.position = Vector3.Lerp(anchorPoint, player.transform.position, 0.5f);
-        } else
+        }
+        else
         {
             hum.Stop();
             runeRope.SetActive(false);
@@ -48,6 +50,6 @@ public class FairyMove : MonoBehaviour
             // transform.position = Vector3.Lerp(mousePos, player.transform.position, 0.5f);
         }
 
-        
+
     }
 }
