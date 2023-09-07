@@ -692,6 +692,8 @@ public class PlayerController : MonoBehaviour
                 break;
             case State.Swinging:
                 break;
+            case State.Stunned:
+                break;
             default:
                 Debug.LogError("OnCollisionExit2D broke");
                 break;
