@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     public float terminalVelocity = 35f;//22.5f;
     public float accelFactor = 1.035f;
     bool canSwing = true;
+    bool isStunned = false;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
     public Tilemap wallMap;
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour
 
     public enum State
     {
-        Grounded, Airborne, Attached, Swinging
+        Grounded, Airborne, Attached, Swinging, Stunned
     }
 
     // Start is called before the first frame update
@@ -188,6 +189,9 @@ public class PlayerController : MonoBehaviour
                 HandleSwinging();
                 UpdateRopeRender();
                 break;
+            case State.Stunned:
+                HandleStunned();
+                break;
             default:
                 break;
         }
@@ -222,6 +226,8 @@ public class PlayerController : MonoBehaviour
             case State.Swinging:
                 animator.SetBool("jump", true);
                 HandleSwingingPhysics();
+                break;
+            case State.Stunned:
                 break;
             default:
                 break;
@@ -342,6 +348,11 @@ public class PlayerController : MonoBehaviour
 
             state = State.Swinging;
         }
+    }
+    
+    void HandleStunned()
+    {
+        
     }
 
     private void RevolutionCheck()
@@ -523,13 +534,20 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
-        if (state == State.Swinging)
+        if (collision.collider.name == "StunMap")
+        {
+            state = State.Stunned;
+            isStunned = true;
+            canSwing = false;
+        }
+        else if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
             }
+            state = State.Airborne;
         }
         else if (state == State.Attached)
         {
@@ -542,6 +560,7 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(DelaySwing(DELAY_SWING));
             }
+            state = State.Airborne;
         }
         else if (state == State.Airborne)
         {
@@ -570,13 +589,22 @@ public class PlayerController : MonoBehaviour
             {
                 state = State.Grounded;
             }
-
+        }
+        else if (state == State.Stunned)
+        {
+            if (IsFloorCollision(collision))
+            {
+                state = State.Grounded;
+                isStunned = false;
+                canSwing = true;
+            }
         }
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionEnter");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append("OnCollisionEnter\n");
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("isStunned: " + isStunned + "\n");
         stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
         stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
         stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
@@ -584,7 +612,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
         ropeLine.enabled = false;
-        state = State.Airborne;
+        
         rb.gravityScale = gravity;
     }
 
@@ -603,6 +631,8 @@ public class PlayerController : MonoBehaviour
             case State.Swinging:
                 state = State.Airborne;
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
+                break;
+            case State.Stunned:
                 break;
             default:
                 Debug.LogError("broke oncollisionstay");
@@ -624,13 +654,16 @@ public class PlayerController : MonoBehaviour
         {
             rightCollision = true;
         }
-        if ((leftCollision && rightCollision) || floorCollision)
+        if (state != State.Stunned)
         {
-            state = State.Grounded;
-        }
-        else
-        {
-            state = State.Airborne;
+            if ((leftCollision && rightCollision) || floorCollision)
+            {
+                state = State.Grounded;
+            }
+            else
+            {
+                state = State.Airborne;
+            }
         }
         if (leftCollision)
         {
@@ -646,6 +679,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("OnCollisionStay\n");
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("isStunned: " + isStunned + "\n");
         stringBuilder.Append("leftCollision: " + leftCollision + "\n");
         stringBuilder.Append("rightCollision: " + rightCollision + "\n");
         stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
@@ -669,6 +703,8 @@ public class PlayerController : MonoBehaviour
                 break;
             case State.Swinging:
                 break;
+            case State.Stunned:
+                break;
             default:
                 Debug.LogError("OnCollisionExit2D broke");
                 break;
@@ -678,6 +714,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("OnCollisionExit\n");
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("isStunned: " + isStunned + "\n");
         stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
         stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
         stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
