@@ -214,10 +214,15 @@ public class PlayerController : MonoBehaviour
         {
             case State.Grounded:
                 animator.SetBool("jump", false);
+                animator.SetBool("falling", false);
                 break;
             case State.Airborne:
                 StartCoroutine(DelayJumpAnimation(0.07f));
                 HandleAirbornePhysics();
+                if (rb.velocity.y < 0)
+                {
+                    animator.SetBool("falling", true);
+                }
                 break;
             case State.Attached:
                 animator.SetBool("jump", true);
@@ -225,6 +230,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case State.Swinging:
                 animator.SetBool("jump", true);
+                animator.SetBool("falling", false);
                 HandleSwingingPhysics();
                 break;
             case State.Stunned:
