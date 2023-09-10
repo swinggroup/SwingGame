@@ -6,18 +6,16 @@ public class FollowPlayer : MonoBehaviour
 {
     public GameObject player;
     bool goStart;
-    int camSize = 12;
     Camera cam;
     private const float offsetMax = 10f;
     private Vector3 horizontalOffset;
     private Vector3 verticalOffset;
     private Vector3 playerPreviousPos;
-    private float floatApproximation = 0.001f;
-    bool left;
-    bool right;
-    bool up;
-    bool down;
-    public bool panningBack;
+    private bool left;
+    private bool right;
+    private bool up;
+    private bool down;
+    private bool panningBack;
 
     // Start is called before the first frame update
     void Start()
@@ -100,9 +98,8 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        panningBack = !up && !down && !left && !right && 
-            (!EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) ||
-            !EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y));
+        panningBack = !EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) ||
+            !EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y);
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         if ((!up && !down && !left && !right) && !panningBack)
         {
