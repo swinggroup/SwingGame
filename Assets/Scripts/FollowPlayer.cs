@@ -11,16 +11,20 @@ public class FollowPlayer : MonoBehaviour
     private const float offsetMax = 10f;
     private Vector3 horizontalOffset;
     private Vector3 verticalOffset;
+    private Vector3 playerPreviousPos;
+    private float floatApproximation = 0.001f;
     bool left;
     bool right;
     bool up;
     bool down;
+    public bool panningBack;
 
     // Start is called before the first frame update
     void Start()
     {
         verticalOffset = new();
         horizontalOffset = new();
+        playerPreviousPos = player.transform.position;
         cam = GetComponent<Camera>();
         GoAgain();
     }
@@ -96,21 +100,27 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        panningBack = !up && !down && !left && !right && 
+            (!EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) ||
+            !EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y));
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
-        desiredPosition.z = transform.position.z;
-        if ((!up && !down && !left && !right) && Vector3.Distance(transform.position, desiredPosition) < 1f)
+        if ((!up && !down && !left && !right) && !panningBack)
         {
             this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
         } else
         {
             transform.position = new Vector3(Mathf.Lerp(transform.position.x, desiredPosition.x, 0.1f), Mathf.Lerp(transform.position.y, desiredPosition.y, 0.1f), -10);
         }
-        /*
-        if (goStart)
+        playerPreviousPos = player.transform.position;
+    }
+
+    bool EqualWithinApproximation(float delta, float a, float b)
+    {
+        if ((b - delta <= a && a <= b + delta) || (a - delta <= b && b <= a + delta))
         {
-            this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z) + horizontalOffset + verticalOffset; 
+            return true;
         }
-        */
+        return false;
     }
 
     void Zoomer()
