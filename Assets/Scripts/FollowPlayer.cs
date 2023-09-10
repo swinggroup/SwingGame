@@ -15,7 +15,6 @@ public class FollowPlayer : MonoBehaviour
     private bool right;
     private bool up;
     private bool down;
-    private bool panningBack;
 
     // Start is called before the first frame update
     void Start()
@@ -98,10 +97,9 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        panningBack = !EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) ||
-            !EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y);
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
-        if ((!up && !down && !left && !right) && !panningBack)
+        // Gradually pan camera back to player.
+        if ((!up && !down && !left && !right) && (EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) && EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y)))
         {
             this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
         } else
