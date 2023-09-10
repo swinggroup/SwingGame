@@ -213,6 +213,13 @@ public class PlayerController : MonoBehaviour
             case State.Grounded:
                 animator.SetBool("jump", false);
                 animator.SetBool("falling", false);
+                if (Mathf.Abs(rb.velocity.x) > 1f)
+                {
+                    animator.SetBool("rolling", true);
+                } else
+                {
+                    animator.SetBool("rolling", false);
+                }
                 break;
             case State.Airborne:
                 StartCoroutine(DelayJumpAnimation(0.07f));
@@ -547,7 +554,6 @@ public class PlayerController : MonoBehaviour
         {
             if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
             {
-                Debug.Log("why dad");
                 animator.SetTrigger("bonk");
             }
         }
