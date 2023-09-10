@@ -179,6 +179,26 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 62}
+  - name: deadGrounded_Frame_3
+    originalName: 
+    pivot: {x: 0.53333336, y: 0.5238095}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 91
+      width: 60
+      height: 21
+    spriteID: 3acd99edc2c84f045adf078518191b99
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 91}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -212,6 +232,14 @@ ScriptedImporter:
         width: 60
         height: 21
       spriteId: 9d6832db4f9b16a479327de0d08308ab
+    - name: deadGrounded_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 8
+        y: 29
+        width: 60
+        height: 21
+      spriteId: 3acd99edc2c84f045adf078518191b99
     linkedCells: []
     parentIndex: -1
   platformSettings:

@@ -543,6 +543,13 @@ public class PlayerController : MonoBehaviour
             state = State.Stunned;
             isStunned = true;
             canSwing = false;
+        } else if (state == State.Grounded)
+        {
+            if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
+            {
+                Debug.Log("why dad");
+                animator.SetTrigger("bonk");
+            }
         }
         else if (state == State.Swinging)
         {
