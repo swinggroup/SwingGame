@@ -45,11 +45,9 @@ public class PlayerController : MonoBehaviour
 
     public bool ropeShow;
 
-    //[SerializeField] 
-    public float gravity = 6f; //5.5f;
-    //[SerializeField] 
-    public float terminalVelocity = 35f;//22.5f;
-    public float accelFactor = 1.035f;
+    private float gravity = 6f;
+    private float terminalVelocity = 27f;
+    private float accelFactor = 0.2f; 
     bool canSwing = true;
     bool isStunned = false;
     public Tilemap cloudMap;
