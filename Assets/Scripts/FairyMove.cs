@@ -19,7 +19,7 @@ public class FairyMove : MonoBehaviour
     void LateUpdate()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = mousePos;
+        transform.position = new Vector3(Mathf.Lerp(transform.position.x, mousePos.x, 0.1f), Mathf.Lerp(transform.position.y, mousePos.y, 0.1f), 0);
         if (player.state == PlayerController.State.Attached || player.state == PlayerController.State.Swinging)
         {
             Vector2 anchorPoint = player.rope.anchorPoint;
