@@ -47,12 +47,13 @@ public class PlayerController : MonoBehaviour
 
     private float gravity = 6f;
     private float terminalVelocity = 27f;
-    private float accelFactor = 0.2f; 
+    private float accelFactor = 0.2f;
     bool canSwing = true;
     bool isStunned = false;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
     public Tilemap wallMap;
+    public Tilemap BoostMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
     public bool leftCollision = false;
@@ -360,10 +361,10 @@ public class PlayerController : MonoBehaviour
             state = State.Swinging;
         }
     }
-    
+
     void HandleStunned()
     {
-        
+
     }
 
     private void RevolutionCheck()
@@ -542,6 +543,24 @@ public class PlayerController : MonoBehaviour
         ropeLine.useWorldSpace = true;
     }
 
+    private void HandleBoosting(Collision2D collision)
+    {
+        state = State.Airborne;
+        var playerCollider = collision.otherCollider;
+        if (IsFloorCollision(collision))
+        {
+            playerCollider.attachedRigidbody.velocity = new Vector2(0, 200);
+        }
+        else if (IsLeftCollision(collision))
+        {
+            playerCollider.attachedRigidbody.velocity = new Vector2(200, 0);
+        }
+        else if (IsRightCollision(collision))
+        {
+            playerCollider.attachedRigidbody.velocity = new Vector2(-200, 0);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
@@ -550,7 +569,12 @@ public class PlayerController : MonoBehaviour
             state = State.Stunned;
             isStunned = true;
             canSwing = false;
-        } else if (state == State.Grounded)
+        }
+        else if (collision.collider.name == "BoostMap")
+        {
+            HandleBoosting(collision);
+        }
+        else if (state == State.Grounded)
         {
             if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
             {
