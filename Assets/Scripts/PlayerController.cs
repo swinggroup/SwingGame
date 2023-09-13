@@ -40,10 +40,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     public Rope rope;
     public State state;
-    LineRenderer ropeLine;
     Vector2 spinVelocity;
-
-    public bool ropeShow;
 
     private float gravity = 6f;
     private float terminalVelocity = 27f;
@@ -76,40 +73,6 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
 
-    public class Rope
-    {
-        public double length;
-        public Vector2 anchorPoint;
-        GameObject player;
-        Rigidbody2D rb;
-
-        public Rope(GameObject player)
-        {
-            this.player = player;
-            this.rb = player.GetComponent<Rigidbody2D>();
-        }
-
-        public bool IsTaut()
-        {
-            Vector2 playerPos = new Vector2(player.transform.position.x, player.transform.position.y);
-            Vector2 playerToAnchor = anchorPoint - playerPos;
-            if (Vector2.Dot(playerToAnchor, rb.velocity) <= 0)
-            {
-                return Vector2.Distance(playerPos, anchorPoint) >= length;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Vector2 NormalizedPlayerToAnchor()
-        {
-            Vector2 playerPos = new Vector2(player.transform.position.x, player.transform.position.y);
-            Vector2 vec = (anchorPoint - playerPos).normalized;
-            return vec;
-        }
-    }
 
     public enum State
     {
@@ -120,10 +83,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         spawnZone = this.gameObject.transform.position;
-        ropeLine = this.gameObject.AddComponent<LineRenderer>();
-        ropeLine.enabled = false;
         rb = this.GetComponent<Rigidbody2D>();
-        rope = new(this.gameObject);
         rb.gravityScale = gravity;
         CloudDistanceList = new();
         state = State.Airborne;
@@ -251,7 +211,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleGrounded()
     {
-        ropeLine.enabled = false;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
@@ -280,22 +239,13 @@ public class PlayerController : MonoBehaviour
             if (hit && (hit.collider.CompareTag("Hookable") || hit.collider.CompareTag("Cloud") || hit.collider.CompareTag("CloudDistance")))
             {
                 // Get the hit coordinate
-
                 Vector2 swingPoint = hit.point;
-
                 swingedObject = hit.collider.gameObject;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                rope.anchorPoint = new Vector2(swingPoint.x, swingPoint.y);
-                rope.length = Vector2.Distance(ourPos, rope.anchorPoint);
-
+                Debug.Log("calling newrope");
+                rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
                 state = State.Attached;
-
-                // Draw line from player to anchor
-                if (ropeShow == true)
-                {
-                    ropeLine.enabled = true;
-                }
             }
             else
             {
@@ -322,9 +272,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            ropeLine.enabled = false;
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
+            rope.DeleteRope();
         }
     }
 
@@ -407,19 +357,19 @@ public class PlayerController : MonoBehaviour
 
         if (RevolutionData.positionSwitchCount == 2) // we crossed the y threshold twice, so stop swinging
         {
-            ropeLine.enabled = false;
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
+            rope.DeleteRope();
             return;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            ropeLine.enabled = false;
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
+            rope.DeleteRope();
         }
     }
 
@@ -532,14 +482,12 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateRopeRender()
     {
+        rope.StartPoint.position = rope.anchorPoint;
+        rope.EndPoint.position = this.transform.position;
         Vector2 ourPos = GetHandPosition();
         List<Vector3> pos = new();
         pos.Add(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y));
         pos.Add(new Vector3(ourPos.x, ourPos.y));
-        ropeLine.startWidth = 0.05f;
-        ropeLine.endWidth = 0.05f;
-        ropeLine.SetPositions(pos.ToArray());
-        ropeLine.useWorldSpace = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -565,6 +513,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
             }
             state = State.Airborne;
+            rope.DeleteRope();
         }
         else if (state == State.Attached)
         {
@@ -576,6 +525,7 @@ public class PlayerController : MonoBehaviour
             else if (IsFloorCollision(collision))
             {
                 StartCoroutine(DelaySwing(DELAY_SWING));
+                rope.DeleteRope();
             }
             state = State.Airborne;
         }
@@ -588,10 +538,6 @@ public class PlayerController : MonoBehaviour
             // TODO: Reevaluate if we want to have no delay for ceiling collision.
             if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
             {
-                /*
-                Debug.Log("OnCollisionEnter2D IsCeilingCollision: " + IsCeilingCollision(collision));
-                Debug.Log("OnCollisionEnter2D IsFloorCollision: " + IsFloorCollision(collision));
-                */
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
             if (IsCeilingCollision(collision))
@@ -628,7 +574,6 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
-        ropeLine.enabled = false;
         
         rb.gravityScale = gravity;
     }
