@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
+            canSwing = true;
         }
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
