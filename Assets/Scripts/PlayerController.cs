@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip thudSound;
 
     int jumpFixedFrames;
+    int boostFixedFrames;
+    ConstantForce2D currConstantForce;
     // bool delaying; on hold for now
     Rigidbody2D rb;
     public Rope rope;
@@ -44,12 +46,13 @@ public class PlayerController : MonoBehaviour
 
     private float gravity = 6f;
     private float terminalVelocity = 27f;
-    private float accelFactor = 0.2f; 
+    private float accelFactor = 0.2f;
     bool canSwing = true;
     bool isStunned = false;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
     public Tilemap wallMap;
+    public Tilemap BoostMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
     public bool leftCollision = false;
@@ -87,6 +90,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
         CloudDistanceList = new();
         state = State.Airborne;
+        currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true)
         {
             screenDebug.SetActive(true);
@@ -166,6 +170,16 @@ public class PlayerController : MonoBehaviour
         else if (rb.velocity.x < -0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = true;
+        }
+
+        // Track how long we keep applying the constant force to boost
+        if (boostFixedFrames == 0 || state == State.Swinging)
+        {
+            currConstantForce.force = (new Vector2(0, 0));
+        }
+        else
+        {
+            boostFixedFrames--;
         }
 
         switch (state)
@@ -310,10 +324,10 @@ public class PlayerController : MonoBehaviour
             state = State.Swinging;
         }
     }
-    
+
     void HandleStunned()
     {
-        
+
     }
 
     private void RevolutionCheck()
@@ -490,6 +504,30 @@ public class PlayerController : MonoBehaviour
         pos.Add(new Vector3(ourPos.x, ourPos.y));
     }
 
+    private void HandleBoosting(Collision2D collision)
+    {
+        if (state == State.Attached || state == State.Swinging)
+        {
+            StartCoroutine(DelaySwing(DELAY_SWING));
+        }
+        state = State.Airborne;
+
+        int boostVelocity = 500;
+        boostFixedFrames = 20;
+        if (IsFloorCollision(collision))
+        {
+            currConstantForce.force = new Vector2(0, boostVelocity);
+        }
+        else if (IsLeftCollision(collision))
+        {
+            currConstantForce.force = new Vector2(boostVelocity, 0);
+        }
+        else if (IsRightCollision(collision))
+        {
+            currConstantForce.force = new Vector2(-boostVelocity, 0);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
@@ -498,7 +536,12 @@ public class PlayerController : MonoBehaviour
             state = State.Stunned;
             isStunned = true;
             canSwing = false;
-        } else if (state == State.Grounded)
+        }
+        else if (collision.collider.name == "BoostMap")
+        {
+            HandleBoosting(collision);
+        }
+        else if (state == State.Grounded)
         {
             if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
             {
