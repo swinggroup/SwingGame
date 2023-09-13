@@ -37,8 +37,9 @@ public class anchorIndicator : MonoBehaviour
                 this.transform.position = ourPos + (unitVector * PlayerController.GRAPPLE_RANGE);
             }
         }
-        if (player.state == PlayerController.State.Swinging)
+        if (player.state == PlayerController.State.Swinging || player.state == PlayerController.State.Attached)
         {
+            this.GetComponent<SpriteRenderer>().color = Color.yellow;
             this.transform.position = player.rope.anchorPoint;
         }
     }

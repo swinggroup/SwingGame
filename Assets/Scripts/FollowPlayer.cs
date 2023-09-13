@@ -97,6 +97,11 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        // test
+        this.transform.position = player.transform.position;
+        this.transform.position += new Vector3(0, 0,-10);
+        return;
+        // test
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         // Gradually pan camera back to player.
         if ((!up && !down && !left && !right) && (EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) && EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y)))
