@@ -538,11 +538,11 @@ public class PlayerController : MonoBehaviour
             isStunned = true;
             canSwing = false;
         }
-        else if (collision.collider.name == "BoostMap")
+        if (collision.collider.name == "BoostMap")
         {
             HandleBoosting(collision);
         }
-        else if (state == State.Grounded)
+        if (state == State.Grounded)
         {
             if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
             {
@@ -552,11 +552,13 @@ public class PlayerController : MonoBehaviour
         else if (state == State.Swinging)
         {
             StartCoroutine(DelaySwing(DELAY_SWING));
+            // Wall bounce when swinging into wall
             if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
             }
-            state = State.Airborne;
+            //TODO(mwong2568): Reevaluate if switching state to airborne is needed for stun.
+            //state = State.Airborne;
             rope.DeleteRope();
         }
         else if (state == State.Attached)
@@ -571,7 +573,9 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(DelaySwing(DELAY_SWING));
                 rope.DeleteRope();
             }
-            state = State.Airborne;
+            rope.DeleteRope();
+            //TODO(mwong2568): Reevaluate if switching state to airborne is needed for stun.
+            //state = State.Airborne;
         }
         else if (state == State.Airborne)
         {
@@ -599,7 +603,11 @@ public class PlayerController : MonoBehaviour
         }
         else if (state == State.Stunned)
         {
-            if (IsFloorCollision(collision))
+            if (rope.RopeExists())
+            {
+                rope.DeleteRope();
+            }
+            if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
             {
                 state = State.Grounded;
                 isStunned = false;
@@ -666,7 +674,7 @@ public class PlayerController : MonoBehaviour
             {
                 state = State.Grounded;
             }
-            else
+            else if (state != State.Attached)
             {
                 state = State.Airborne;
             }

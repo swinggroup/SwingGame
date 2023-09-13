@@ -63,6 +63,8 @@ public class Rope : MonoBehaviour
         }
     }
 
+    public bool RopeExists() { return ropeSegments != null; }
+
     public void DeleteRope()
     {
         ropeSegments = null;
