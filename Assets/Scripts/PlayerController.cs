@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip thudSound;
 
     int jumpFixedFrames;
+    int boostFixedFrames;
+    ConstantForce2D currConstantForce;
     // bool delaying; on hold for now
     Rigidbody2D rb;
     public Rope rope;
@@ -128,6 +130,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
         CloudDistanceList = new();
         state = State.Airborne;
+        currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true)
         {
             screenDebug.SetActive(true);
@@ -207,6 +210,16 @@ public class PlayerController : MonoBehaviour
         else if (rb.velocity.x < -0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = true;
+        }
+
+        // Track how long we keep applying the constant force to boost
+        if (boostFixedFrames == 0 || state == State.Swinging)
+        {
+            currConstantForce.force = (new Vector2(0, 0));
+        }
+        else
+        {
+            boostFixedFrames--;
         }
 
         switch (state)
@@ -545,19 +558,25 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBoosting(Collision2D collision)
     {
+        if (state == State.Attached || state == State.Swinging)
+        {
+            StartCoroutine(DelaySwing(DELAY_SWING));
+        }
         state = State.Airborne;
-        var playerCollider = collision.otherCollider;
+
+        int boostVelocity = 500;
+        boostFixedFrames = 20;
         if (IsFloorCollision(collision))
         {
-            playerCollider.attachedRigidbody.velocity = new Vector2(0, 200);
+            currConstantForce.force = new Vector2(0, boostVelocity);
         }
         else if (IsLeftCollision(collision))
         {
-            playerCollider.attachedRigidbody.velocity = new Vector2(200, 0);
+            currConstantForce.force = new Vector2(boostVelocity, 0);
         }
         else if (IsRightCollision(collision))
         {
-            playerCollider.attachedRigidbody.velocity = new Vector2(-200, 0);
+            currConstantForce.force = new Vector2(-boostVelocity, 0);
         }
     }
 
