@@ -10,6 +10,7 @@ TagManager:
   - CloudDistance
   - Wall
   - FinishPlatform
+  - Unhookable
   layers:
   - Default
   - TransparentFX

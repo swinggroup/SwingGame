@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     bool isStunned = false;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
-    public Tilemap wallMap;
+    public Tilemap unhookableMap;
     public Tilemap BoostMap;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
