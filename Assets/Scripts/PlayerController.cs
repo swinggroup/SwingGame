@@ -557,8 +557,8 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
             }
-            //TODO(mwong2568): Reevaluate if switching state to airborne is needed for stun.
-            //state = State.Airborne;
+            // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
+            state = State.Airborne;
             rope.DeleteRope();
         }
         else if (state == State.Attached)
@@ -574,8 +574,7 @@ public class PlayerController : MonoBehaviour
                 rope.DeleteRope();
             }
             rope.DeleteRope();
-            //TODO(mwong2568): Reevaluate if switching state to airborne is needed for stun.
-            //state = State.Airborne;
+            // Do not transition state to airborne so not taut bounce mechanic still works.
         }
         else if (state == State.Airborne)
         {
