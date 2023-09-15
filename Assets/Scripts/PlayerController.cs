@@ -191,7 +191,9 @@ public class PlayerController : MonoBehaviour
                 if (Mathf.Abs(rb.velocity.x) > 1f)
                 {
                     animator.SetBool("rolling", true);
-                } else
+                    animator.SetBool("bonk", false);
+                }
+                else
                 {
                     animator.SetBool("rolling", false);
                 }
@@ -202,14 +204,17 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.y < 0)
                 {
                     animator.SetBool("falling", true);
+                    animator.SetBool("bonk", false);
                 }
                 break;
             case State.Attached:
                 animator.SetBool("jump", true);
+                animator.SetBool("bonk", false);
                 HandleAttachedPhysics();
                 break;
             case State.Swinging:
                 animator.SetBool("jump", true);
+                animator.SetBool("bonk", false);
                 animator.SetBool("falling", false);
                 HandleSwingingPhysics();
                 break;
@@ -474,6 +479,7 @@ public class PlayerController : MonoBehaviour
             if (state == State.Airborne)
             {
                 animator.SetBool("jump", true);
+                animator.SetBool("bonk", false);
             }
         }
     }
@@ -513,7 +519,7 @@ public class PlayerController : MonoBehaviour
         }
         state = State.Airborne;
 
-        int boostVelocity = 500;
+        int boostVelocity = 5500;
         boostFixedFrames = 20;
         if (IsFloorCollision(collision))
         {
@@ -544,10 +550,6 @@ public class PlayerController : MonoBehaviour
         }
         if (state == State.Grounded)
         {
-            if ((IsLeftCollision(collision) || (IsRightCollision(collision))))
-            {
-                animator.SetTrigger("bonk");
-            }
         }
         else if (state == State.Swinging)
         {
@@ -625,32 +627,12 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
         debugLogs.SetText(stringBuilder.ToString());
-        
+
         rb.gravityScale = gravity;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        switch (state)
-        {
-            case State.Grounded:
-                break;
-            case State.Airborne:
-                break;
-            case State.Attached:
-                //state = State.Airborne;
-                //StartCoroutine(DelaySwing(DELAY_NORMAL));
-                break;
-            case State.Swinging:
-                state = State.Airborne;
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
-                break;
-            case State.Stunned:
-                break;
-            default:
-                Debug.LogError("broke oncollisionstay");
-                break;
-        }
         if (IsCeilingCollision(collision))
         {
             ceilingCollision = true;
@@ -684,8 +666,36 @@ public class PlayerController : MonoBehaviour
         }
         else if (rightCollision)
         {
+            rb.velocity = new Vector3(0, 0, 0);
             this.transform.position -= new Vector3(0.01f, 0, 0);
         }
+        switch (state)
+        {
+            case State.Grounded:
+                // if grounded and hit a wall (should be rolling) we stop and bonk
+                if (leftCollision || rightCollision)
+                {
+                    animator.SetBool("bonk", true);
+                    //rb.velocity = new Vector3(0, 0, 0);
+                }
+                break;
+            case State.Airborne:
+                break;
+            case State.Attached:
+                //state = State.Airborne;
+                //StartCoroutine(DelaySwing(DELAY_NORMAL));
+                break;
+            case State.Swinging:
+                state = State.Airborne;
+                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                break;
+            case State.Stunned:
+                break;
+            default:
+                Debug.LogError("broke oncollisionstay");
+                break;
+        }
+
 
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionStay");
         StringBuilder stringBuilder = new StringBuilder();
