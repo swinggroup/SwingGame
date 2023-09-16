@@ -13,13 +13,6 @@ using UnityEngine.WSA;
 
 public class PlayerController : MonoBehaviour
 {
-    // Debug vars
-    int updateCount = 0;
-    int collisionEnterCount = 0;
-    int collisionStayCount = 0;
-    int collisionExitCount = 0;
-    // Debug vars^
-
     public bool debugOn;
     public Animator animator;
 
@@ -40,6 +33,7 @@ public class PlayerController : MonoBehaviour
     ConstantForce2D currConstantForce;
     // bool delaying; on hold for now
     Rigidbody2D rb;
+    BoxCollider2D boxCollider;
     public Rope rope;
     public State state;
     Vector2 spinVelocity;
@@ -88,6 +82,7 @@ public class PlayerController : MonoBehaviour
         spawnZone = this.gameObject.transform.position;
         rb = this.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravity;
+        boxCollider = this.GetComponent<BoxCollider2D>();
         CloudDistanceList = new();
         state = State.Airborne;
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
@@ -164,6 +159,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        AdjustVelocity();
         if (rb.velocity.x > 0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = false;
@@ -229,6 +226,41 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void AdjustVelocity()
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, 0, 0), Vector3.down, 0.8f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, 0, 0), Vector3.down, 0.8f, LayerMask.GetMask("Hookables"));
+        if (leftHit ^ rightHit)
+        {
+            RaycastHit2D hit = leftHit ? leftHit : rightHit;
+            Debug.Log(hit.normal);
+            var slopeRotation = Quaternion.FromToRotation(hit.normal, Vector3.up);
+            Vector3 direction;
+            if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
+            {
+                direction = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
+            }
+            else if (Vector2.Dot(Vector2.left, hit.normal) < -0.1f)
+            {
+                direction = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
+            }
+            else
+            {
+                return;
+            }
+            var adjustedVelocity = direction * rb.velocity.magnitude;
+            adjustedVelocity *= 1.01f;
+            if (adjustedVelocity.y < 0)
+            {
+                Debug.Log(-Physics.gravity * Time.fixedDeltaTime);
+                adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
+                Debug.Log("adjust velocity: " + adjustedVelocity);
+                rb.velocity = adjustedVelocity;
+            }
+        }
+    }
+
     void HandleGrounded()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -236,7 +268,6 @@ public class PlayerController : MonoBehaviour
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 2600));
-            //rb.AddForce(new Vector2(0, 650));
             state = State.Airborne;
         }
     }
@@ -672,7 +703,7 @@ public class PlayerController : MonoBehaviour
         {
             case State.Grounded:
                 // if grounded and hit a wall (should be rolling) we stop and bonk
-                if (leftCollision || rightCollision)
+                if ((leftCollision && rb.velocity.x < 0) || (rightCollision && rb.velocity.x > 0))
                 {
                     animator.SetBool("bonk", true);
                     rb.velocity = new Vector3(0, 0, 0);
