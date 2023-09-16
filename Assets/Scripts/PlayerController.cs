@@ -263,7 +263,6 @@ public class PlayerController : MonoBehaviour
                 swingedObject = hit.collider.gameObject;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                Debug.Log("calling newrope");
                 rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
                 state = State.Attached;
             }
@@ -519,7 +518,7 @@ public class PlayerController : MonoBehaviour
         }
         state = State.Airborne;
 
-        int boostVelocity = 5500;
+        int boostVelocity = 500;
         boostFixedFrames = 20;
         if (IsFloorCollision(collision))
         {
@@ -547,6 +546,7 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.name == "BoostMap")
         {
             HandleBoosting(collision);
+            rope.DeleteRope();
         }
         if (state == State.Grounded)
         {
@@ -666,7 +666,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (rightCollision)
         {
-            rb.velocity = new Vector3(0, 0, 0);
             this.transform.position -= new Vector3(0.01f, 0, 0);
         }
         switch (state)
@@ -676,7 +675,7 @@ public class PlayerController : MonoBehaviour
                 if (leftCollision || rightCollision)
                 {
                     animator.SetBool("bonk", true);
-                    //rb.velocity = new Vector3(0, 0, 0);
+                    rb.velocity = new Vector3(0, 0, 0);
                 }
                 break;
             case State.Airborne:
