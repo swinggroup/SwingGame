@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private float accelFactor = 0.2f;
     bool canSwing = true;
     bool isStunned = false;
+    bool adjusting = false;
     public Tilemap cloudMap;
     public Tilemap cloudDistanceMap;
     public Tilemap unhookableMap;
@@ -159,8 +160,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        if (rb.velocity.magnitude > terminalVelocity)
+        {
+            rb.velocity = rb.velocity.normalized * terminalVelocity;
+        }
         AdjustVelocity();
+
         if (rb.velocity.x > 0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = false;
@@ -185,6 +190,7 @@ public class PlayerController : MonoBehaviour
             case State.Grounded:
                 animator.SetBool("jump", false);
                 animator.SetBool("falling", false);
+                adjusting = false;
                 if (Mathf.Abs(rb.velocity.x) > 1f)
                 {
                     animator.SetBool("rolling", true);
@@ -220,21 +226,17 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
-        if (rb.velocity.magnitude > terminalVelocity)
-        {
-            rb.velocity = rb.velocity.normalized * terminalVelocity;
-        }
     }
 
     private void AdjustVelocity()
     {
         var ray = new Ray(transform.position, Vector3.down);
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, 0, 0), Vector3.down, 0.8f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, 0, 0), Vector3.down, 0.8f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
         if (leftHit ^ rightHit)
         {
+            animator.SetBool("rolling", true);
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
-            Debug.Log(hit.normal);
             var slopeRotation = Quaternion.FromToRotation(hit.normal, Vector3.up);
             Vector3 direction;
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
@@ -253,9 +255,13 @@ public class PlayerController : MonoBehaviour
             adjustedVelocity *= 1.01f;
             if (adjustedVelocity.y < 0)
             {
-                Debug.Log(-Physics.gravity * Time.fixedDeltaTime);
+                // if adjusting is false, translate up a little to prevent collisions while sliding down slope
+                if (!adjusting)
+                {
+                    transform.position += new Vector3(0, 0.2f, 0);
+                    adjusting = true;
+                }
                 adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
-                Debug.Log("adjust velocity: " + adjustedVelocity);
                 rb.velocity = adjustedVelocity;
             }
         }
