@@ -4,78 +4,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using UnityEngine.WSA;
 
 public class PlayerController : MonoBehaviour
 {
+    /******************************************************************************************
+     * Debug Variables
+     *******************************************************************************************/
+    private Vector2 spawnZone;
     public bool debugOn;
-    public Animator animator;
+    public GameObject screenDebug;
 
+    /******************************************************************************************
+     * Assigned via Inspector: animation, sfx, tilemaps, rope
+     *******************************************************************************************/
+    public Animator animator;
+    public AudioClip grappleSound;
+    public AudioClip whiffSound;
+    public AudioClip jumpSound;
+    public AudioClip thudSound;
+    public Tilemap cloudMap;
+    public Tilemap unhookableMap;
+    public Tilemap BoostMap;
+    public Tilemap cloudDistanceMap;
+    SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
+
+    public Rope rope;
+
+    /******************************************************************************************
+     * Constants 
+     *******************************************************************************************/
+    private readonly float gravity = 6f;
+    private readonly float terminalVelocity = 27f;
+    private readonly float accelFactor = 0.2f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
 
-    GameObject swingedObject;
-
-    public AudioClip grappleSound;
-    public AudioClip whiffSound;
-    public AudioClip jumpSound;
-    public AudioClip thudSound;
-
-    int jumpFixedFrames;
-    int boostFixedFrames;
-    ConstantForce2D currConstantForce;
-    // bool delaying; on hold for now
-    Rigidbody2D rb;
-    BoxCollider2D boxCollider;
-    public Rope rope;
+    /******************************************************************************************
+     * State / Pseudo-State variables 
+     *******************************************************************************************/
+    public enum State
+    {
+        Grounded, Airborne, Attached, Swinging, Stunned
+    }
     public State state;
-    Vector2 spinVelocity;
-
-    private float gravity = 6f;
-    private float terminalVelocity = 27f;
-    private float accelFactor = 0.2f;
     bool canSwing = true;
     bool isStunned = false;
     bool adjusting = false;
-    public Tilemap cloudMap;
-    public Tilemap cloudDistanceMap;
-    public Tilemap unhookableMap;
-    public Tilemap BoostMap;
-    SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
-
-    public bool leftCollision = false;
-    public bool rightCollision = false;
-    public bool ceilingCollision = false;
-    public bool floorCollision = false;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
 
-    public GameObject winScreen;
-
-    public GameObject screenDebug;
-
-    private Vector2 spawnZone;
-
-
+    /******************************************************************************************
+     * Physics variables
+     *******************************************************************************************/
     private class RevolutionData
     {
         public static float threshold;
         public static int positionRelativeToThreshold;
         public static int positionSwitchCount;
     }
+    int jumpFixedFrames;
+    int boostFixedFrames;
+    Rigidbody2D rb;
+    ConstantForce2D currConstantForce; // for boosting
+    BoxCollider2D boxCollider;
+    Vector2 spinVelocity;
+    public bool leftCollision = false;
+    public bool rightCollision = false;
+    public bool ceilingCollision = false;
+    public bool floorCollision = false;
 
-
-    public enum State
-    {
-        Grounded, Airborne, Attached, Swinging, Stunned
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -87,32 +88,9 @@ public class PlayerController : MonoBehaviour
         CloudDistanceList = new();
         state = State.Airborne;
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
-        if (debugOn == true)
-        {
-            screenDebug.SetActive(true);
-        }
-        else
-        {
-            screenDebug.SetActive(false);
-        }
+        if (debugOn == true) screenDebug.SetActive(true);
+        else screenDebug.SetActive(false);
     }
-
-    private void LateUpdate()
-    {
-        // Update debug on screen
-        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "State");
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("State: " + state.ToString() + "\n");
-        stringBuilder.Append("canSwing: " + canSwing + "\n");
-        stringBuilder.Append("Timestamp : " + Time.time + "\n");
-        debugLogs.SetText(stringBuilder.ToString());
-
-        leftCollision = false;
-        rightCollision = false;
-        ceilingCollision = false;
-        floorCollision = false;
-    }
-
 
     // Update is called once per frame
     void Update()
@@ -154,8 +132,21 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+    }
+    private void LateUpdate()
+    {
+        leftCollision = false;
+        rightCollision = false;
+        ceilingCollision = false;
+        floorCollision = false;
 
-
+        // Update debug on screen
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "State");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
     }
 
     void FixedUpdate()
@@ -228,45 +219,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void AdjustVelocity()
-    {
-        var ray = new Ray(transform.position, Vector3.down);
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
-        if (leftHit ^ rightHit)
-        {
-            animator.SetBool("rolling", true);
-            RaycastHit2D hit = leftHit ? leftHit : rightHit;
-            var slopeRotation = Quaternion.FromToRotation(hit.normal, Vector3.up);
-            Vector3 direction;
-            if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
-            {
-                direction = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
-            }
-            else if (Vector2.Dot(Vector2.left, hit.normal) < -0.1f)
-            {
-                direction = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
-            }
-            else
-            {
-                return;
-            }
-            var adjustedVelocity = direction * rb.velocity.magnitude;
-            adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < 0)
-            {
-                // if adjusting is false, translate up a little to prevent collisions while sliding down slope
-                if (!adjusting)
-                {
-                    transform.position += new Vector3(0, 0.2f, 0);
-                    adjusting = true;
-                }
-                adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
-                rb.velocity = adjustedVelocity;
-            }
-        }
-    }
-
     void HandleGrounded()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -297,7 +249,6 @@ public class PlayerController : MonoBehaviour
             {
                 // Get the hit coordinate
                 Vector2 swingPoint = hit.point;
-                swingedObject = hit.collider.gameObject;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
@@ -445,22 +396,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(force, ForceMode2D.Force);
     }
 
-    private Vector2 GetHandPosition()
-    {
-        Quaternion rotation = this.transform.rotation;
-        if (rb.velocity.x > 0)
-        {
-            rotation *= Quaternion.Euler(Vector3.forward * -90);
-        }
-        else
-        {
-            rotation *= Quaternion.Euler(Vector3.forward * 90);
-        }
-        Vector3 direction = Vector3.up;
-        direction = rotation * direction;
-        direction = 0.5f * direction.normalized;
-        return this.transform.position + direction;
-    }
     IEnumerator DelaySwing(float delay)
     {
         delayingSwing = true;
@@ -536,7 +471,6 @@ public class PlayerController : MonoBehaviour
         RemoveCloud(cloudTiles, new Vector3Int(position.x, position.y + 1), visited, map);
     }
 
-
     private void UpdateRopeRender()
     {
         rope.StartPoint.position = rope.anchorPoint;
@@ -545,6 +479,22 @@ public class PlayerController : MonoBehaviour
         List<Vector3> pos = new();
         pos.Add(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y));
         pos.Add(new Vector3(ourPos.x, ourPos.y));
+    }
+    private Vector2 GetHandPosition()
+    {
+        Quaternion rotation = this.transform.rotation;
+        if (rb.velocity.x > 0)
+        {
+            rotation *= Quaternion.Euler(Vector3.forward * -90);
+        }
+        else
+        {
+            rotation *= Quaternion.Euler(Vector3.forward * 90);
+        }
+        Vector3 direction = Vector3.up;
+        direction = rotation * direction;
+        direction = 0.5f * direction.normalized;
+        return this.transform.position + direction;
     }
 
     private void HandleBoosting(Collision2D collision)
@@ -585,86 +535,73 @@ public class PlayerController : MonoBehaviour
             HandleBoosting(collision);
             rope.DeleteRope();
         }
-        if (state == State.Grounded)
+        switch (state)
         {
-        }
-        else if (state == State.Swinging)
-        {
-            StartCoroutine(DelaySwing(DELAY_SWING));
-            // Wall bounce when swinging into wall
-            if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
-            {
-                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
-            }
-            // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
-            state = State.Airborne;
-            rope.DeleteRope();
-        }
-        else if (state == State.Attached)
-        {
-            if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
-            {
-                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
-                return;
-            }
-            else if (IsFloorCollision(collision))
-            {
-                StartCoroutine(DelaySwing(DELAY_SWING));
-                rope.DeleteRope();
-            }
-            rope.DeleteRope();
-            // Do not transition state to airborne so not taut bounce mechanic still works.
-        }
-        else if (state == State.Airborne)
-        {
-            if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
-            {
-                rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
-            }
-            // TODO: Reevaluate if we want to have no delay for ceiling collision.
-            if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
-            {
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
-            }
-            if (IsCeilingCollision(collision))
-            {
-                jumpFixedFrames = 0;
-                if (delayingSwing == false)
+            case State.Grounded:
+                break;
+            case State.Airborne:
+                if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
                 {
+                    rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
+                }
+                // TODO: Reevaluate if we want to have no delay for ceiling collision.
+                if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
+                {
+                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                }
+                if (IsCeilingCollision(collision))
+                {
+                    jumpFixedFrames = 0;
+                    if (delayingSwing == false)
+                    {
+                        canSwing = true;
+                    }
+                }
+                if (IsFloorCollision(collision))
+                {
+                    state = State.Grounded;
+                }
+                break;
+            case State.Attached:
+                if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
+                {
+                    rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
+                    return;
+                }
+                else if (IsFloorCollision(collision))
+                {
+                    StartCoroutine(DelaySwing(DELAY_SWING));
+                    rope.DeleteRope();
+                }
+                rope.DeleteRope();
+                // Do not transition state to airborne so not taut bounce mechanic still works.
+
+                break;
+            case State.Swinging:
+                StartCoroutine(DelaySwing(DELAY_SWING));
+                // Wall bounce when swinging into wall
+                if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
+                {
+                    rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
+                }
+                // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
+                state = State.Airborne;
+                rope.DeleteRope();
+                break;
+            case State.Stunned:
+                if (rope.RopeExists())
+                {
+                    rope.DeleteRope();
+                }
+                if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
+                {
+                    state = State.Grounded;
+                    isStunned = false;
                     canSwing = true;
                 }
-            }
-            if (IsFloorCollision(collision))
-            {
-                state = State.Grounded;
-            }
+                break;
         }
-        else if (state == State.Stunned)
-        {
-            if (rope.RopeExists())
-            {
-                rope.DeleteRope();
-            }
-            if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
-            {
-                state = State.Grounded;
-                isStunned = false;
-                canSwing = true;
-            }
-        }
-        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionEnter");
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("OnCollisionEnter\n");
-        stringBuilder.Append("State: " + state.ToString() + "\n");
-        stringBuilder.Append("canSwing: " + canSwing + "\n");
-        stringBuilder.Append("isStunned: " + isStunned + "\n");
-        stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
-        stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
-        stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
-        stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
-        stringBuilder.Append("Timestamp : " + Time.time + "\n");
-        debugLogs.SetText(stringBuilder.ToString());
-
+        DebugGUI("OnCollisionEnter", collision);
         rb.gravityScale = gravity;
     }
 
@@ -718,8 +655,6 @@ public class PlayerController : MonoBehaviour
             case State.Airborne:
                 break;
             case State.Attached:
-                //state = State.Airborne;
-                //StartCoroutine(DelaySwing(DELAY_NORMAL));
                 break;
             case State.Swinging:
                 state = State.Airborne;
@@ -731,21 +666,7 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("broke oncollisionstay");
                 break;
         }
-
-
-        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionStay");
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("OnCollisionStay\n");
-        stringBuilder.Append("State: " + state.ToString() + "\n");
-        stringBuilder.Append("canSwing: " + canSwing + "\n");
-        stringBuilder.Append("isStunned: " + isStunned + "\n");
-        stringBuilder.Append("leftCollision: " + leftCollision + "\n");
-        stringBuilder.Append("rightCollision: " + rightCollision + "\n");
-        stringBuilder.Append("ceilingCollision: " + ceilingCollision + "\n");
-        stringBuilder.Append("floorCollision: " + floorCollision + "\n");
-        stringBuilder.Append("Timestamp : " + Time.time + "\n");
-        debugLogs.SetText(stringBuilder.ToString());
-
+        DebugGUI("OnCollisionStay", collision);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -768,31 +689,7 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("OnCollisionExit2D broke");
                 break;
         }
-        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == "OnCollisionExit");
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("OnCollisionExit\n");
-        stringBuilder.Append("State: " + state.ToString() + "\n");
-        stringBuilder.Append("canSwing: " + canSwing + "\n");
-        stringBuilder.Append("isStunned: " + isStunned + "\n");
-        stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
-        stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
-        stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
-        stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
-        stringBuilder.Append("Timestamp : " + Time.time + "\n");
-        debugLogs.SetText(stringBuilder.ToString());
-    }
-
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.transform.CompareTag("FinishPlatform"))
-        {
-            // Victory screen to pop up
-            winScreen.SetActive(true);
-
-            // A button to move to the next scene
-        }
+        DebugGUI("OnCollisionExit", collision);
     }
 
     private bool IsLeftCollision(Collision2D collision)
@@ -855,6 +752,60 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    private void AdjustVelocity()
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        if (leftHit ^ rightHit)
+        {
+            animator.SetBool("rolling", true);
+            RaycastHit2D hit = leftHit ? leftHit : rightHit;
+            var slopeRotation = Quaternion.FromToRotation(hit.normal, Vector3.up);
+            Vector3 direction;
+            if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
+            {
+                direction = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
+            }
+            else if (Vector2.Dot(Vector2.left, hit.normal) < -0.1f)
+            {
+                direction = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
+            }
+            else
+            {
+                return;
+            }
+            var adjustedVelocity = direction * rb.velocity.magnitude;
+            adjustedVelocity *= 1.01f;
+            if (adjustedVelocity.y < 0)
+            {
+                // if adjusting is false, translate up a little to prevent collisions while sliding down slope
+                if (!adjusting)
+                {
+                    transform.position += new Vector3(0, 0.2f, 0);
+                    adjusting = true;
+                }
+                adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
+                rb.velocity = adjustedVelocity;
+            }
+        }
+    }
+
+
+
+    private void DebugGUI(string name, Collision2D collision)
+    {
+        TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == name);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("OnCollisionExit\n");
+        stringBuilder.Append("State: " + state.ToString() + "\n");
+        stringBuilder.Append("canSwing: " + canSwing + "\n");
+        stringBuilder.Append("isStunned: " + isStunned + "\n");
+        stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
+        stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
+        stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
+        stringBuilder.Append("floorCollision: " + IsFloorCollision(collision) + "\n");
+        stringBuilder.Append("Timestamp : " + Time.time + "\n");
+        debugLogs.SetText(stringBuilder.ToString());
+    }
 }
-
-
