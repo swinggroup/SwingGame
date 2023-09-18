@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -754,14 +755,15 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustVelocity()
     {
-        var ray = new Ray(transform.position, Vector3.down);
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2, 0), Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        
+        Debug.DrawLine(transform.position, leftHit.point, Color.red);
+        Debug.DrawLine(transform.position, rightHit.point, Color.red);
         if (leftHit ^ rightHit)
         {
             animator.SetBool("rolling", true);
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
-            var slopeRotation = Quaternion.FromToRotation(hit.normal, Vector3.up);
             Vector3 direction;
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
