@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
             canSwing = true;
+            adjusting = false;
         }
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
@@ -229,10 +230,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 2600));
             state = State.Airborne;
+            adjusting = false;
         }
     }
 
@@ -798,7 +801,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("--------------------\nState: " + state);
             Debug.Log("Adjusted Velocity: " + adjustedVelocity + "------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < 0)
+            if (adjustedVelocity.y < 0 && rb.velocity.y < 0)
             {
                 // if adjusting is false, translate up a little to prevent collisions while sliding down slope
                 if (!adjusting)
