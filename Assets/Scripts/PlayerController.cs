@@ -715,7 +715,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.right) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.right) > .98f) // .707f)
             {
                 return true;
             }
@@ -730,7 +730,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.left) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.left) > .98f) //.707f)
             {
                 return true;
             }
@@ -760,7 +760,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .98f) // .707f)
             {
                 return true;
             }
@@ -770,8 +770,8 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustVelocity()
     {
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.05f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.05f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
         
         Debug.DrawLine(transform.position, leftHit.point, Color.red);
         Debug.DrawLine(transform.position, rightHit.point, Color.red);
@@ -801,12 +801,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("--------------------\nState: " + state);
             Debug.Log("Adjusted Velocity: " + adjustedVelocity + "------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < 0 && rb.velocity.y < 0)
+            if (adjustedVelocity.y < 0) //&& rb.velocity.y < 0)
             {
                 // if adjusting is false, translate up a little to prevent collisions while sliding down slope
                 if (!adjusting)
                 {
-                    //transform.position += new Vector3(0, 0.2f, 0);
                     adjusting = true;
                     animator.SetBool("rolling", true);
                 }
