@@ -770,11 +770,13 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustVelocity()
     {
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.05f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.05f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        Vector3 leftRayStart = transform.position - new Vector3(1.05f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
+        Vector3 rightRayStart = transform.position + new Vector3(1.05f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
+        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
         
-        Debug.DrawLine(transform.position, leftHit.point, Color.red);
-        Debug.DrawLine(transform.position, rightHit.point, Color.red);
+        Debug.DrawLine(leftRayStart, leftHit.point, Color.green);
+        Debug.DrawLine(rightRayStart, rightHit.point, Color.green);
         if (leftHit ^ rightHit)
         {
             
