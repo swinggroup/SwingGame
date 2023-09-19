@@ -715,7 +715,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.right) > .98f) // .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.right) > 0.98480775301f) // .98f) // .707f)
             {
                 return true;
             }
@@ -730,7 +730,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.left) > .98f) //.707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.left) > 0.98480775301f) // .98f) //.707f)
             {
                 return true;
             }
@@ -745,7 +745,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.up) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.up) > .17364817766f) // .707f)
             {
                 return true;
             }
@@ -760,7 +760,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .98f) // .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .17364817766f) // .98f) // .707f)
             {
                 return true;
             }
