@@ -7,6 +7,7 @@ public class FollowPlayer : MonoBehaviour
     public GameObject player;
     bool goStart;
     Camera cam;
+    private readonly float ORTHOGRAPHIC_SIZE = 11.25f;
     private const float offsetMax = 10f;
     private Vector3 horizontalOffset;
     private Vector3 verticalOffset;
@@ -131,9 +132,10 @@ public class FollowPlayer : MonoBehaviour
             this.transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z), 3);
             cam.orthographicSize -= 1;
 
-            if (cam.orthographicSize == 15)
+            if (cam.orthographicSize <= ORTHOGRAPHIC_SIZE)
             {
                 goStart = true;
+                cam.orthographicSize = ORTHOGRAPHIC_SIZE;
             }
         }
     }
