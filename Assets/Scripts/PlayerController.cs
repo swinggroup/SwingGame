@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
             canSwing = true;
+            adjusting = false;
         }
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
@@ -147,6 +148,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
+        stringBuilder.Append("adjusting : " + adjusting + "\n");
         debugLogs.SetText(stringBuilder.ToString());
     }
 
@@ -156,7 +158,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * terminalVelocity;
         }
-        AdjustVelocity();
+        if (adjusting)
+        {
+            rb.velocity += new Vector2(0, (-Physics.gravity.y * gravity) * Time.fixedDeltaTime);
+            rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
+        }
 
         if (rb.velocity.x > 0.1f)
         {
@@ -182,7 +188,7 @@ public class PlayerController : MonoBehaviour
             case State.Grounded:
                 animator.SetBool("jump", false);
                 animator.SetBool("falling", false);
-                adjusting = false;
+
                 if (Mathf.Abs(rb.velocity.x) > 1f)
                 {
                     animator.SetBool("rolling", true);
@@ -224,10 +230,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 2600));
             state = State.Airborne;
+            adjusting = false;
         }
     }
 
@@ -543,6 +551,7 @@ public class PlayerController : MonoBehaviour
             case State.Airborne:
                 if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
                 {
+                    Debug.Log("asdhasdsad");
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 }
                 // TODO: Reevaluate if we want to have no delay for ceiling collision.
@@ -608,6 +617,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        AdjustVelocity();
         if (IsCeilingCollision(collision))
         {
             ceilingCollision = true;
@@ -635,11 +645,11 @@ public class PlayerController : MonoBehaviour
                 state = State.Airborne;
             }
         }
-        if (leftCollision)
+        if (leftCollision && !adjusting)
         {
             this.transform.position += new Vector3(0.01f, 0, 0);
         }
-        else if (rightCollision)
+        else if (rightCollision && !adjusting)
         {
             this.transform.position -= new Vector3(0.01f, 0, 0);
         }
@@ -672,10 +682,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        
         switch (state)
         {
             case State.Grounded:
-                state = State.Airborne;
+                AdjustVelocity();
+                if (!adjusting)
+                {
+                    state = State.Airborne;
+                }
                 break;
             case State.Airborne:
                 state = State.Airborne;
@@ -700,7 +715,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.right) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.right) > 0.98480775301f) // .98f) // .707f)
             {
                 return true;
             }
@@ -715,7 +730,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.left) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.left) > 0.98480775301f) // .98f) //.707f)
             {
                 return true;
             }
@@ -730,7 +745,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.up) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.up) > .17364817766f) // .707f)
             {
                 return true;
             }
@@ -745,7 +760,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (ContactPoint2D contactPoint in points)
         {
-            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .707f)
+            if (Vector2.Dot(contactPoint.normal, Vector2.down) > .17364817766f) // .98f) // .707f)
             {
                 return true;
             }
@@ -755,15 +770,22 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustVelocity()
     {
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.1f, 0), Vector3.down, 0.3f, LayerMask.GetMask("Hookables"));
+        Vector3 leftRayStart = transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
+        Vector3 rightRayStart = transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
+        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
         
-        Debug.DrawLine(transform.position, leftHit.point, Color.red);
-        Debug.DrawLine(transform.position, rightHit.point, Color.red);
+        Debug.DrawLine(leftRayStart, leftHit.point, Color.green);
+        Debug.DrawLine(rightRayStart, rightHit.point, Color.green);
         if (leftHit ^ rightHit)
         {
-            animator.SetBool("rolling", true);
+            
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
+            if (Vector2.Dot(Vector2.up, hit.normal) > 0.8f)
+            {
+                adjusting = false;
+                animator.SetBool("rolling", false);
+            }
             Vector3 direction;
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
@@ -778,18 +800,32 @@ public class PlayerController : MonoBehaviour
                 return;
             }
             var adjustedVelocity = direction * rb.velocity.magnitude;
+            Debug.Log("--------------------\nState: " + state);
+            Debug.Log("dist between player and lefthit point: " + Vector2.Distance(transform.position, leftHit.point));
+            Debug.Log("Adjusted Velocity: " + adjustedVelocity + "\n------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < 0)
+            if (adjustedVelocity.y < 0) //&& rb.velocity.y < 0)
             {
                 // if adjusting is false, translate up a little to prevent collisions while sliding down slope
                 if (!adjusting)
                 {
-                    transform.position += new Vector3(0, 0.2f, 0);
                     adjusting = true;
+                    animator.SetBool("rolling", true);
                 }
-                adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
+                // Moved to FixedUpdate
+                // adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
                 rb.velocity = adjustedVelocity;
             }
+            // For the case where our collider is hanging off the edge, we don't want adjusting to be true.
+            else
+            {
+                adjusting = false;
+                animator.SetBool("rolling", false);
+            }
+        } else
+        {
+            adjusting = false;
+            animator.SetBool("rolling", false);
         }
     }
 
@@ -799,7 +835,7 @@ public class PlayerController : MonoBehaviour
     {
         TextMeshProUGUI debugLogs = screenDebug.GetComponentsInChildren<TextMeshProUGUI>().ToList().Find(x => x.name == name);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("OnCollisionExit\n");
+        stringBuilder.Append(name + "\n");
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
         stringBuilder.Append("isStunned: " + isStunned + "\n");
