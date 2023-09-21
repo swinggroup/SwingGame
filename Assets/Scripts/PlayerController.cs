@@ -551,7 +551,6 @@ public class PlayerController : MonoBehaviour
             case State.Airborne:
                 if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
                 {
-                    Debug.Log("asdhasdsad");
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 }
                 // TODO: Reevaluate if we want to have no delay for ceiling collision.

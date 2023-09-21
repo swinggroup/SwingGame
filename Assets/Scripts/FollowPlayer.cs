@@ -99,9 +99,11 @@ public class FollowPlayer : MonoBehaviour
     void LateUpdate()
     {
         // test
+        /*
         this.transform.position = player.transform.position;
         this.transform.position += new Vector3(0, 0,-10);
         return;
+        */
         // test
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         // Gradually pan camera back to player.
