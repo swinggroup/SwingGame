@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour
     public GameObject player;
     bool goStart;
     Camera cam;
-    private readonly float ORTHOGRAPHIC_SIZE = 11.25f;
+    private readonly float ORTHOGRAPHIC_SIZE = 16.875f;
     private const float offsetMax = 10f;
     private Vector3 horizontalOffset;
     private Vector3 verticalOffset;
