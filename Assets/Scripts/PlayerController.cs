@@ -802,14 +802,14 @@ public class PlayerController : MonoBehaviour
             var adjustedVelocity = direction * rb.velocity.magnitude;
             Debug.Log("--------------------\nState: " + state);
             Debug.Log("dist between player and lefthit point: " + Vector2.Distance(transform.position, leftHit.point));
-            Debug.Log("Adjusted Velocity: " + adjustedVelocity + "\n------------------\n");
+            Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < 0) //&& rb.velocity.y < 0)
+            if (adjustedVelocity.y < -0.0001f)
             {
-                // if adjusting is false, translate up a little to prevent collisions while sliding down slope
                 if (!adjusting)
                 {
                     adjusting = true;
+                    Debug.Log("wollo");
                     animator.SetBool("rolling", true);
                 }
                 // Moved to FixedUpdate
