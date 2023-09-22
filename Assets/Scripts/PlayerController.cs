@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     }
     int jumpFixedFrames;
     int boostFixedFrames;
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     ConstantForce2D currConstantForce; // for boosting
     BoxCollider2D boxCollider;
     Vector2 spinVelocity;
@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviour
             canSwing = true;
             adjusting = false;
         }
+
 
         if (CloudDistanceList.Count > 0 && CloudDistanceList.Keys.First() <= this.transform.position.y)
         {
@@ -228,6 +229,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleGrounded()
     {
+        if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);

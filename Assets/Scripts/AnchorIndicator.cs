@@ -19,9 +19,14 @@ public class anchorIndicator : MonoBehaviour
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
         Vector2 unitVector = (mousePos - ourPos).normalized;
         RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, PlayerController.GRAPPLE_RANGE, LayerMask.GetMask("Hookables"));
-        if (hit)
+        if (hit && !hit.collider.CompareTag("Unhookable"))
         {
             this.GetComponent<SpriteRenderer>().color = Color.red;
+            this.transform.position = hit.point;
+        }
+        else if (hit && hit.collider.CompareTag("Unhookable"))
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.black;
             this.transform.position = hit.point;
         }
         else

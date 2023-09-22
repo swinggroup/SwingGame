@@ -5,6 +5,7 @@ using UnityEngine;
 public class FollowPlayer : MonoBehaviour
 {
     public GameObject player;
+    public bool movingCam;
     bool goStart;
     Camera cam;
     private readonly float ORTHOGRAPHIC_SIZE = 16.875f;
@@ -20,6 +21,7 @@ public class FollowPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        movingCam = true;
         verticalOffset = new();
         horizontalOffset = new();
         playerPreviousPos = player.transform.position;
@@ -37,6 +39,10 @@ public class FollowPlayer : MonoBehaviour
 
     private void Update()
     {
+        if (player.GetComponent<Rigidbody2D>().velocity.magnitude > 0.0001f)
+        {
+            return;
+        }
         verticalOffset = new();
         horizontalOffset = new();
         if (Input.GetKeyDown(KeyCode.R))
@@ -98,20 +104,15 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        // test
-        /*
-        this.transform.position = player.transform.position;
-        this.transform.position += new Vector3(0, 0,-10);
-        return;
-        */
-        // test
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         // Gradually pan camera back to player.
         if ((!up && !down && !left && !right) && (EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) && EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y)))
         {
+            movingCam = false;
             this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
         } else
         {
+            movingCam = true;
             transform.position = new Vector3(Mathf.Lerp(transform.position.x, desiredPosition.x, 0.1f), Mathf.Lerp(transform.position.y, desiredPosition.y, 0.1f), -10);
         }
         playerPreviousPos = player.transform.position;
@@ -131,6 +132,7 @@ public class FollowPlayer : MonoBehaviour
 
         if (goStart == false)
         {
+            movingCam = true;
             this.transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z), 3);
             cam.orthographicSize -= 1;
 
