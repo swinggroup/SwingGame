@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
+    private readonly float arrowKeyVelocityMagnitude = 200f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -102,6 +103,14 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2();
             canSwing = true;
             adjusting = false;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            rb.velocity += Input.GetKeyDown(KeyCode.LeftArrow) ? new Vector2(-arrowKeyVelocityMagnitude, 0) : new Vector2(arrowKeyVelocityMagnitude, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            rb.velocity += Input.GetKeyDown(KeyCode.DownArrow) ? new Vector2(0, -arrowKeyVelocityMagnitude) : new Vector2(0, arrowKeyVelocityMagnitude);
         }
 
 
