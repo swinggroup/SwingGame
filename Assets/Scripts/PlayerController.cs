@@ -791,10 +791,10 @@ public class PlayerController : MonoBehaviour
         {
             
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
+            // If what we hit is horizontal
             if (Vector2.Dot(Vector2.up, hit.normal) > 0.8f)
             {
                 adjusting = false;
-                animator.SetBool("rolling", false);
             }
             Vector3 direction;
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
@@ -819,7 +819,6 @@ public class PlayerController : MonoBehaviour
                 if (!adjusting)
                 {
                     adjusting = true;
-                    Debug.Log("wollo");
                     animator.SetBool("rolling", true);
                 }
                 // Moved to FixedUpdate
@@ -830,12 +829,10 @@ public class PlayerController : MonoBehaviour
             else
             {
                 adjusting = false;
-                animator.SetBool("rolling", false);
             }
         } else
         {
             adjusting = false;
-            animator.SetBool("rolling", false);
         }
     }
 
