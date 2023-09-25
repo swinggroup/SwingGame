@@ -97,6 +97,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            spawnZone = this.transform.position;
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = spawnZone;
@@ -171,7 +175,12 @@ public class PlayerController : MonoBehaviour
         if (adjusting)
         {
             rb.velocity += new Vector2(0, (-Physics.gravity.y * gravity) * Time.fixedDeltaTime);
-            rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
+            // 45 degree slope
+            // rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
+            // steep slope
+            // rb.velocity = new Vector2(rb.velocity.x, -2 * Math.Abs(rb.velocity.x));
+            // shallow slope
+            rb.velocity = new Vector2(rb.velocity.x, -0.5f * Math.Abs(rb.velocity.x));
         }
 
         if (rb.velocity.x > 0.1f)
@@ -447,7 +456,7 @@ public class PlayerController : MonoBehaviour
 
         rope.anchorPoint = new();
 
-        this.GetComponent<SpriteRenderer>().color = Color.red;
+        this.GetComponent<SpriteRenderer>().color = delay == DELAY_NORMAL ? Color.red : Color.magenta;
         yield return new WaitForSeconds(delay);
         foreach (var pair in cloudTiles)
         {
@@ -457,7 +466,6 @@ public class PlayerController : MonoBehaviour
         this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
         delayingSwing = false;
-
     }
 
     IEnumerator DelayJumpAnimation(float delay)
@@ -814,7 +822,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dist between player and lefthit point: " + Vector2.Distance(transform.position, leftHit.point));
             Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < -0.0001f)
+            if (adjustedVelocity.y < -0.00001f)
             {
                 if (!adjusting)
                 {
