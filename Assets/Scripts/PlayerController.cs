@@ -186,16 +186,13 @@ public class PlayerController : MonoBehaviour
             if (Vector3.Dot(adjustingDirection, fortyFiveLeft) > 0.99f || Vector3.Dot(adjustingDirection, fortyFiveRight) > 0.99f)
             {
                 // 45 degree slope
-                Debug.Log("45");
                 rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
             } else if (Vector3.Dot(adjustingDirection, steepLeft) > 0.99f || Vector3.Dot(adjustingDirection, steepRight) > 0.99f)
             {
                 // steep slope
-                Debug.Log("steep");
                 rb.velocity = new Vector2(rb.velocity.x, -2 * Math.Abs(rb.velocity.x));
             } else
             {
-                Debug.Log("shallow");
                 // shallow slope
                 //rb.velocity = new Vector2(rb.velocity.x, -0.5f * Math.Abs(rb.velocity.x));
                 rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y);
@@ -822,28 +819,24 @@ public class PlayerController : MonoBehaviour
             // If what we hit is horizontal
             if (Vector2.Dot(Vector2.up, hit.normal) > 0.99f)
             {
-                Debug.Log("ground hit");
                 adjusting = false;
             }
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
-                Debug.Log("right hit");
                 adjustingDirection = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
             }
             else if (Vector2.Dot(Vector2.left, hit.normal) < -0.1f)
             {
-                Debug.Log("left hit");
                 adjustingDirection = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
             }
             else
             {
-                Debug.Log("no hit");
                 return;
             }
             var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;
-            Debug.Log("--------------------\nState: " + state);
-            Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
-            Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
+            // Debug.Log("--------------------\nState: " + state);
+            // Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
+            // Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
             if (adjustedVelocity.y < -0.0000000000000001f)
             {
