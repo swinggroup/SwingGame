@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public Tilemap unhookableMap;
     public Tilemap BoostMap;
     public Tilemap cloudDistanceMap;
+    public PhysicsMaterial2D noFrictionMaterial;
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
     public Rope rope;
@@ -40,6 +41,12 @@ public class PlayerController : MonoBehaviour
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
     private readonly float arrowKeyVelocityMagnitude = 200f;
+    private readonly Vector3 fortyFiveLeft = new Vector3(-1, -1, 0).normalized;
+    private readonly Vector3 fortyFiveRight = new Vector3(1, -1, 0).normalized;
+    private readonly Vector3 steepLeft = new Vector3(-1, -2, 0).normalized;
+    private readonly Vector3 steepRight = new Vector3(1, -2, 0).normalized;
+    private readonly Vector3 shallowLeft = new Vector3(-2, -1, 0).normalized;
+    private readonly Vector3 shallowRight = new Vector3(2, -1, 0).normalized;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -78,6 +85,7 @@ public class PlayerController : MonoBehaviour
     public bool rightCollision = false;
     public bool ceilingCollision = false;
     public bool floorCollision = false;
+    private Vector3 adjustingDirection;
 
 
     // Start is called before the first frame update
@@ -175,12 +183,24 @@ public class PlayerController : MonoBehaviour
         if (adjusting)
         {
             rb.velocity += new Vector2(0, (-Physics.gravity.y * gravity) * Time.fixedDeltaTime);
-            // 45 degree slope
-            // rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
-            // steep slope
-            // rb.velocity = new Vector2(rb.velocity.x, -2 * Math.Abs(rb.velocity.x));
-            // shallow slope
-            rb.velocity = new Vector2(rb.velocity.x, -0.5f * Math.Abs(rb.velocity.x));
+            if (Vector3.Dot(adjustingDirection, fortyFiveLeft) > 0.99f || Vector3.Dot(adjustingDirection, fortyFiveRight) > 0.99f)
+            {
+                // 45 degree slope
+                Debug.Log("45");
+                rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
+            } else if (Vector3.Dot(adjustingDirection, steepLeft) > 0.99f || Vector3.Dot(adjustingDirection, steepRight) > 0.99f)
+            {
+                // steep slope
+                Debug.Log("steep");
+                rb.velocity = new Vector2(rb.velocity.x, -2 * Math.Abs(rb.velocity.x));
+            } else
+            {
+                Debug.Log("shallow");
+                // shallow slope
+                //rb.velocity = new Vector2(rb.velocity.x, -0.5f * Math.Abs(rb.velocity.x));
+                rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y);
+                rb.velocity = new Vector2(2 * rb.velocity.x, -Math.Abs(rb.velocity.x));
+            }
         }
 
         if (rb.velocity.x > 0.1f)
@@ -790,8 +810,8 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 leftRayStart = transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
         Vector3 rightRayStart = transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
-        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.2f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.1948f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.1948f, LayerMask.GetMask("Hookables"));
         
         Debug.DrawLine(leftRayStart, leftHit.point, Color.green);
         Debug.DrawLine(rightRayStart, rightHit.point, Color.green);
@@ -800,51 +820,61 @@ public class PlayerController : MonoBehaviour
             
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
             // If what we hit is horizontal
-            if (Vector2.Dot(Vector2.up, hit.normal) > 0.8f)
+            if (Vector2.Dot(Vector2.up, hit.normal) > 0.99f)
             {
+                Debug.Log("ground hit");
                 adjusting = false;
             }
-            Vector3 direction;
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
-                direction = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
+                Debug.Log("right hit");
+                adjustingDirection = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
             }
             else if (Vector2.Dot(Vector2.left, hit.normal) < -0.1f)
             {
-                direction = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
+                Debug.Log("left hit");
+                adjustingDirection = Quaternion.AngleAxis(-90, Vector3.forward) * hit.normal;
             }
             else
             {
+                Debug.Log("no hit");
                 return;
             }
-            var adjustedVelocity = direction * rb.velocity.magnitude;
+            var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;
             Debug.Log("--------------------\nState: " + state);
-            Debug.Log("dist between player and lefthit point: " + Vector2.Distance(transform.position, leftHit.point));
+            Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
             Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < -0.00001f)
+            if (adjustedVelocity.y < -0.0000000000000001f)
             {
                 if (!adjusting)
                 {
+                    boxCollider.sharedMaterial = noFrictionMaterial;
                     adjusting = true;
                     animator.SetBool("rolling", true);
                 }
-                // Moved to FixedUpdate
-                // adjustedVelocity += (-Physics.gravity * gravity) * Time.fixedDeltaTime;
                 rb.velocity = adjustedVelocity;
             }
             // For the case where our collider is hanging off the edge, we don't want adjusting to be true.
             else
             {
+                boxCollider.sharedMaterial = null;
                 adjusting = false;
             }
         } else
         {
+            boxCollider.sharedMaterial = null; 
             adjusting = false;
         }
     }
-
-
+    bool EqualWithinApproximation(float delta, float a, float b)
+    {
+        if ((b - delta <= a && a <= b + delta) || (a - delta <= b && b <= a + delta))
+        {
+            return true;
+        }
+        return false;
+    }
 
     private void DebugGUI(string name, Collision2D collision)
     {
