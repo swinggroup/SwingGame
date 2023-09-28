@@ -187,11 +187,13 @@ public class PlayerController : MonoBehaviour
             {
                 // 45 degree slope
                 rb.velocity = new Vector2(rb.velocity.x, -Math.Abs(rb.velocity.x));
-            } else if (Vector3.Dot(adjustingDirection, steepLeft) > 0.99f || Vector3.Dot(adjustingDirection, steepRight) > 0.99f)
+            }
+            else if (Vector3.Dot(adjustingDirection, steepLeft) > 0.99f || Vector3.Dot(adjustingDirection, steepRight) > 0.99f)
             {
                 // steep slope
                 rb.velocity = new Vector2(rb.velocity.x, -2 * Math.Abs(rb.velocity.x));
-            } else
+            }
+            else
             {
                 // shallow slope
                 //rb.velocity = new Vector2(rb.velocity.x, -0.5f * Math.Abs(rb.velocity.x));
@@ -594,7 +596,6 @@ public class PlayerController : MonoBehaviour
                     jumpFixedFrames = 0;
                     if (delayingSwing == false)
                     {
-                        Debug.Log("bug");
                         canSwing = true;
                     }
                 }
@@ -713,7 +714,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+
         switch (state)
         {
             case State.Grounded:
@@ -803,14 +804,13 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 leftRayStart = transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
         Vector3 rightRayStart = transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
-        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.1948f, LayerMask.GetMask("Hookables"));
-        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.1948f, LayerMask.GetMask("Hookables"));
-        
+        RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.35f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.35f, LayerMask.GetMask("Hookables"));
+
         Debug.DrawLine(leftRayStart, leftHit.point, Color.green);
         Debug.DrawLine(rightRayStart, rightHit.point, Color.green);
         if (leftHit ^ rightHit)
         {
-            
             RaycastHit2D hit = leftHit ? leftHit : rightHit;
             // If what we hit is horizontal
             if (Vector2.Dot(Vector2.up, hit.normal) > 0.99f)
@@ -850,9 +850,10 @@ public class PlayerController : MonoBehaviour
                 boxCollider.sharedMaterial = null;
                 adjusting = false;
             }
-        } else
+        }
+        else
         {
-            boxCollider.sharedMaterial = null; 
+            boxCollider.sharedMaterial = null;
             adjusting = false;
         }
     }
