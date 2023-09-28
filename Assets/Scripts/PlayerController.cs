@@ -291,7 +291,7 @@ public class PlayerController : MonoBehaviour
             // Raycast to first platform hit
             RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, GRAPPLE_RANGE, LayerMask.GetMask("Hookables"));
 
-            if (hit && (hit.collider.CompareTag("Hookable") || hit.collider.CompareTag("Cloud") || hit.collider.CompareTag("CloudDistance")))
+            if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
                 // Get the hit coordinate
                 Vector2 swingPoint = hit.point;
@@ -589,16 +589,12 @@ public class PlayerController : MonoBehaviour
                 {
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 }
-                // TODO: Reevaluate if we want to have no delay for ceiling collision.
-                if (!IsCeilingCollision(collision) && !IsFloorCollision(collision))
-                {
-                    StartCoroutine(DelaySwing(DELAY_NORMAL));
-                }
                 if (IsCeilingCollision(collision))
                 {
                     jumpFixedFrames = 0;
                     if (delayingSwing == false)
                     {
+                        Debug.Log("bug");
                         canSwing = true;
                     }
                 }
