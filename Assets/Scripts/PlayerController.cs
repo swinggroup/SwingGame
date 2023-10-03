@@ -150,9 +150,6 @@ public class PlayerController : MonoBehaviour
                 HandleSwinging();
                 UpdateRopeRender();
                 break;
-            case State.Stunned:
-                HandleStunned();
-                break;
             default:
                 break;
         }
@@ -257,8 +254,6 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("falling", false);
                 HandleSwingingPhysics();
                 break;
-            case State.Stunned:
-                break;
             default:
                 break;
         }
@@ -267,7 +262,7 @@ public class PlayerController : MonoBehaviour
     void HandleGrounded()
     {
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isStunned)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
@@ -282,8 +277,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.gravityScale = gravity;
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-
-        if (Input.GetMouseButtonDown(0) && canSwing)
+        if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
         {
             canSwing = false;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -573,14 +567,27 @@ public class PlayerController : MonoBehaviour
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
         if (collision.collider.name == "StunMap")
         {
-            state = State.Stunned;
             isStunned = true;
             canSwing = false;
+            if (rope.RopeExists())
+            {
+                rope.DeleteRope();
+            }
         }
         if (collision.collider.name == "BoostMap")
         {
             HandleBoosting(collision);
             rope.DeleteRope();
+        }
+        if(isStunned)
+        {
+            if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
+            {
+                state = State.Grounded;
+                isStunned = false;
+                canSwing = true;
+            }
+
         }
         switch (state)
         {
@@ -629,18 +636,6 @@ public class PlayerController : MonoBehaviour
                 // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
                 state = State.Airborne;
                 rope.DeleteRope();
-                break;
-            case State.Stunned:
-                if (rope.RopeExists())
-                {
-                    rope.DeleteRope();
-                }
-                if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
-                {
-                    state = State.Grounded;
-                    isStunned = false;
-                    canSwing = true;
-                }
                 break;
         }
         DebugGUI("OnCollisionEnter", collision);
@@ -703,8 +698,6 @@ public class PlayerController : MonoBehaviour
                 state = State.Airborne;
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
                 break;
-            case State.Stunned:
-                break;
             default:
                 Debug.LogError("broke oncollisionstay");
                 break;
@@ -730,8 +723,6 @@ public class PlayerController : MonoBehaviour
             case State.Attached:
                 break;
             case State.Swinging:
-                break;
-            case State.Stunned:
                 break;
             default:
                 Debug.LogError("OnCollisionExit2D broke");
