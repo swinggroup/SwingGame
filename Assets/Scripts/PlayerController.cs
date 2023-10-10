@@ -820,10 +820,14 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
+            if (leftHit && rb.velocity.x < 0f || rightHit && rb.velocity.x > 0f)
+            {
+                adjustingDirection *= -1;
+            }
             var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;
-            // Debug.Log("--------------------\nState: " + state);
-            // Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
-            // Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
+            Debug.Log("--------------------\nState: " + state);
+            Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
+            Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
             if (adjustedVelocity.y < -0.0000000000000001f)
             {
