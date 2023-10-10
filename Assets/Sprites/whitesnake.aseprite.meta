@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: whitesnake
     originalName: 
-    pivot: {x: 0.5213358, y: 0.3084833}
+    pivot: {x: 0.49597588, y: 0.47560978}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 1617
-      height: 778
+      width: 497
+      height: 123
     spriteID: 6c94fe30a142b3442b5ed18e413ccbbb
     spriteBone: []
     spriteOutline: []
@@ -151,10 +151,10 @@ ScriptedImporter:
     - name: whitesnake
       frameIndex: 0
       cellRect:
-        x: 69
-        y: 672
-        width: 1617
-        height: 778
+        x: 15
+        y: 33
+        width: 497
+        height: 123
       spriteId: 6c94fe30a142b3442b5ed18e413ccbbb
     linkedCells: []
     parentIndex: -1
@@ -209,4 +209,4 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 1824, y: 1824}
+  canvasSize: {x: 523, y: 183}
