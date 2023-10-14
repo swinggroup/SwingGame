@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     public State state;
     bool canSwing = true;
     bool isStunned = false;
-    bool adjusting = false;
+    bool onSlope = false;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
 
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
             canSwing = true;
-            adjusting = false;
+            onSlope = false;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
-        stringBuilder.Append("adjusting : " + adjusting + "\n");
+        stringBuilder.Append("adjusting : " + onSlope + "\n");
         debugLogs.SetText(stringBuilder.ToString());
     }
 
@@ -177,6 +177,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * terminalVelocity;
         }
+        /*
         if (adjusting)
         {
             rb.velocity += new Vector2(0, (-Physics.gravity.y * gravity) * Time.fixedDeltaTime);
@@ -198,6 +199,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(2 * rb.velocity.x, -Math.Abs(rb.velocity.x));
             }
         }
+        */
 
         if (rb.velocity.x > 0.1f)
         {
@@ -224,7 +226,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("jump", false);
                 animator.SetBool("falling", false);
 
-                if (Mathf.Abs(rb.velocity.x) > 1f)
+                if (Mathf.Abs(rb.velocity.x) > 0.0000000001f)
                 {
                     animator.SetBool("rolling", true);
                     animator.SetBool("bonk", false);
@@ -269,7 +271,7 @@ public class PlayerController : MonoBehaviour
             jumpFixedFrames = MAX_JUMP_FRAMES;
             rb.AddForce(new Vector2(0, 2600));
             state = State.Airborne;
-            adjusting = false;
+            onSlope = false;
         }
     }
 
@@ -672,11 +674,11 @@ public class PlayerController : MonoBehaviour
                 state = State.Airborne;
             }
         }
-        if (leftCollision && !adjusting)
+        if (leftCollision && !onSlope)
         {
             this.transform.position += new Vector3(0.01f, 0, 0);
         }
-        else if (rightCollision && !adjusting)
+        else if (rightCollision && !onSlope)
         {
             this.transform.position -= new Vector3(0.01f, 0, 0);
         }
@@ -707,15 +709,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-
         switch (state)
         {
             case State.Grounded:
                 AdjustVelocity();
-                if (!adjusting)
-                {
-                    state = State.Airborne;
-                }
+                state = State.Airborne;
                 break;
             case State.Airborne:
                 state = State.Airborne;
@@ -793,8 +791,8 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustVelocity()
     {
-        Vector3 leftRayStart = transform.position - new Vector3(1.1f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
-        Vector3 rightRayStart = transform.position + new Vector3(1.1f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
+        Vector3 leftRayStart = transform.position - new Vector3(1.117647058823529f * boxCollider.size.x / 2, boxCollider.size.y / 2 - 0.2f, 0);
+        Vector3 rightRayStart = transform.position + new Vector3(1.117647058823529f * boxCollider.size.x / 2, -boxCollider.size.y / 2 + 0.2f, 0);
         RaycastHit2D leftHit = Physics2D.Raycast(leftRayStart, Vector3.down, 0.35f, LayerMask.GetMask("Hookables"));
         RaycastHit2D rightHit = Physics2D.Raycast(rightRayStart, Vector3.down, 0.35f, LayerMask.GetMask("Hookables"));
 
@@ -806,8 +804,10 @@ public class PlayerController : MonoBehaviour
             // If what we hit is horizontal
             if (Vector2.Dot(Vector2.up, hit.normal) > 0.99f)
             {
-                adjusting = false;
-            }
+                onSlope = false;
+                return;
+            } 
+            /*
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
                 adjustingDirection = Quaternion.AngleAxis(90, Vector3.forward) * hit.normal;
@@ -820,21 +820,30 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
+            */
             if (leftHit && rb.velocity.x < 0f || rightHit && rb.velocity.x > 0f)
             {
-                adjustingDirection *= -1;
+                // adjustingDirection *= -1;
             }
+            if (!onSlope)
+            {
+                boxCollider.sharedMaterial = noFrictionMaterial;
+                onSlope = true;
+                animator.SetBool("rolling", true);
+            }
+            /*
             var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;
             Debug.Log("--------------------\nState: " + state);
             Debug.Log("dist between player and righthit point: " + Vector2.Distance(transform.position, rightHit.point));
-            Debug.Log("Adjusted Velocity: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
+            Debug.Log("Adjusted Velocity x: " + adjustedVelocity.x.ToString("0.000000000000000000") + "\n------------------\n");
+            Debug.Log("Adjusted Velocity y: " + adjustedVelocity.y.ToString("0.000000000000000000") + "\n------------------\n");
             adjustedVelocity *= 1.01f;
-            if (adjustedVelocity.y < -0.0000000000000001f)
+            if (adjustedVelocity.y < -0.0000000000000001f || adjustedVelocity.y > 0.0000000000000001f)
             {
-                if (!adjusting)
+                if (!onSlope)
                 {
                     boxCollider.sharedMaterial = noFrictionMaterial;
-                    adjusting = true;
+                    onSlope = true;
                     animator.SetBool("rolling", true);
                 }
                 rb.velocity = adjustedVelocity;
@@ -843,15 +852,17 @@ public class PlayerController : MonoBehaviour
             else
             {
                 boxCollider.sharedMaterial = null;
-                adjusting = false;
+                onSlope = false;
             }
+            */
         }
         else
         {
             boxCollider.sharedMaterial = null;
-            adjusting = false;
+            onSlope = false;
         }
     }
+
     bool EqualWithinApproximation(float delta, float a, float b)
     {
         if ((b - delta <= a && a <= b + delta) || (a - delta <= b && b <= a + delta))
