@@ -567,7 +567,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
-        if (collision.collider.name == "StunMap")
+        if (collision.collider.name.Contains("StunMap"))
         {
             isStunned = true;
             canSwing = false;
@@ -583,7 +583,7 @@ public class PlayerController : MonoBehaviour
         }
         if(isStunned)
         {
-            if (IsFloorCollision(collision) && collision.collider.name != "StunMap")
+            if (IsFloorCollision(collision) && !collision.collider.name.Contains("StunMap"))
             {
                 state = State.Grounded;
                 isStunned = false;
