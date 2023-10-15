@@ -11,6 +11,9 @@ TagManager:
   - Wall
   - FinishPlatform
   - Unhookable
+  - Parallax1
+  - Parallax2
+  - Parallax3
   layers:
   - Default
   - TransparentFX
