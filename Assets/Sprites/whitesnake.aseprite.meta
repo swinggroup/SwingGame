@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: whitesnake
     originalName: 
-    pivot: {x: 0.499, y: 0.46694216}
+    pivot: {x: 0.50688976, y: 0.46249998}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 512
-      y: 272
-      width: 500
-      height: 121
+      x: 4
+      y: 262
+      width: 508
+      height: 120
     spriteID: 6c94fe30a142b3442b5ed18e413ccbbb
     spriteBone: []
     spriteOutline: []
@@ -138,19 +138,119 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 512, y: 272}
+    uvTransform: {x: 4, y: 262}
   - name: whitesnake_Frame_1
     originalName: 
-    pivot: {x: 0.499, y: 0.492126}
+    pivot: {x: 0.50688976, y: 0.46249998}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 520
+      y: 262
+      width: 508
+      height: 120
+    spriteID: 4fcba6671b5908041b24b5d125af912b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 520, y: 262}
+  - name: whitesnake_Frame_2
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46638653}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1036
+      y: 518
+      width: 508
+      height: 119
+    spriteID: 028c3c11dda6f0f4da47ed2e89075c89
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1036, y: 518}
+  - name: whitesnake_Frame_3
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46638653}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 646
+      width: 508
+      height: 119
+    spriteID: 5f9bd69b368f79642830315326a38d8a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 646}
+  - name: whitesnake_Frame_4
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.47083333}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1036
+      y: 262
+      width: 508
+      height: 120
+    spriteID: 00abb09eec7771e42a850db9c594ecea
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1036, y: 262}
+  - name: whitesnake_Frame_5
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.47083333}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 390
+      width: 508
+      height: 120
+    spriteID: 766e267c1a2cf084482ea3e3b47845ae
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 390}
+  - name: whitesnake_Frame_6
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46694216}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 500
-      height: 127
-    spriteID: 53c3993001169ac438e7c97ac584a4a8
+      width: 508
+      height: 121
+    spriteID: d715cbdacd139e049b2ef199e1228141
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -159,118 +259,18 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: whitesnake_Frame_2
-    originalName: 
-    pivot: {x: 0.499, y: 0.48809525}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 512
-      y: 4
-      width: 500
-      height: 126
-    spriteID: e179e78a5551f5f4d87b8009afe8b5b6
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 512, y: 4}
-  - name: whitesnake_Frame_3
-    originalName: 
-    pivot: {x: 0.499, y: 0.484}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 139
-      width: 500
-      height: 125
-    spriteID: e762fec2f2b97de40be6ef3930f1e1ac
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 139}
-  - name: whitesnake_Frame_4
-    originalName: 
-    pivot: {x: 0.499, y: 0.47560978}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 512
-      y: 139
-      width: 500
-      height: 123
-    spriteID: dc8e2b59ca8437b4b8fe9e0a3f6dc2c4
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 512, y: 139}
-  - name: whitesnake_Frame_5
-    originalName: 
-    pivot: {x: 0.499, y: 0.47131145}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 272
-      width: 500
-      height: 122
-    spriteID: a82d31bf70000404c9f722663e514627
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 272}
-  - name: whitesnake_Frame_6
-    originalName: 
-    pivot: {x: 0.499, y: 0.46694216}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 402
-      width: 500
-      height: 121
-    spriteID: 3bf763697bec335459f667385f4791ac
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 402}
   - name: whitesnake_Frame_7
     originalName: 
-    pivot: {x: 0.499, y: 0.46694216}
+    pivot: {x: 0.50688976, y: 0.46694216}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 512
-      y: 402
-      width: 500
+      x: 520
+      y: 4
+      width: 508
       height: 121
-    spriteID: 105e51ba5d140bd43a630e4f402ba0fe
+    spriteID: fbe5a76c5fca0d442ba99b97fae1f3da
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -278,7 +278,167 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 512, y: 402}
+    uvTransform: {x: 520, y: 4}
+  - name: whitesnake_Frame_8
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46249998}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 520
+      y: 390
+      width: 508
+      height: 120
+    spriteID: 58c0afa02be85f84d8cf4b3af5e7eedd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 520, y: 390}
+  - name: whitesnake_Frame_9
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46249998}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1036
+      y: 390
+      width: 508
+      height: 120
+    spriteID: 890b1e1c6718fce488e9ad15cb3087ff
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1036, y: 390}
+  - name: whitesnake_Frame_10
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.45867768}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1036
+      y: 4
+      width: 508
+      height: 121
+    spriteID: 8ab8ace96f76eed4b95c09979558a502
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1036, y: 4}
+  - name: whitesnake_Frame_11
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.45867768}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 133
+      width: 508
+      height: 121
+    spriteID: 61d6025809051904fb8bae571bfa6445
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 133}
+  - name: whitesnake_Frame_12
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.45867768}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 520
+      y: 133
+      width: 508
+      height: 121
+    spriteID: bddc78f386854cf4cb28339a816625bc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 520, y: 133}
+  - name: whitesnake_Frame_13
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.45867768}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1036
+      y: 133
+      width: 508
+      height: 121
+    spriteID: 001621bc1e650ed4aa4f7c604bc62772
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1036, y: 133}
+  - name: whitesnake_Frame_14
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46249998}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 518
+      width: 508
+      height: 120
+    spriteID: eecd6f2befd18d6498d2e466788d9f05
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 518}
+  - name: whitesnake_Frame_15
+    originalName: 
+    pivot: {x: 0.50688976, y: 0.46249998}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 520
+      y: 518
+      width: 508
+      height: 120
+    spriteID: c0cf532f38890494c8959ee96f687c34
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 520, y: 518}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -291,67 +451,131 @@ ScriptedImporter:
     - name: whitesnake_Frame_0
       frameIndex: 0
       cellRect:
-        x: 12
-        y: 35
-        width: 500
-        height: 121
+        x: 4
+        y: 36
+        width: 508
+        height: 120
       spriteId: 6c94fe30a142b3442b5ed18e413ccbbb
     - name: whitesnake_Frame_1
       frameIndex: 1
       cellRect:
-        x: 12
-        y: 29
-        width: 500
-        height: 127
-      spriteId: 53c3993001169ac438e7c97ac584a4a8
+        x: 4
+        y: 36
+        width: 508
+        height: 120
+      spriteId: 4fcba6671b5908041b24b5d125af912b
     - name: whitesnake_Frame_2
       frameIndex: 2
       cellRect:
-        x: 12
-        y: 30
-        width: 500
-        height: 126
-      spriteId: e179e78a5551f5f4d87b8009afe8b5b6
+        x: 4
+        y: 36
+        width: 508
+        height: 119
+      spriteId: 028c3c11dda6f0f4da47ed2e89075c89
     - name: whitesnake_Frame_3
       frameIndex: 3
       cellRect:
-        x: 12
-        y: 31
-        width: 500
-        height: 125
-      spriteId: e762fec2f2b97de40be6ef3930f1e1ac
+        x: 4
+        y: 36
+        width: 508
+        height: 119
+      spriteId: 5f9bd69b368f79642830315326a38d8a
     - name: whitesnake_Frame_4
       frameIndex: 4
       cellRect:
-        x: 12
-        y: 33
-        width: 500
-        height: 123
-      spriteId: dc8e2b59ca8437b4b8fe9e0a3f6dc2c4
+        x: 4
+        y: 35
+        width: 508
+        height: 120
+      spriteId: 00abb09eec7771e42a850db9c594ecea
     - name: whitesnake_Frame_5
       frameIndex: 5
       cellRect:
-        x: 12
-        y: 34
-        width: 500
-        height: 122
-      spriteId: a82d31bf70000404c9f722663e514627
+        x: 4
+        y: 35
+        width: 508
+        height: 120
+      spriteId: 766e267c1a2cf084482ea3e3b47845ae
     - name: whitesnake_Frame_6
       frameIndex: 6
       cellRect:
-        x: 12
+        x: 4
         y: 35
-        width: 500
+        width: 508
         height: 121
-      spriteId: 3bf763697bec335459f667385f4791ac
+      spriteId: d715cbdacd139e049b2ef199e1228141
     - name: whitesnake_Frame_7
       frameIndex: 7
       cellRect:
-        x: 12
+        x: 4
         y: 35
-        width: 500
+        width: 508
         height: 121
-      spriteId: 105e51ba5d140bd43a630e4f402ba0fe
+      spriteId: fbe5a76c5fca0d442ba99b97fae1f3da
+    - name: whitesnake_Frame_8
+      frameIndex: 8
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 120
+      spriteId: 58c0afa02be85f84d8cf4b3af5e7eedd
+    - name: whitesnake_Frame_9
+      frameIndex: 9
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 120
+      spriteId: 890b1e1c6718fce488e9ad15cb3087ff
+    - name: whitesnake_Frame_10
+      frameIndex: 10
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 121
+      spriteId: 8ab8ace96f76eed4b95c09979558a502
+    - name: whitesnake_Frame_11
+      frameIndex: 11
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 121
+      spriteId: 61d6025809051904fb8bae571bfa6445
+    - name: whitesnake_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 121
+      spriteId: bddc78f386854cf4cb28339a816625bc
+    - name: whitesnake_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 121
+      spriteId: 001621bc1e650ed4aa4f7c604bc62772
+    - name: whitesnake_Frame_14
+      frameIndex: 14
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 120
+      spriteId: eecd6f2befd18d6498d2e466788d9f05
+    - name: whitesnake_Frame_15
+      frameIndex: 15
+      cellRect:
+        x: 4
+        y: 36
+        width: 508
+        height: 120
+      spriteId: c0cf532f38890494c8959ee96f687c34
     linkedCells: []
     parentIndex: -1
   platformSettings:
