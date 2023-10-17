@@ -6,6 +6,7 @@ public class FollowPlayer : MonoBehaviour
 {
     public GameObject player;
     public bool movingCam;
+    public bool gameTester = true;
     bool goStart;
     Camera cam;
     private readonly float ORTHOGRAPHIC_SIZE = 16.875f;
@@ -105,6 +106,11 @@ public class FollowPlayer : MonoBehaviour
     void LateUpdate()
     {
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
+        if (gameTester) {
+            this.transform.position = new Vector3(desiredPosition.x, desiredPosition.y, -10);
+            movingCam = false;
+            return;
+        }
         // Gradually pan camera back to player.
         if ((!up && !down && !left && !right) && (EqualWithinApproximation(0.01f, playerPreviousPos.x, transform.position.x) && EqualWithinApproximation(0.01f, playerPreviousPos.y, transform.position.y)))
         {
