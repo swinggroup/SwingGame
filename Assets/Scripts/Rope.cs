@@ -21,7 +21,7 @@ public class Rope : MonoBehaviour
     private float ropeSegLen = 0.25f;
     private float lineWidth = 0.0625f;
     private int segmentLength;
-    private Vector3 playerPhysicsTransform;
+    public Vector3 playerPhysicsTransform;
 
     // Use this for initialization
     void Start()
@@ -91,13 +91,12 @@ public class Rope : MonoBehaviour
         {
             this.ApplyConstraint();
         }
+
     }
 
     private void ApplyConstraint()
     {
-        // Debug:
-        playerPhysicsTransform = player.transform.position;
-         
+        
         // Constraint to First Point 
         RopeSegment firstSegment = this.ropeSegments[0];
         firstSegment.posNow = this.StartPoint.position;
@@ -107,7 +106,7 @@ public class Rope : MonoBehaviour
         // Constraint to Second Point 
         RopeSegment endSegment = this.ropeSegments[ropeSegments.Count - 1];
         // endSegment.posNow = this.EndPoint.position;
-        endSegment.posNow = player.transform.position;
+        endSegment.posNow = playerPhysicsTransform;
         this.ropeSegments[ropeSegments.Count - 1] = endSegment;
 
         for (int i = 0; i < this.segmentLength - 1; i++)
@@ -167,7 +166,7 @@ public class Rope : MonoBehaviour
 
             Vector3[] straightRopePos = new Vector3[2];
             straightRopePos[0] = StartPoint.transform.position;
-            straightRopePos[1] = player.transform.position;
+            straightRopePos[1] = playerPhysicsTransform;
             lineRenderer.positionCount = straightRopePos.Length;
             lineRenderer.SetPositions(straightRopePos);
             return;
@@ -184,8 +183,6 @@ public class Rope : MonoBehaviour
         // lock draw rope final segment to player transform pos
         // doesnt work properly, bc the simulation thinks player position is elsewehre
         // ropePositions[segmentLength - 1] = player.transform.position;
-        Debug.Log("player physics transform: " + playerPhysicsTransform);
-        Debug.Log("actual transform now: " + player.transform.position);
         lineRenderer.positionCount = ropePositions.Length;
         lineRenderer.SetPositions(ropePositions);
     }

@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
-        Debug.Log("palyer fixedupdate finished, transform: " + transform.position);
+        rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
     void HandleGrounded()
@@ -439,6 +439,7 @@ public class PlayerController : MonoBehaviour
         Vector2 force = rope.NormalizedPlayerToAnchor();
         force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
         rb.AddForce(force, ForceMode2D.Force);
+        rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
     IEnumerator DelaySwing(float delay)
