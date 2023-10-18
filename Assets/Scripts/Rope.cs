@@ -19,8 +19,9 @@ public class Rope : MonoBehaviour
     private LineRenderer lineRenderer;
     private List<RopeSegment> ropeSegments = null;
     private float ropeSegLen = 0.25f;
-    private float lineWidth = 0.1f;
+    private float lineWidth = 0.0625f;
     private int segmentLength;
+    private Vector3 playerPhysicsTransform;
 
     // Use this for initialization
     void Start()
@@ -31,7 +32,7 @@ public class Rope : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         this.DrawRope();
     }
@@ -75,7 +76,7 @@ public class Rope : MonoBehaviour
         // SIMULATION
         Vector2 forceGravity = new Vector2(0f, -0.5f);
 
-        for (int i = 1; i < this.segmentLength; i++)
+        for (int i = 1; i < this.segmentLength - 1; i++) // don't apply gravity to 1st or last segment
         {
             RopeSegment currSegment = this.ropeSegments[i];
             Vector2 velocity = currSegment.posNow - currSegment.posOld;
@@ -94,6 +95,9 @@ public class Rope : MonoBehaviour
 
     private void ApplyConstraint()
     {
+        // Debug:
+        playerPhysicsTransform = player.transform.position;
+         
         // Constraint to First Point 
         RopeSegment firstSegment = this.ropeSegments[0];
         firstSegment.posNow = this.StartPoint.position;
@@ -102,7 +106,8 @@ public class Rope : MonoBehaviour
 
         // Constraint to Second Point 
         RopeSegment endSegment = this.ropeSegments[ropeSegments.Count - 1];
-        endSegment.posNow = this.EndPoint.position;
+        // endSegment.posNow = this.EndPoint.position;
+        endSegment.posNow = player.transform.position;
         this.ropeSegments[ropeSegments.Count - 1] = endSegment;
 
         for (int i = 0; i < this.segmentLength - 1; i++)
@@ -124,14 +129,18 @@ public class Rope : MonoBehaviour
             }
 
             Vector2 changeAmount = changeDir * error;
-            if (i != 0)
+            if (i != 0 && i != segmentLength - 2)
             {
                 firstSeg.posNow -= changeAmount * 0.5f;
                 this.ropeSegments[i] = firstSeg;
                 secondSeg.posNow += changeAmount * 0.5f;
                 this.ropeSegments[i + 1] = secondSeg;
+            } else if (i == segmentLength - 2) // don't change the position of the second anchor point (where rope attaches to player)
+            {
+                firstSeg.posNow -= changeAmount;
+                this.ropeSegments[i] = firstSeg;
             }
-            else
+            else // don't change position of the first anchor point (where we lock on)
             {
                 secondSeg.posNow += changeAmount;
                 this.ropeSegments[i + 1] = secondSeg;
@@ -158,7 +167,7 @@ public class Rope : MonoBehaviour
 
             Vector3[] straightRopePos = new Vector3[2];
             straightRopePos[0] = StartPoint.transform.position;
-            straightRopePos[1] = EndPoint.transform.position;
+            straightRopePos[1] = player.transform.position;
             lineRenderer.positionCount = straightRopePos.Length;
             lineRenderer.SetPositions(straightRopePos);
             return;
@@ -172,7 +181,11 @@ public class Rope : MonoBehaviour
         {
             ropePositions[i] = this.ropeSegments[i].posNow;
         }
-
+        // lock draw rope final segment to player transform pos
+        // doesnt work properly, bc the simulation thinks player position is elsewehre
+        // ropePositions[segmentLength - 1] = player.transform.position;
+        Debug.Log("player physics transform: " + playerPhysicsTransform);
+        Debug.Log("actual transform now: " + player.transform.position);
         lineRenderer.positionCount = ropePositions.Length;
         lineRenderer.SetPositions(ropePositions);
     }

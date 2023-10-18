@@ -259,6 +259,7 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+        Debug.Log("palyer fixedupdate finished, transform: " + transform.position);
     }
 
     void HandleGrounded()
