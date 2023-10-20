@@ -454,7 +454,6 @@ public class PlayerController : MonoBehaviour
         {
             Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
 
-
             HashSet<Tuple<int, int>> visited = new();
             RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
         }
@@ -563,6 +562,10 @@ public class PlayerController : MonoBehaviour
         else if (IsRightCollision(collision))
         {
             currConstantForce.force = new Vector2(-boostVelocity, 0);
+        }
+        else if (IsCeilingCollision(collision))
+        {
+            currConstantForce.force = new Vector2(0, -boostVelocity);
         }
     }
 
