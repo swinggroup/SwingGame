@@ -95,7 +95,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638339237414908126
+  platformSettingsDirtyTick: 638340218254134247
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -147,7 +147,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
+      x: 82
       y: 228
       width: 16
       height: 16
@@ -167,7 +167,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
+      x: 98
       y: 228
       width: 16
       height: 16
@@ -187,7 +187,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
+      x: 114
       y: 228
       width: 16
       height: 16
@@ -207,7 +207,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
+      x: 130
       y: 228
       width: 16
       height: 16
@@ -227,7 +227,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
+      x: 82
       y: 212
       width: 16
       height: 16
@@ -247,7 +247,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
+      x: 98
       y: 212
       width: 16
       height: 16
@@ -267,7 +267,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
+      x: 114
       y: 212
       width: 16
       height: 16
@@ -287,7 +287,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
+      x: 130
       y: 212
       width: 16
       height: 16
@@ -307,7 +307,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
+      x: 82
       y: 196
       width: 16
       height: 16
@@ -327,7 +327,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
+      x: 98
       y: 196
       width: 16
       height: 16
@@ -347,7 +347,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
+      x: 114
       y: 196
       width: 16
       height: 16
@@ -367,7 +367,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
+      x: 130
       y: 196
       width: 16
       height: 16
@@ -387,8 +387,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 180
+      x: 338
+      y: 196
       width: 16
       height: 16
     spriteID: 40cc31a60be90ed43bb0f0ee9801270b
@@ -407,8 +407,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 180
+      x: 354
+      y: 196
       width: 16
       height: 16
     spriteID: 620bf536e6d9a204abb327f887dc67a8
@@ -427,8 +427,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 180
+      x: 370
+      y: 196
       width: 16
       height: 16
     spriteID: 61e90c140443699499f2148f16259310
@@ -447,7 +447,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
+      x: 82
       y: 180
       width: 16
       height: 16
@@ -467,8 +467,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 164
+      x: 98
+      y: 180
       width: 16
       height: 16
     spriteID: 908bf415636edf646bba2754a1402dd6
@@ -487,8 +487,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 164
+      x: 114
+      y: 180
       width: 16
       height: 16
     spriteID: 946795adf2bbd5b41a5a79c5d3fa8ea1
@@ -507,8 +507,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 164
+      x: 130
+      y: 180
       width: 16
       height: 16
     spriteID: f833e09a07c58d04e8b875bdca07e469
@@ -527,8 +527,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
-      y: 164
+      x: 306
+      y: 180
       width: 16
       height: 16
     spriteID: 45e0ac58af1360b4c88eecd8830c1899
@@ -547,8 +547,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 51
-      y: 132
+      x: 322
+      y: 180
       width: 16
       height: 16
     spriteID: d0c2fed4c22361e4d92181f11b833fec
@@ -567,8 +567,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 67
-      y: 132
+      x: 338
+      y: 180
       width: 16
       height: 16
     spriteID: f3eb3bc88ba018848876bffaf10d1571
@@ -587,8 +587,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 132
+      x: 370
+      y: 180
       width: 16
       height: 16
     spriteID: 7ee032d6af664df42bf99bf47eea13fa
@@ -607,8 +607,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 132
+      x: 82
+      y: 164
       width: 16
       height: 16
     spriteID: 2c515417e7adaa541b60e84a77bc893f
@@ -627,8 +627,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 132
+      x: 98
+      y: 164
       width: 16
       height: 16
     spriteID: ff32873e5e6567c4a958f40bf1252714
@@ -647,8 +647,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 51
-      y: 116
+      x: 114
+      y: 164
       width: 16
       height: 16
     spriteID: 05a6feb5ea0804c4bb5b1c99fe7dddf4
@@ -667,8 +667,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 67
-      y: 116
+      x: 130
+      y: 164
       width: 16
       height: 16
     spriteID: 75293287d435b2b4ebea23ec1a92b915
@@ -687,8 +687,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 116
+      x: 290
+      y: 164
       width: 16
       height: 16
     spriteID: 5a4633f37a1c1c447aa4dd90fcec7339
@@ -707,8 +707,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 116
+      x: 306
+      y: 164
       width: 16
       height: 16
     spriteID: 790a85baa31587e4a8f6576f2049dea6
@@ -727,8 +727,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 116
+      x: 338
+      y: 164
       width: 16
       height: 16
     spriteID: e29b66e45b6853f429b5179b87b1114c
@@ -747,8 +747,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 51
-      y: 100
+      x: 354
+      y: 164
       width: 16
       height: 16
     spriteID: b428b6a2c1a86e541afc11adf3af97a9
@@ -767,8 +767,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 67
-      y: 100
+      x: 370
+      y: 164
       width: 16
       height: 16
     spriteID: fc63b9eabc10b7f4898cb8bd9e54f47e
@@ -787,8 +787,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 100
+      x: 386
+      y: 164
       width: 16
       height: 16
     spriteID: 4e0f4581673da66439ed440c426ac735
@@ -807,8 +807,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 100
+      x: 290
+      y: 148
       width: 16
       height: 16
     spriteID: 44f53f7688f373145bbf8123567ecbb7
@@ -827,8 +827,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 51
-      y: 84
+      x: 306
+      y: 148
       width: 16
       height: 16
     spriteID: c4a230d0e2435ad4ba88bf34720d3daf
@@ -847,8 +847,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 67
-      y: 84
+      x: 322
+      y: 148
       width: 16
       height: 16
     spriteID: e9e1e482a2307f7488c0b26620678550
@@ -867,8 +867,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 84
+      x: 338
+      y: 148
       width: 16
       height: 16
     spriteID: 1a621e88b6b9484438f8e1f669958018
@@ -887,8 +887,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 84
+      x: 354
+      y: 148
       width: 16
       height: 16
     spriteID: dca8a210051dd5b438f5e0f068d9129e
@@ -907,8 +907,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 84
+      x: 370
+      y: 148
       width: 16
       height: 16
     spriteID: d2a47f5b494fb224bb612ea52699aafc
@@ -927,8 +927,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 51
-      y: 68
+      x: 386
+      y: 148
       width: 16
       height: 16
     spriteID: 0f95143a94a1a9640876537c466b2e0f
@@ -947,8 +947,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 67
-      y: 68
+      x: 50
+      y: 132
       width: 16
       height: 16
     spriteID: 142c400d1e647d64e8c8c39c7fb691af
@@ -967,8 +967,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 83
-      y: 68
+      x: 66
+      y: 132
       width: 16
       height: 16
     spriteID: d3cac5b93f992e44d99afd0d4076004b
@@ -987,8 +987,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 99
-      y: 68
+      x: 82
+      y: 132
       width: 16
       height: 16
     spriteID: e9b6ec9c0bae08541abc0b25e098b906
@@ -1007,8 +1007,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 115
-      y: 68
+      x: 98
+      y: 132
       width: 16
       height: 16
     spriteID: eafa960478f04b14487861daedffb70a
@@ -1027,8 +1027,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 3
-      y: 36
+      x: 114
+      y: 132
       width: 16
       height: 16
     spriteID: 4cd14cd0f1ea2a4489e8e63d6dafaa12
@@ -1047,8 +1047,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 19
-      y: 36
+      x: 290
+      y: 132
       width: 16
       height: 16
     spriteID: 472a1a15f25228b42b78881c9f3484d1
@@ -1067,8 +1067,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 35
-      y: 36
+      x: 306
+      y: 132
       width: 16
       height: 16
     spriteID: 63682c19fba77a148818e4b574def44a
@@ -1087,8 +1087,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
-      y: 36
+      x: 322
+      y: 132
       width: 16
       height: 16
     spriteID: cb78365d891e5d14aaf1a9a6b5c47a43
@@ -1107,8 +1107,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 147
-      y: 36
+      x: 338
+      y: 132
       width: 16
       height: 16
     spriteID: f3f51522d13ba314ba3234982f512054
@@ -1127,8 +1127,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 179
-      y: 36
+      x: 370
+      y: 132
       width: 16
       height: 16
     spriteID: 392d36adb35cb8448929236ba13eb020
@@ -1147,8 +1147,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 195
-      y: 36
+      x: 386
+      y: 132
       width: 16
       height: 16
     spriteID: 5e9721344cd061146b65c17a43d6f9a1
@@ -1167,8 +1167,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 211
-      y: 36
+      x: 50
+      y: 116
       width: 16
       height: 16
     spriteID: 88f775199c72db34ab750847bccd423e
@@ -1187,8 +1187,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 3
-      y: 20
+      x: 66
+      y: 116
       width: 16
       height: 16
     spriteID: 8aa88a9c14d92cb4c9a9e45217edcd79
@@ -1207,8 +1207,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 19
-      y: 20
+      x: 82
+      y: 116
       width: 16
       height: 16
     spriteID: c57e531f3bad6c0429c71a16911f9b90
@@ -1227,8 +1227,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 35
-      y: 20
+      x: 98
+      y: 116
       width: 16
       height: 16
     spriteID: 58f30e8a0a3e0a349800d79ac0487cba
@@ -1247,8 +1247,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 131
-      y: 20
+      x: 114
+      y: 116
       width: 16
       height: 16
     spriteID: 210ede9b77838464ca38cfdfbb29e7fc
@@ -1267,8 +1267,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 147
-      y: 20
+      x: 306
+      y: 116
       width: 16
       height: 16
     spriteID: 2a847f1e6629a0141a50931893bf6f84
@@ -1287,8 +1287,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 179
-      y: 20
+      x: 322
+      y: 116
       width: 16
       height: 16
     spriteID: c37dbf73bcc6cf04d925bb2131c50f54
@@ -1307,8 +1307,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 195
-      y: 20
+      x: 338
+      y: 116
       width: 16
       height: 16
     spriteID: 67cec380356fb1e44b2c48d166020b16
@@ -1327,8 +1327,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 211
-      y: 20
+      x: 354
+      y: 116
       width: 16
       height: 16
     spriteID: 2c51abdb0658e614791861564002c014
@@ -1347,8 +1347,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 3
-      y: 4
+      x: 370
+      y: 116
       width: 16
       height: 16
     spriteID: 33b6e8d5bf36e524f9e0b600b095b14c
@@ -1367,8 +1367,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 19
-      y: 4
+      x: 386
+      y: 116
       width: 16
       height: 16
     spriteID: cd59bd1da60c0d54dbc300eef556c592
@@ -1387,8 +1387,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 35
-      y: 4
+      x: 50
+      y: 100
       width: 16
       height: 16
     spriteID: cc614421cc25b29409f4ae19908d448d
@@ -1407,8 +1407,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 179
-      y: 4
+      x: 66
+      y: 100
       width: 16
       height: 16
     spriteID: eca55f928e70c244fbb02a3c614ab8d8
@@ -1427,8 +1427,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 195
-      y: 4
+      x: 98
+      y: 100
       width: 16
       height: 16
     spriteID: 880eb4eb7e34c6649a7b76fd4ee8db96
@@ -1447,8 +1447,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 211
-      y: 4
+      x: 114
+      y: 100
       width: 16
       height: 16
     spriteID: 18cbf6e09d2fcb74bb4f1a01ce34b3c0
@@ -1462,13 +1462,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_66
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 196
+      x: 306
+      y: 100
       width: 16
       height: 16
     spriteID: 84543805d1420914fb49803298189e44
@@ -1482,13 +1482,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_67
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 196
+      x: 322
+      y: 100
       width: 16
       height: 16
     spriteID: 1986f2bac5b26b24b99b5c8b4d56f345
@@ -1502,13 +1502,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_68
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 196
+      x: 338
+      y: 100
       width: 16
       height: 16
     spriteID: cb4a1ebff32a826429a66b6863a5a67d
@@ -1522,13 +1522,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_69
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 180
+      x: 354
+      y: 100
       width: 16
       height: 16
     spriteID: e808b42daa817874e9e0fb3b591f5916
@@ -1542,13 +1542,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_70
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 180
+      x: 370
+      y: 100
       width: 16
       height: 16
     spriteID: 15f2abcdd239a3541b06d86bbda52393
@@ -1562,13 +1562,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_71
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 180
+      x: 386
+      y: 100
       width: 16
       height: 16
     spriteID: 9a3634e794fde3341b0ec2603d9623bf
@@ -1582,13 +1582,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_72
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 180
+      x: 50
+      y: 84
       width: 16
       height: 16
     spriteID: b5568bfe8708ab546bd893a24890f11c
@@ -1602,13 +1602,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_73
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 291
-      y: 164
+      x: 66
+      y: 84
       width: 16
       height: 16
     spriteID: 35ffc2189cbf66942aa631ca550f5cf6
@@ -1622,13 +1622,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_74
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 164
+      x: 82
+      y: 84
       width: 16
       height: 16
     spriteID: c6adacadec52a884aa013e01d47ed25c
@@ -1642,13 +1642,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_75
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 164
+      x: 98
+      y: 84
       width: 16
       height: 16
     spriteID: be55dc9ed033035439b1869cd48babad
@@ -1662,13 +1662,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_76
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 164
+      x: 114
+      y: 84
       width: 16
       height: 16
     spriteID: f6603a978c7179e4396ad41e87303ffb
@@ -1682,13 +1682,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_77
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 164
+      x: 306
+      y: 84
       width: 16
       height: 16
     spriteID: 28baf581e1ab24e489a65a27824b1308
@@ -1702,13 +1702,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_78
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 164
+      x: 322
+      y: 84
       width: 16
       height: 16
     spriteID: 7fa4b90b6e45bc8409f23e4292c0a174
@@ -1722,13 +1722,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_79
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 291
-      y: 148
+      x: 338
+      y: 84
       width: 16
       height: 16
     spriteID: 70e50292394e19c43be99ad7d9d8ef4f
@@ -1742,13 +1742,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_80
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 148
+      x: 354
+      y: 84
       width: 16
       height: 16
     spriteID: f4b143aa32a22b84f92963ac3d97ba2f
@@ -1762,13 +1762,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_81
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 148
+      x: 370
+      y: 84
       width: 16
       height: 16
     spriteID: d7b0a8a0098e05d4785b4634c28b4d56
@@ -1782,13 +1782,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_82
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 148
+      x: 386
+      y: 84
       width: 16
       height: 16
     spriteID: 42602b8cd1826b84aa53cdb96251166e
@@ -1802,13 +1802,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_83
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 148
+      x: 50
+      y: 68
       width: 16
       height: 16
     spriteID: 7c84fe58f06a9b8488f809c6652ffe61
@@ -1822,13 +1822,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_84
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 148
+      x: 66
+      y: 68
       width: 16
       height: 16
     spriteID: d1d40e260c5acfc40af664cb8ab5acd3
@@ -1842,13 +1842,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_85
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 148
+      x: 82
+      y: 68
       width: 16
       height: 16
     spriteID: 8cbbc68a373ef114790810c0cca2ba9f
@@ -1862,13 +1862,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_86
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 291
-      y: 132
+      x: 98
+      y: 68
       width: 16
       height: 16
     spriteID: ebb95d04e0ba417419f46b8c264df1a1
@@ -1882,13 +1882,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_87
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 132
+      x: 114
+      y: 68
       width: 16
       height: 16
     spriteID: 0db0ce8401c53444fa0fa5714e4a9347
@@ -1902,13 +1902,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_88
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 132
+      x: 306
+      y: 68
       width: 16
       height: 16
     spriteID: 1f5454eda0f27f44ba8b27d905dd4244
@@ -1922,13 +1922,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_89
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 132
+      x: 322
+      y: 68
       width: 16
       height: 16
     spriteID: d90ce07b2c56e4640b4a39b03abc54f0
@@ -1942,13 +1942,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_90
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 132
+      x: 338
+      y: 68
       width: 16
       height: 16
     spriteID: b7b3ea555a0e13d409349ff28bb4e9db
@@ -1962,13 +1962,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_91
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 132
+      x: 354
+      y: 68
       width: 16
       height: 16
     spriteID: 1e3b55ebd42054e48bbf236192c506f5
@@ -1982,13 +1982,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_92
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 116
+      x: 370
+      y: 68
       width: 16
       height: 16
     spriteID: 586f8dcffbb13f142b979f2f9be853b5
@@ -2002,13 +2002,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_93
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 116
+      x: 386
+      y: 68
       width: 16
       height: 16
     spriteID: 2705769e03116124fb37c7c4066e64f2
@@ -2022,13 +2022,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_94
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 116
+      x: 2
+      y: 36
       width: 16
       height: 16
     spriteID: 7a59326a2f1b27142bffaa08c51d93d6
@@ -2042,13 +2042,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_95
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 116
+      x: 18
+      y: 36
       width: 16
       height: 16
     spriteID: 5803d3a4480d94a4d9e999f4e8172c70
@@ -2062,13 +2062,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_96
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 116
+      x: 34
+      y: 36
       width: 16
       height: 16
     spriteID: 448938884daa3a2479dfd908d0203ea6
@@ -2082,13 +2082,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_97
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 116
+      x: 130
+      y: 36
       width: 16
       height: 16
     spriteID: c1814f96a650c434298dded44eb7a779
@@ -2102,13 +2102,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_98
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 100
+      x: 146
+      y: 36
       width: 16
       height: 16
     spriteID: c48ab143db4762147a6a7c4aab5c3098
@@ -2122,13 +2122,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_99
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 100
+      x: 178
+      y: 36
       width: 16
       height: 16
     spriteID: ca2df8b1d1509984fb895c08e12ca4b3
@@ -2142,13 +2142,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_100
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 100
+      x: 194
+      y: 36
       width: 16
       height: 16
     spriteID: 5597c6d8820ca124c8fa9c25cd5a12d7
@@ -2162,13 +2162,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_101
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 100
+      x: 210
+      y: 36
       width: 16
       height: 16
     spriteID: 4bd82e2ca69db91439c5bb88f65300ab
@@ -2182,13 +2182,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_102
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 100
+      x: 2
+      y: 20
       width: 16
       height: 16
     spriteID: f324a508a08cf2c4b84769238b81a117
@@ -2202,13 +2202,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_103
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 100
+      x: 18
+      y: 20
       width: 16
       height: 16
     spriteID: 812ab2f420c74fa488364979df8d0976
@@ -2222,13 +2222,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_104
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 84
+      x: 34
+      y: 20
       width: 16
       height: 16
     spriteID: c95b655830d69314d8d072644f5ef558
@@ -2242,13 +2242,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_105
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 84
+      x: 130
+      y: 20
       width: 16
       height: 16
     spriteID: fa248ac494f79b043bc3200b6d1bb9a2
@@ -2262,13 +2262,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_106
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 84
+      x: 146
+      y: 20
       width: 16
       height: 16
     spriteID: 025b2e64d7443ac4da55e177650b0a73
@@ -2282,13 +2282,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_107
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 84
+      x: 178
+      y: 20
       width: 16
       height: 16
     spriteID: 370df723cee759547a013d3c38f82968
@@ -2302,13 +2302,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_108
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 84
+      x: 194
+      y: 20
       width: 16
       height: 16
     spriteID: fe55c5ee404a0f34fb73b661bc68de99
@@ -2322,13 +2322,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_109
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 84
+      x: 210
+      y: 20
       width: 16
       height: 16
     spriteID: 3753f70998f4de14099f8a9ca9461d45
@@ -2342,13 +2342,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_110
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 307
-      y: 68
+      x: 2
+      y: 4
       width: 16
       height: 16
     spriteID: c6ae408724dc5c042933c4dacac60ad7
@@ -2362,13 +2362,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_111
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 323
-      y: 68
+      x: 18
+      y: 4
       width: 16
       height: 16
     spriteID: e2d4a6f26689a114da123c28ab4154bf
@@ -2382,13 +2382,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_112
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 339
-      y: 68
+      x: 34
+      y: 4
       width: 16
       height: 16
     spriteID: 35c9050f824efb3458c06161a125898d
@@ -2402,13 +2402,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_113
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 355
-      y: 68
+      x: 178
+      y: 4
       width: 16
       height: 16
     spriteID: 333466e08d67b8b4e84b7297945bb73f
@@ -2422,13 +2422,13 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_114
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 371
-      y: 68
+      x: 194
+      y: 4
       width: 16
       height: 16
     spriteID: c554bc34d67566646b3626acb3e1b40b
@@ -2442,16 +2442,76 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: background_bricks_115
     originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 210
+      y: 4
+      width: 16
+      height: 16
+    spriteID: f874d4cb670dd8947bf5d4fe482a9312
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  - name: background_bricks_116
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 387
-      y: 68
+      x: 146
+      y: 132
       width: 16
       height: 16
-    spriteID: f874d4cb670dd8947bf5d4fe482a9312
+    spriteID: cc0571d2ac9f5744890b874198018a72
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  - name: background_bricks_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 162
+      y: 132
+      width: 16
+      height: 16
+    spriteID: a5e9bdf42cdc3aa4b812706bbd369dad
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  - name: background_bricks_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 178
+      y: 132
+      width: 16
+      height: 16
+    spriteID: f06e60fc83f18384b827b6b1cef264b0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -2471,11 +2531,11 @@ ScriptedImporter:
     - name: background_bricks
       frameIndex: 0
       cellRect:
-        x: 17
+        x: 18
         y: 240
-        width: 399
-        height: 238
-      spriteId: c2ea9c0f677e2614a9c1ea9fe6a86d05
+        width: 398
+        height: 240
+      spriteId: ded62ec104af5fb4b9df468fb7d08ec6
     linkedCells: []
     parentIndex: -1
   platformSettings:
