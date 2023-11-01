@@ -14,7 +14,6 @@ public class anchorIndicator : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
         Vector2 unitVector = (mousePos - ourPos).normalized;
@@ -31,6 +30,7 @@ public class anchorIndicator : MonoBehaviour
         }
         else
         {
+            // doing physics calculations in lateupdate causes indicator jitter
             this.GetComponent<SpriteRenderer>().color = Color.black;
             this.transform.position = mousePos;
             if ((ourPos - mousePos).magnitude > PlayerController.GRAPPLE_RANGE)
