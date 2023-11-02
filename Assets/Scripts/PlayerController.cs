@@ -297,6 +297,7 @@ public class PlayerController : MonoBehaviour
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
+                Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
                 state = State.Attached;
             }
             else
@@ -452,6 +453,7 @@ public class PlayerController : MonoBehaviour
         // If we hook onto a Cloud
         if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
         {
+            Debug.Log("hooked on cloud");
             Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
 
             HashSet<Tuple<int, int>> visited = new();
