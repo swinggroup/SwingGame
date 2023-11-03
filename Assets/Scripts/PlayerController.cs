@@ -460,6 +460,24 @@ public class PlayerController : MonoBehaviour
             RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
         }
 
+        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f))) != null))
+        {
+            Debug.Log("hooked on cloud");
+            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f));
+
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+        }
+
+        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f))) != null))
+        {
+            Debug.Log("hooked on cloud");
+            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f));
+
+            HashSet<Tuple<int, int>> visited = new();
+            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+        }
+
         // If we hook onto a CloudDistance
         if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
         {
