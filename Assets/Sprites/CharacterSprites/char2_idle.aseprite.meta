@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: char2_idle
     originalName: 
-    pivot: {x: 0.5769231, y: 0.5}
+    pivot: {x: 0.5, y: 0.4848485}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 26
-      height: 32
+      width: 24
+      height: 33
     spriteID: 7255c5df50da7c1429b9a2a1fe94510b
     spriteBone: []
     spriteOutline: []
@@ -141,14 +141,14 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: char2_idle_Frame_1
     originalName: 
-    pivot: {x: 0.5714286, y: 0.4848485}
+    pivot: {x: 0.5, y: 0.4848485}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 68
-      y: 44
-      width: 21
+      x: 36
+      y: 4
+      width: 24
       height: 33
     spriteID: ec2fd9cb4a2117148b9a91c0001926ac
     spriteBone: []
@@ -158,87 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 68, y: 44}
-  - name: char2_idle_Frame_2
-    originalName: 
-    pivot: {x: 0.55, y: 0.4848485}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 97
-      y: 44
-      width: 20
-      height: 33
-    spriteID: 24f6d7b48ce196e498216ebb49ead631
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 97, y: 44}
-  - name: char2_idle_Frame_3
-    originalName: 
-    pivot: {x: 0.55, y: 0.4848485}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 85
-      width: 20
-      height: 33
-    spriteID: 8bd2fd6e95e647d48825a847e6e27ed6
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 85}
-  - name: char2_idle_Frame_2
-    originalName: 
-    pivot: {x: 0.5, y: 0.4848485}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 44
-      width: 24
-      height: 33
-    spriteID: d0ae4b1b5dc0324418755418dbb9dc3f
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 44}
-  - name: char2_idle_Frame_5
-    originalName: 
-    pivot: {x: 0.5, y: 0.4848485}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 36
-      y: 44
-      width: 24
-      height: 33
-    spriteID: 48e12db974c6760498c821d4acb1be18
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 36, y: 44}
+    uvTransform: {x: 36, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -248,54 +168,22 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: char2_idle_Frame_4
-      frameIndex: 4
-      cellRect:
-        x: 9
-        y: 16
-        width: 26
-        height: 32
-      spriteId: 7255c5df50da7c1429b9a2a1fe94510b
-    - name: char2_idle_Frame_5
-      frameIndex: 5
-      cellRect:
-        x: 12
-        y: 16
-        width: 21
-        height: 33
-      spriteId: ec2fd9cb4a2117148b9a91c0001926ac
     - name: char2_idle_Frame_0
       frameIndex: 0
       cellRect:
-        x: 13
+        x: 12
         y: 16
-        width: 20
+        width: 24
         height: 33
-      spriteId: 24f6d7b48ce196e498216ebb49ead631
+      spriteId: 7255c5df50da7c1429b9a2a1fe94510b
     - name: char2_idle_Frame_1
       frameIndex: 1
       cellRect:
-        x: 13
-        y: 16
-        width: 20
-        height: 33
-      spriteId: 8bd2fd6e95e647d48825a847e6e27ed6
-    - name: char2_idle_Frame_2
-      frameIndex: 2
-      cellRect:
         x: 12
         y: 16
         width: 24
         height: 33
-      spriteId: d0ae4b1b5dc0324418755418dbb9dc3f
-    - name: char2_idle_Frame_3
-      frameIndex: 3
-      cellRect:
-        x: 12
-        y: 16
-        width: 24
-        height: 33
-      spriteId: 48e12db974c6760498c821d4acb1be18
+      spriteId: ec2fd9cb4a2117148b9a91c0001926ac
     linkedCells: []
     parentIndex: -1
   platformSettings:

@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: char2_fall_Frame_0
     originalName: 
-    pivot: {x: 0.51612896, y: 0.5757576}
+    pivot: {x: 0.51515156, y: 0.5714286}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 83
-      width: 31
-      height: 33
+      x: 51
+      y: 4
+      width: 33
+      height: 35
     spriteID: c9299f10d7c83b94999051474ad367c4
     spriteBone: []
     spriteOutline: []
@@ -138,18 +138,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 83}
+    uvTransform: {x: 51, y: 4}
   - name: char2_fall_Frame_1
     originalName: 
-    pivot: {x: 0.4705882, y: 0.54838705}
+    pivot: {x: 0.47222227, y: 0.54545456}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
-      y: 44
-      width: 34
-      height: 31
+      y: 87
+      width: 36
+      height: 33
     spriteID: 4d22430ddbd763c4faabc7cdbb27ad93
     spriteBone: []
     spriteOutline: []
@@ -158,18 +158,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 44}
+    uvTransform: {x: 4, y: 87}
   - name: char2_fall_Frame_2
     originalName: 
-    pivot: {x: 0.48648646, y: 0.46875}
+    pivot: {x: 0.48717952, y: 0.47058824}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 37
-      height: 32
+      width: 39
+      height: 34
     spriteID: b8203bda4e217a043a46b0d3dab274c7
     spriteBone: []
     spriteOutline: []
@@ -181,15 +181,15 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: char2_fall_Frame_3
     originalName: 
-    pivot: {x: 0.47222227, y: 0.41935483}
+    pivot: {x: 0.4736842, y: 0.42424244}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
-      y: 4
-      width: 36
-      height: 31
+      x: 4
+      y: 46
+      width: 38
+      height: 33
     spriteID: c0bfe92e157a9fa4981bdaffb59aa489
     spriteBone: []
     spriteOutline: []
@@ -198,7 +198,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 4}
+    uvTransform: {x: 4, y: 46}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -211,34 +211,34 @@ ScriptedImporter:
     - name: char2_fall_Frame_0
       frameIndex: 0
       cellRect:
-        x: 8
-        y: 13
-        width: 31
-        height: 33
+        x: 7
+        y: 12
+        width: 33
+        height: 35
       spriteId: c9299f10d7c83b94999051474ad367c4
     - name: char2_fall_Frame_1
       frameIndex: 1
       cellRect:
-        x: 8
-        y: 15
-        width: 34
-        height: 31
+        x: 7
+        y: 14
+        width: 36
+        height: 33
       spriteId: 4d22430ddbd763c4faabc7cdbb27ad93
     - name: char2_fall_Frame_2
       frameIndex: 2
       cellRect:
-        x: 6
-        y: 17
-        width: 37
-        height: 32
+        x: 5
+        y: 16
+        width: 39
+        height: 34
       spriteId: b8203bda4e217a043a46b0d3dab274c7
     - name: char2_fall_Frame_3
       frameIndex: 3
       cellRect:
-        x: 7
-        y: 19
-        width: 36
-        height: 31
+        x: 6
+        y: 18
+        width: 38
+        height: 33
       spriteId: c0bfe92e157a9fa4981bdaffb59aa489
     linkedCells: []
     parentIndex: -1

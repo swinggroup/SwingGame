@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: char2_jump_Frame_0
     originalName: 
-    pivot: {x: 0.5416666, y: 0.61538464}
+    pivot: {x: 0.53846157, y: 0.60714287}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 35
-      y: 40
-      width: 24
-      height: 26
+      x: 37
+      y: 42
+      width: 26
+      height: 28
     spriteID: e01589baef841fd4a92c2f7963b69e16
     spriteBone: []
     spriteOutline: []
@@ -138,18 +138,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 35, y: 40}
+    uvTransform: {x: 37, y: 42}
   - name: char2_jump_Frame_1
     originalName: 
-    pivot: {x: 0.51851857, y: 0.5714286}
+    pivot: {x: 0.5172414, y: 0.5666667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 35
+      x: 37
       y: 4
-      width: 27
-      height: 28
+      width: 29
+      height: 30
     spriteID: 50874f7c887f73a4e954df8801d8178b
     spriteBone: []
     spriteOutline: []
@@ -158,18 +158,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 35, y: 4}
+    uvTransform: {x: 37, y: 4}
   - name: char2_jump_Frame_2
     originalName: 
-    pivot: {x: 0.43478262, y: 0.5}
+    pivot: {x: 0.43999997, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
-      y: 52
-      width: 23
-      height: 36
+      y: 54
+      width: 25
+      height: 38
     spriteID: 4eab9a05c8c2eaf42b613fbe12f9a3d7
     spriteBone: []
     spriteOutline: []
@@ -178,18 +178,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 52}
+    uvTransform: {x: 4, y: 54}
   - name: char2_jump_Frame_3
     originalName: 
-    pivot: {x: 0.47826084, y: 0.55}
+    pivot: {x: 0.48, y: 0.54761904}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 23
-      height: 40
+      width: 25
+      height: 42
     spriteID: 4575de6060e4e664799069cd8a06d371
     spriteBone: []
     spriteOutline: []
@@ -211,34 +211,34 @@ ScriptedImporter:
     - name: char2_jump_Frame_0
       frameIndex: 0
       cellRect:
-        x: 11
-        y: 16
-        width: 24
-        height: 26
+        x: 10
+        y: 15
+        width: 26
+        height: 28
       spriteId: e01589baef841fd4a92c2f7963b69e16
     - name: char2_jump_Frame_1
       frameIndex: 1
       cellRect:
-        x: 10
-        y: 16
-        width: 27
-        height: 28
+        x: 9
+        y: 15
+        width: 29
+        height: 30
       spriteId: 50874f7c887f73a4e954df8801d8178b
     - name: char2_jump_Frame_2
       frameIndex: 2
       cellRect:
-        x: 14
-        y: 14
-        width: 23
-        height: 36
+        x: 13
+        y: 13
+        width: 25
+        height: 38
       spriteId: 4eab9a05c8c2eaf42b613fbe12f9a3d7
     - name: char2_jump_Frame_3
       frameIndex: 3
       cellRect:
-        x: 13
-        y: 10
-        width: 23
-        height: 40
+        x: 12
+        y: 9
+        width: 25
+        height: 42
       spriteId: 4575de6060e4e664799069cd8a06d371
     linkedCells: []
     parentIndex: -1
