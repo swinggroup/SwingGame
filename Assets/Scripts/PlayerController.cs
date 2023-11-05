@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
     public Rope rope;
+    public AnchorIndicator anchorIndicator;
 
     /******************************************************************************************
      * Constants 
@@ -283,12 +285,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
         {
             canSwing = false;
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = anchorIndicator.transform.position;
+            // Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             // Get the unit vector towards the mouse
             Vector2 unitVector = (mousePos - ourPos).normalized;
             // Raycast to first platform hit
-            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, GRAPPLE_RANGE, LayerMask.GetMask("Hookables"));
+            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, (ourPos - mousePos).magnitude + 0.1f, LayerMask.GetMask("Hookables"));
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
