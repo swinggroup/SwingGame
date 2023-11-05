@@ -286,12 +286,11 @@ public class PlayerController : MonoBehaviour
         {
             canSwing = false;
             Vector2 mousePos = anchorIndicator.transform.position;
-            // Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            // Get the unit vector towards the mouse
+            // Get the unit vector towards the anchor indicator
             Vector2 unitVector = (mousePos - ourPos).normalized;
             // Raycast to first platform hit
-            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, (ourPos - mousePos).magnitude + 0.1f, LayerMask.GetMask("Hookables"));
+            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.1f, PlayerController.GRAPPLE_RANGE), LayerMask.GetMask("Hookables"));
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {

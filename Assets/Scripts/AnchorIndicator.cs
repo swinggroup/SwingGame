@@ -23,7 +23,7 @@ public class AnchorIndicator : MonoBehaviour
 
         bool withinRange(Vector2 vector) => (ourPos - vector).magnitude <= PlayerController.GRAPPLE_RANGE;
 
-        RaycastHit2D raycastHit = Physics2D.Raycast(ourPos, unitVector, (ourPos - (Vector2)this.transform.position).magnitude + 0.1f, LayerMask.GetMask("Hookables"));
+        RaycastHit2D raycastHit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - (Vector2)this.transform.position).magnitude + 0.1f, PlayerController.GRAPPLE_RANGE), LayerMask.GetMask("Hookables"));
 
         if (raycastHit && raycastHit.collider.CompareTag("Hookable"))
         {
