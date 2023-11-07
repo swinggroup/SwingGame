@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
     int boostFixedFrames;
     public Rigidbody2D rb;
     ConstantForce2D currConstantForce; // for boosting
-    BoxCollider2D boxCollider;
+    public BoxCollider2D boxCollider;
     Vector2 spinVelocity;
     public bool leftCollision = false;
     public bool rightCollision = false;
@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
             // Get the unit vector towards the anchor indicator
             Vector2 unitVector = (mousePos - ourPos).normalized;
             // Raycast to first platform hit
-            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.1f, PlayerController.GRAPPLE_RANGE), LayerMask.GetMask("Hookables"));
+            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
@@ -304,6 +304,8 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
+                Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
