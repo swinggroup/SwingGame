@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     SortedDictionary<float, List<Tuple<Vector3Int, TileBase>>> CloudDistanceList;
 
     public Rope rope;
+    public AnchorIndicator anchorIndicator;
 
     /******************************************************************************************
      * Constants 
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
     int boostFixedFrames;
     public Rigidbody2D rb;
     ConstantForce2D currConstantForce; // for boosting
-    BoxCollider2D boxCollider;
+    public BoxCollider2D boxCollider;
     Vector2 spinVelocity;
     public bool leftCollision = false;
     public bool rightCollision = false;
@@ -283,12 +285,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
         {
             canSwing = false;
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = anchorIndicator.transform.position;
 
-            // Get the unit vector towards the mouse
+            // Get the unit vector towards the anchor indicator
             Vector2 unitVector = (mousePos - ourPos).normalized;
             // Raycast to first platform hit
-            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, GRAPPLE_RANGE, LayerMask.GetMask("Hookables"));
+            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
@@ -297,11 +299,13 @@ public class PlayerController : MonoBehaviour
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
-                Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
+                // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
                 state = State.Attached;
             }
             else
             {
+                // Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
+                // Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
