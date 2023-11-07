@@ -60,21 +60,10 @@ public class AnchorIndicator : MonoBehaviour
                 // Instead, raycast from the anchor indicator to the closest point, then raycast from the player to the first raycast hit
                 // point to snap the anchor indicator to the closest platform visible to the player.
                 
-                // Offset position vector to prevent raycast starting inside the platform
-                Vector2 raycastStart = this.transform.position;
-                raycastStart.x = ourPos.x > this.transform.position.x ? this.transform.position.x + 0.175f : this.transform.position.x - 0.175f;
-                raycastStart.y = ourPos.y > this.transform.position.y ? this.transform.position.y + 0.175f : this.transform.position.y - 0.175f;
-
-                unitVector = (closestPoint - (Vector2)raycastStart).normalized;
-
-                raycastHit = Physics2D.Raycast(raycastStart, unitVector, ((Vector2)raycastStart - closestPoint).magnitude + 0.2f, LayerMask.GetMask("Hookables"));
-                // Debug.Log("Ray1 start point: " + raycastStart);
-                // Debug.Log("Ray1 hit point: " + raycastHit.point);
-                // Debug.DrawRay(raycastStart, unitVector * (((Vector2)this.transform.position - closestPoint).magnitude + 0.2f), Color.green);
-                unitVector = (raycastHit.point - ourPos).normalized;
-                raycastHit = Physics2D.Raycast(ourPos, unitVector, (raycastHit.point - ourPos).magnitude + 0.2f, LayerMask.GetMask("Hookables"));
-                // Debug.Log("Ray2hit point: " + raycastHit.point);
-                // Debug.DrawRay(ourPos, unitVector * PlayerController.GRAPPLE_RANGE, Color.blue);
+                unitVector = (closestPoint - ourPos).normalized;
+                raycastHit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, (closestPoint - ourPos).magnitude + 0.2f, LayerMask.GetMask("Hookables"));
+                // Debug.Log("Rayhit point: " + raycastHit.point);
+                // Debug.DrawRay(ourPos, unitVector * ((raycastHit.point - ourPos).magnitude + 0.2f), Color.blue);
                 if (raycastHit)
                 {
                     // TODO: Rethink tags 

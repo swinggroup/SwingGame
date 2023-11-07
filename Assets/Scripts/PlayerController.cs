@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
             // Get the unit vector towards the anchor indicator
             Vector2 unitVector = (mousePos - ourPos).normalized;
             // Raycast to first platform hit
-            RaycastHit2D hit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
+            RaycastHit2D hit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
@@ -298,7 +298,7 @@ public class PlayerController : MonoBehaviour
                 Vector2 swingPoint = hit.point;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
+                rope.NewRope(anchorIndicator.transform.position);
                 // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
                 state = State.Attached;
             }
