@@ -53,7 +53,6 @@ public class AnchorIndicator : MonoBehaviour
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(this.transform.position, OVERLAP_CIRCLE_RADIUS, LayerMask.GetMask("Hookables"));
             if (collidersInRange.Length > 0)
             {
-                //Debug.Log("wtf");
                 collidersInRange = collidersInRange.OrderBy(c => Vector2.Distance(c.ClosestPoint(this.transform.position), this.transform.position)).ToArray();
                 Vector2 closestPoint = collidersInRange[0].ClosestPoint(this.transform.position);
 
@@ -63,8 +62,8 @@ public class AnchorIndicator : MonoBehaviour
                 
                 // Offset position vector to prevent raycast starting inside the platform
                 Vector2 raycastStart = this.transform.position;
-                raycastStart.x = ourPos.x > this.transform.position.x ? this.transform.position.x + 0.1f: this.transform.position.x - 0.1f;
-                raycastStart.y = ourPos.y > this.transform.position.y ? this.transform.position.y + 0.1f : this.transform.position.y - 0.1f;
+                raycastStart.x = ourPos.x > this.transform.position.x ? this.transform.position.x + 0.175f : this.transform.position.x - 0.175f;
+                raycastStart.y = ourPos.y > this.transform.position.y ? this.transform.position.y + 0.175f : this.transform.position.y - 0.175f;
 
                 unitVector = (closestPoint - (Vector2)raycastStart).normalized;
 
@@ -87,13 +86,15 @@ public class AnchorIndicator : MonoBehaviour
                     {
                         this.transform.position = raycastHit.point;
                     }
+                    // Anchor indicator is potentially outside of the grapple range but still close enough to a platform that we want to snap it.
+                    // We snap to the intersection point between the circle made by the grapple radius and the platform.
                     else
                     {
                         var angle = Vector2.SignedAngle(Vector2.up.normalized, (closestPoint - ourPos).normalized);
                         angle = angle < 0 ? angle + 360 : angle;
                         angle += 90f;
-                        //Debug.Log("Angle: " + angle);
-                        //Debug.Log("Max angle needed: " + Mathf.Asin(player.boxCollider.size.y / 2 / PlayerController.GRAPPLE_RANGE));
+                        // Debug.Log("Angle: " + angle);
+                        // Debug.Log("Max angle needed: " + Mathf.Asin((player.boxCollider.size.y / 2) / PlayerController.GRAPPLE_RANGE) * Mathf.Rad2Deg);
                         Vector2 intersectionPoint = ArcColliderIntersectionPoint(ourPos, PlayerController.GRAPPLE_RANGE, angle);
                         if (!intersectionPoint.Equals(Vector2.negativeInfinity))
                         {
@@ -117,8 +118,8 @@ public class AnchorIndicator : MonoBehaviour
 
     Vector2 ArcColliderIntersectionPoint(Vector2 circleCenter, float circleRadius, float startAngle)
     {
-        float step = .1f;
-        float arcAngle = 10f;
+        float step = .05f;
+        float arcAngle = Mathf.Asin(((player.boxCollider.size.y / 2) / PlayerController.GRAPPLE_RANGE) + 0.1f) * Mathf.Rad2Deg;
 
         for (float angleOffset = 0f; angleOffset <= arcAngle; angleOffset += step)
         {
@@ -132,6 +133,7 @@ public class AnchorIndicator : MonoBehaviour
             if (!hit.collider.IsUnityNull())
             {
                 if (radianAngleIncreasing != startAngle) Debug.DrawRay(circleCenter, direction);
+                // Debug.Log("Angle offset when first hit is: " + angleOffset);
                 // Debug.Log("Num rays used this frame: " + Mathf.RoundToInt(angleOffset / step));
                 return hit.point;
             }
@@ -147,6 +149,7 @@ public class AnchorIndicator : MonoBehaviour
             if (!hit.collider.IsUnityNull())
             {
                 if (radianAngleDecreasing != startAngle) Debug.DrawRay(circleCenter, direction);
+                // Debug.Log("Angle offset when first hit is: " + angleOffset);
                 // Debug.Log("Num rays used this frame: " + Mathf.RoundToInt(angleOffset / step));
                 return hit.point;
             }

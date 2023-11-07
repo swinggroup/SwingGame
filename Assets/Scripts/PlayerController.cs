@@ -299,13 +299,13 @@ public class PlayerController : MonoBehaviour
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
                 rope.NewRope(new Vector2(swingPoint.x, swingPoint.y));
-                Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
+                // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
                 state = State.Attached;
             }
             else
             {
-                Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
-                Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
+                // Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
+                // Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
                 StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
