@@ -498,14 +498,25 @@ public class PlayerController : MonoBehaviour
 
         this.GetComponent<SpriteRenderer>().color = delay == DELAY_NORMAL ? Color.red : Color.magenta;
         yield return new WaitForSeconds(delay);
+        this.GetComponent<SpriteRenderer>().color = Color.white;
+        canSwing = true;
+        delayingSwing = false;
+
+        // Function to verify that player is not overlapping with the respawning cloud. Delay spawn if so.
+        bool playerOverlapping() => !cloudTiles.All(x => Physics2D.OverlapBox((Vector2Int)x.Item1, Vector2.one, 0f, LayerMask.GetMask("Default")).IsUnityNull());
+
+        while (playerOverlapping())
+        {
+            Debug.Log("Player overlap");
+            yield return new WaitForSeconds(1);
+        }
+
         foreach (var pair in cloudTiles)
         {
             cloudMap.SetTile(pair.Item1, pair.Item2);
         }
+        
 
-        this.GetComponent<SpriteRenderer>().color = Color.white;
-        canSwing = true;
-        delayingSwing = false;
     }
 
     IEnumerator DelayJumpAnimation(float delay)
