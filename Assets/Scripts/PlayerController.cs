@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
-    private readonly float arrowKeyVelocityMagnitude = 200f;
+    private readonly float arrowKeyVelocityMagnitude = 5f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -222,7 +222,9 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("jump", false);
                 animator.SetBool("falling", false);
 
-                if (Mathf.Abs(rb.velocity.x) > 0.0000000001f)
+                // If player is flickering between idle and rolling, the condition is too strict
+                // and not catching float error when the rigid body is still.
+                if (Mathf.Abs(rb.velocity.x) > 0.000000001f)
                 {
                     animator.SetBool("rolling", true);
                     animator.SetBool("bonk", false);
