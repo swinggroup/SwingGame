@@ -15,8 +15,7 @@ public class AnchorIndicator : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    void HandleAnchorIndicator()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
@@ -38,7 +37,6 @@ public class AnchorIndicator : MonoBehaviour
         }
         else
         {
-            // doing physics calculations in lateupdate causes indicator jitter
             this.GetComponent<SpriteRenderer>().color = Color.black;
             this.transform.position = mousePos;
             if (!withinRange(mousePos))
@@ -48,6 +46,8 @@ public class AnchorIndicator : MonoBehaviour
                     this.transform.position = player.rope.anchorPoint;
                 }
                 this.transform.position = ourPos + (unitVector * PlayerController.GRAPPLE_RANGE);
+                // Debug.Log("unit vector: " + unitVector * PlayerController.GRAPPLE_RANGE);
+
             }
             // Anchor indicator snap
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(this.transform.position, OVERLAP_CIRCLE_RADIUS, LayerMask.GetMask("Hookables"));
@@ -56,10 +56,6 @@ public class AnchorIndicator : MonoBehaviour
                 collidersInRange = collidersInRange.OrderBy(c => Vector2.Distance(c.ClosestPoint(this.transform.position), this.transform.position)).ToArray();
                 Vector2 closestPoint = collidersInRange[0].ClosestPoint(this.transform.position);
 
-                // Directly raycasting from the player to closest point doesn't always work. (the raycast might barely miss on a corner)
-                // Instead, raycast from the anchor indicator to the closest point, then raycast from the player to the first raycast hit
-                // point to snap the anchor indicator to the closest platform visible to the player.
-                
                 unitVector = (closestPoint - ourPos).normalized;
                 raycastHit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, (closestPoint - ourPos).magnitude + 0.2f, LayerMask.GetMask("Hookables"));
                 // Debug.Log("Rayhit point: " + raycastHit.point);
@@ -103,6 +99,17 @@ public class AnchorIndicator : MonoBehaviour
             this.GetComponent<SpriteRenderer>().color = Color.yellow;
             this.transform.position = player.rope.anchorPoint;
         }
+    }
+
+    void LateUpdate()
+    {
+        HandleAnchorIndicator();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        HandleAnchorIndicator();
     }
 
     Vector2 ArcColliderIntersectionPoint(Vector2 circleCenter, float circleRadius, float startAngle)
