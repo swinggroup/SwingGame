@@ -256,7 +256,6 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
-        Debug.Log("player pos:" + this.transform.position);
     }
 
     void HandleGrounded()

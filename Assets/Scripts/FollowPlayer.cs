@@ -102,8 +102,7 @@ public class FollowPlayer : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void HandleFollowPlayer()
     {
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         if (gameTester) {
@@ -123,6 +122,18 @@ public class FollowPlayer : MonoBehaviour
         }
         playerPreviousPos = player.transform.position;
     }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        HandleFollowPlayer();
+    }
+
+    void LateUpdate()
+    {
+        HandleFollowPlayer();
+    }
+
 
     bool EqualWithinApproximation(float delta, float a, float b)
     {
