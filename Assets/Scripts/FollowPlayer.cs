@@ -103,7 +103,7 @@ public class FollowPlayer : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         Vector3 desiredPosition = player.transform.position + horizontalOffset + verticalOffset;
         if (gameTester) {

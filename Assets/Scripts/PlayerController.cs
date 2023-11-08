@@ -43,12 +43,6 @@ public class PlayerController : MonoBehaviour
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
     private readonly float arrowKeyVelocityMagnitude = 200f;
-    private readonly Vector3 fortyFiveLeft = new Vector3(-1, -1, 0).normalized;
-    private readonly Vector3 fortyFiveRight = new Vector3(1, -1, 0).normalized;
-    private readonly Vector3 steepLeft = new Vector3(-1, -2, 0).normalized;
-    private readonly Vector3 steepRight = new Vector3(1, -2, 0).normalized;
-    private readonly Vector3 shallowLeft = new Vector3(-2, -1, 0).normalized;
-    private readonly Vector3 shallowRight = new Vector3(2, -1, 0).normalized;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -262,6 +256,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
+        Debug.Log("player pos:" + this.transform.position);
     }
 
     void HandleGrounded()

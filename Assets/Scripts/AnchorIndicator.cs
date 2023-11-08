@@ -14,8 +14,7 @@ public class AnchorIndicator : MonoBehaviour
     {
 
     }
-
-    // Update is called once per frame
+    /*
     void LateUpdate()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -48,6 +47,100 @@ public class AnchorIndicator : MonoBehaviour
                     this.transform.position = player.rope.anchorPoint;
                 }
                 this.transform.position = ourPos + (unitVector * PlayerController.GRAPPLE_RANGE);
+                Debug.Log("unit vector: " + unitVector * PlayerController.GRAPPLE_RANGE);
+
+            }
+            // Anchor indicator snap
+            Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(this.transform.position, OVERLAP_CIRCLE_RADIUS, LayerMask.GetMask("Hookables"));
+            if (collidersInRange.Length > 0)
+            {
+                collidersInRange = collidersInRange.OrderBy(c => Vector2.Distance(c.ClosestPoint(this.transform.position), this.transform.position)).ToArray();
+                Vector2 closestPoint = collidersInRange[0].ClosestPoint(this.transform.position);
+
+                // Directly raycasting from the player to closest point doesn't always work. (the raycast might barely miss on a corner)
+                // Instead, raycast from the anchor indicator to the closest point, then raycast from the player to the first raycast hit
+                // point to snap the anchor indicator to the closest platform visible to the player.
+                
+                unitVector = (closestPoint - ourPos).normalized;
+                raycastHit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, (closestPoint - ourPos).magnitude + 0.2f, LayerMask.GetMask("Hookables"));
+                // Debug.Log("Rayhit point: " + raycastHit.point);
+                // Debug.DrawRay(ourPos, unitVector * ((raycastHit.point - ourPos).magnitude + 0.2f), Color.blue);
+                if (raycastHit)
+                {
+                    // TODO: Rethink tags 
+                    if (collidersInRange[0].CompareTag("Hookable"))
+                    {
+                        this.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
+                    if (withinRange(raycastHit.point))
+                    {
+                        this.transform.position = raycastHit.point;
+                    }
+                    // Anchor indicator is potentially outside of the grapple range but still close enough to a platform that we want to snap it.
+                    // We snap to the intersection point between the circle made by the grapple radius and the platform.
+                    else
+                    {
+                        var angle = Vector2.SignedAngle(Vector2.up.normalized, (closestPoint - ourPos).normalized);
+                        angle = angle < 0 ? angle + 360 : angle;
+                        angle += 90f;
+                        // Debug.Log("Angle: " + angle);
+                        // Debug.Log("Max angle needed: " + Mathf.Asin((player.boxCollider.size.y / 2) / PlayerController.GRAPPLE_RANGE) * Mathf.Rad2Deg);
+                        Vector2 intersectionPoint = ArcColliderIntersectionPoint(ourPos, PlayerController.GRAPPLE_RANGE, angle);
+                        if (!intersectionPoint.Equals(Vector2.negativeInfinity))
+                        {
+                            this.transform.position = intersectionPoint;
+                        }
+                        else
+                        {
+                            this.GetComponent<SpriteRenderer>().color = Color.black;
+                        }
+                    }
+                        
+                }
+            }
+        }
+        if (player.state == PlayerController.State.Swinging || player.state == PlayerController.State.Attached)
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.yellow;
+            this.transform.position = player.rope.anchorPoint;
+        }
+    }
+    */
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
+        Vector2 unitVector = (mousePos - ourPos).normalized;
+
+        bool withinRange(Vector2 vector) => (ourPos - vector).magnitude <= PlayerController.GRAPPLE_RANGE;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(ourPos, unitVector, Mathf.Min((ourPos - (Vector2)this.transform.position).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE), LayerMask.GetMask("Hookables"));
+
+        if (raycastHit && raycastHit.collider.CompareTag("Hookable"))
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.red;
+            this.transform.position = raycastHit.point;
+        }
+        else if (raycastHit && raycastHit.collider.CompareTag("Unhookable"))
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.black;
+            this.transform.position = raycastHit.point;
+        }
+        else
+        {
+            // doing physics calculations in lateupdate causes indicator jitter
+            this.GetComponent<SpriteRenderer>().color = Color.black;
+            this.transform.position = mousePos;
+            if (!withinRange(mousePos))
+            {
+                if (player.state == PlayerController.State.Swinging)
+                {
+                    this.transform.position = player.rope.anchorPoint;
+                }
+                this.transform.position = ourPos + (unitVector * PlayerController.GRAPPLE_RANGE);
+                Debug.Log("unit vector: " + unitVector * PlayerController.GRAPPLE_RANGE);
             }
             // Anchor indicator snap
             Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(this.transform.position, OVERLAP_CIRCLE_RADIUS, LayerMask.GetMask("Hookables"));
