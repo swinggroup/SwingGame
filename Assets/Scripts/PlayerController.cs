@@ -294,7 +294,8 @@ public class PlayerController : MonoBehaviour
                 Vector2 swingPoint = hit.point;
 
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                rope.NewRope(anchorIndicator.transform.position);
+                // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
+                rope.NewRope(swingPoint);
                 // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
                 state = State.Attached;
             }
