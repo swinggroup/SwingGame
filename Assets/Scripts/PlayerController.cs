@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
     int jumpFixedFrames;
+    public bool jumpedRecently = false;
     int boostFixedFrames;
     public Rigidbody2D rb;
     ConstantForce2D currConstantForce; // for boosting
@@ -83,15 +84,6 @@ public class PlayerController : MonoBehaviour
     public bool floorCollision = false;
     private Vector3 adjustingDirection;
 
-
-    /******************************************************************************************
-     * Misc
-     *******************************************************************************************/
-    public List<bool> jumpBuffer;
-    public readonly int jumpBufferFrames = 40;
-    public bool jumpedRecently = false;
-    public List<Vector2> hookBuffer;
-    public readonly int hookBufferFrames = 40;
 
     // Start is called before the first frame update
     void Start()
@@ -105,15 +97,12 @@ public class PlayerController : MonoBehaviour
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true) screenDebug.SetActive(true);
         else screenDebug.SetActive(false);
-        jumpBuffer = new();
-        hookBuffer = new();
-        jumpedRecently = false;
     }
 
     IEnumerator JumpedRecently()
     {
         jumpedRecently = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         jumpedRecently = false;
     }
 
@@ -288,7 +277,7 @@ public class PlayerController : MonoBehaviour
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
         if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
-            if (jumpedRecently) Debug.Log("jumped recently");
+            jumpedRecently = false;
             rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
@@ -390,7 +379,6 @@ public class PlayerController : MonoBehaviour
             RevolutionData.positionSwitchCount = 0;
 
             state = State.Swinging;
-            jumpedRecently = false;
         }
     }
 
