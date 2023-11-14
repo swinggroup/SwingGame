@@ -622,6 +622,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Debug.Log("Player velocity in FixedUpdate: " + fixedUpdatePlayerVelocity.x.ToString("0.00000000000000000000000000000000000"));
+        // Debug.Log("Player velocity in OnCollisionEnter: " + rb.velocity.x.ToString("0.00000000000000000000000000000000000"));
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
         if (collision.collider.name.Contains("StunMap"))
         {
@@ -652,7 +654,7 @@ public class PlayerController : MonoBehaviour
             case State.Grounded:
                 break;
             case State.Airborne:
-                if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
+                if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
                 {
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 }
@@ -687,8 +689,10 @@ public class PlayerController : MonoBehaviour
             case State.Swinging:
                 StartCoroutine(DelaySwing(DELAY_SWING));
                 // Wall bounce when swinging into wall
-                if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
+                // Debug.Log("player velocity: " + rb.velocity);
+                if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
                 {
+                    // Debug.Log("velocity of collision: " + collision.relativeVelocity);
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                 }
                 // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
@@ -936,6 +940,8 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("State: " + state.ToString() + "\n");
         stringBuilder.Append("canSwing: " + canSwing + "\n");
         stringBuilder.Append("isStunned: " + isStunned + "\n");
+        stringBuilder.Append("Player Velocity: " + rb.velocity + "\n");
+        stringBuilder.Append("Collision Velocity: " + collision.relativeVelocity + "\n");
         stringBuilder.Append("leftCollision: " + IsLeftCollision(collision) + "\n");
         stringBuilder.Append("rightCollision: " + IsRightCollision(collision) + "\n");
         stringBuilder.Append("ceilingCollision: " + IsCeilingCollision(collision) + "\n");
