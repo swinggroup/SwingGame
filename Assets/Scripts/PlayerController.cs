@@ -277,6 +277,7 @@ public class PlayerController : MonoBehaviour
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
         if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
+            // This function could be called again causing a double jump sound if jumpedRecently is still true.
             jumpedRecently = false;
             rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
@@ -324,6 +325,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleAirbornePhysics()
     {
+        // Prevent levitating when player gets airborne from a buffered jump.
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpFixedFrames = 0;
