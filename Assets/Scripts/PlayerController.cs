@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
-    private readonly float arrowKeyVelocityMagnitude = 5f;
+    private readonly float arrowKeyVelocityMagnitude = 200f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -84,6 +84,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 adjustingDirection;
 
 
+    /******************************************************************************************
+     * Misc
+     *******************************************************************************************/
+    public List<bool> jumpBuffer;
+    public readonly int jumpBufferFrames = 40;
+    public bool jumpedRecently = false;
+    public List<Vector2> hookBuffer;
+    public readonly int hookBufferFrames = 40;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,11 +105,25 @@ public class PlayerController : MonoBehaviour
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true) screenDebug.SetActive(true);
         else screenDebug.SetActive(false);
+        jumpBuffer = new();
+        hookBuffer = new();
+        jumpedRecently = false;
+    }
+
+    IEnumerator JumpedRecently()
+    {
+        jumpedRecently = true;
+        yield return new WaitForSeconds(0.5f);
+        jumpedRecently = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            StartCoroutine(JumpedRecently());
+        }
         if (Input.GetKeyDown(KeyCode.Q))
         {
             spawnZone = this.transform.position;
@@ -263,8 +286,9 @@ public class PlayerController : MonoBehaviour
     void HandleGrounded()
     {
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
-        if (Input.GetKeyDown(KeyCode.Space) && !isStunned)
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
+            if (jumpedRecently) Debug.Log("jumped recently");
             rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
