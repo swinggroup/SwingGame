@@ -335,6 +335,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleAirbornePhysics()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpFixedFrames = 0;
+        }
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
             rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
@@ -386,6 +390,7 @@ public class PlayerController : MonoBehaviour
             RevolutionData.positionSwitchCount = 0;
 
             state = State.Swinging;
+            jumpedRecently = false;
         }
     }
 
