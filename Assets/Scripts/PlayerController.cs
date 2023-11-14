@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
-    private readonly float arrowKeyVelocityMagnitude = 5f;
+    private readonly float arrowKeyVelocityMagnitude = 200f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
     int jumpFixedFrames;
+    public bool jumpedRecently = false;
     int boostFixedFrames;
     public Rigidbody2D rb;
     ConstantForce2D currConstantForce; // for boosting
@@ -98,9 +99,20 @@ public class PlayerController : MonoBehaviour
         else screenDebug.SetActive(false);
     }
 
+    IEnumerator JumpedRecently()
+    {
+        jumpedRecently = true;
+        yield return new WaitForSeconds(0.1f);
+        jumpedRecently = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            StartCoroutine(JumpedRecently());
+        }
         if (Input.GetKeyDown(KeyCode.Q))
         {
             spawnZone = this.transform.position;
@@ -263,8 +275,10 @@ public class PlayerController : MonoBehaviour
     void HandleGrounded()
     {
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
-        if (Input.GetKeyDown(KeyCode.Space) && !isStunned)
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
+            // This function could be called again causing a double jump sound if jumpedRecently is still true.
+            jumpedRecently = false;
             rb.velocity = new Vector2(rb.velocity.x, 0);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
             jumpFixedFrames = MAX_JUMP_FRAMES;
@@ -311,6 +325,11 @@ public class PlayerController : MonoBehaviour
 
     void HandleAirbornePhysics()
     {
+        // Prevent levitating when player gets airborne from a buffered jump.
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpFixedFrames = 0;
+        }
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
             rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
