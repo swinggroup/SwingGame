@@ -16,9 +16,9 @@ public class ParallaxScrollLayer : MonoBehaviour
         foreach (Transform child in transform)
         {
             child.position += new Vector3(1f * Time.deltaTime, 0, 0);
-            if (child.position.x > 61)
+            if (child.position.x > 100)
             {
-                child.position -= new Vector3(3 * 62.5f, 0, 0);
+                child.position -= new Vector3(4 * 62.5f, 0, 0);
             }
         }
     }
