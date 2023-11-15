@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d6ce55fd3983da543a4a6fa507415501
+guid: 4420314c73ba67f45bab393f923b59d4
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -95,7 +95,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638354357670431878
+  platformSettingsDirtyTick: 638355891910506697
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -130,7 +130,7 @@ ScriptedImporter:
       y: 4
       width: 156
       height: 242
-    spriteID: a13de1da8667e254ab180b99ecbde8df
+    spriteID: 89174d8361c30dd4e9d2cb497d669901
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -150,7 +150,7 @@ ScriptedImporter:
       y: 254
       width: 156
       height: 242
-    spriteID: 8ad191017b4fad44ab99daff95a65e6a
+    spriteID: 1e8a07f32c09d784fab07ba14224fc25
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -170,7 +170,7 @@ ScriptedImporter:
       y: 504
       width: 156
       height: 242
-    spriteID: c4fa461a9a649e6459b2817c052a2108
+    spriteID: 47922668e2b40e24c8e85a3fd80b48ba
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -190,7 +190,7 @@ ScriptedImporter:
       y: 754
       width: 156
       height: 242
-    spriteID: 155d45c0ba2bc8b40b98225f1b75a50f
+    spriteID: 587f3cc83189bf148a2cf785d087b1bd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -210,7 +210,7 @@ ScriptedImporter:
       y: 4
       width: 156
       height: 242
-    spriteID: e397a47f0bb409a4ab8a776149235938
+    spriteID: 128736400943fab4aa4a169dd3011016
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -230,7 +230,7 @@ ScriptedImporter:
       y: 254
       width: 156
       height: 242
-    spriteID: 9696ada11d8ce2742bdc4fb42b039478
+    spriteID: 94bff89a662cc0144b3cb3f07e75a888
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -250,7 +250,7 @@ ScriptedImporter:
       y: 504
       width: 156
       height: 242
-    spriteID: 356ee3050d1e3e04b97c2d9135c84e16
+    spriteID: 23728c830e8f45d45a4029a2026df52f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -270,7 +270,7 @@ ScriptedImporter:
       y: 754
       width: 156
       height: 242
-    spriteID: 22ee3b7db1a8f7e45b4abadc77c6575d
+    spriteID: a839d86e415889548bd5aea534c6647a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -295,7 +295,7 @@ ScriptedImporter:
         y: 39
         width: 156
         height: 242
-      spriteId: a13de1da8667e254ab180b99ecbde8df
+      spriteId: 89174d8361c30dd4e9d2cb497d669901
     - name: buddha1_Frame_1
       frameIndex: 1
       cellRect:
@@ -303,7 +303,7 @@ ScriptedImporter:
         y: 38
         width: 156
         height: 242
-      spriteId: 8ad191017b4fad44ab99daff95a65e6a
+      spriteId: 1e8a07f32c09d784fab07ba14224fc25
     - name: buddha1_Frame_2
       frameIndex: 2
       cellRect:
@@ -311,7 +311,7 @@ ScriptedImporter:
         y: 37
         width: 156
         height: 242
-      spriteId: c4fa461a9a649e6459b2817c052a2108
+      spriteId: 47922668e2b40e24c8e85a3fd80b48ba
     - name: buddha1_Frame_3
       frameIndex: 3
       cellRect:
@@ -319,7 +319,7 @@ ScriptedImporter:
         y: 36
         width: 156
         height: 242
-      spriteId: 155d45c0ba2bc8b40b98225f1b75a50f
+      spriteId: 587f3cc83189bf148a2cf785d087b1bd
     - name: buddha1_Frame_4
       frameIndex: 4
       cellRect:
@@ -327,7 +327,7 @@ ScriptedImporter:
         y: 36
         width: 156
         height: 242
-      spriteId: e397a47f0bb409a4ab8a776149235938
+      spriteId: 128736400943fab4aa4a169dd3011016
     - name: buddha1_Frame_5
       frameIndex: 5
       cellRect:
@@ -335,7 +335,7 @@ ScriptedImporter:
         y: 37
         width: 156
         height: 242
-      spriteId: 9696ada11d8ce2742bdc4fb42b039478
+      spriteId: 94bff89a662cc0144b3cb3f07e75a888
     - name: buddha1_Frame_6
       frameIndex: 6
       cellRect:
@@ -343,7 +343,7 @@ ScriptedImporter:
         y: 38
         width: 156
         height: 242
-      spriteId: 356ee3050d1e3e04b97c2d9135c84e16
+      spriteId: 23728c830e8f45d45a4029a2026df52f
     - name: buddha1_Frame_7
       frameIndex: 7
       cellRect:
@@ -351,7 +351,7 @@ ScriptedImporter:
         y: 39
         width: 156
         height: 242
-      spriteId: 22ee3b7db1a8f7e45b4abadc77c6575d
+      spriteId: a839d86e415889548bd5aea534c6647a
     linkedCells: []
     parentIndex: -1
   platformSettings:
