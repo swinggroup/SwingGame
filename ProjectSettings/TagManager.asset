@@ -14,6 +14,18 @@ TagManager:
   - Parallax1
   - Parallax2
   - Parallax3
+  - Parallax4
+  - Parallax5
+  - Parallax6
+  - Parallax7
+  - Parallax8
+  - Parallax9
+  - Parallax10
+  - Parallax11
+  - Parallax12
+  - Parallax13
+  - Parallax14
+  - Parallax15
   layers:
   - Default
   - TransparentFX
