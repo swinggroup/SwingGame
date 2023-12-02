@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
             canSwing = true;
+            isStunned = false;
             onSlope = false;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
