@@ -20,12 +20,12 @@ public class RuleTileFixer : MonoBehaviour
         List<Sprite> newSprites = new();
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/boostmap_ruletile/boostmap_tiles.aseprite");
+        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/stunmap_ruletile/stunmap_tiles.aseprite");
         foreach (Object s in aseprite)
         {
             // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE, ENDING WITH AN UNDERSCORE
             // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-            if (s.name.StartsWith("boostmap_tiles_"))
+            if (s.name.StartsWith("stunmap_tiles_"))
             {
                 newSprites.Add((Sprite) s);
             }
@@ -34,7 +34,7 @@ public class RuleTileFixer : MonoBehaviour
         // get the ruletile
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/boostmap_ruletile/boostmap_ruletile.asset", typeof(RuleTile));
+        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/stunmap_ruletile/stunmap_ruletile.asset", typeof(RuleTile));
 
         // for each rule, change the sprite file
         List<RuleTile.TilingRule> rules = ruleTile.m_TilingRules;
