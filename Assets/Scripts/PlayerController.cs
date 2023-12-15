@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
 
                 // If player is flickering between idle and rolling, the condition is too strict
                 // and not catching float error when the rigid body is still.
-                if (Mathf.Abs(rb.velocity.x) > 0.000000001f)
+                if (Mathf.Abs(rb.velocity.x) > 1f)
                 {
                     animator.SetBool("rolling", true);
                     animator.SetBool("bonk", false);
@@ -629,6 +629,7 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.name.Contains("StunMap"))
         {
             isStunned = true;
+            animator.SetBool("stunned", true);
             canSwing = false;
             if (rope.RopeExists())
             {
@@ -644,6 +645,7 @@ public class PlayerController : MonoBehaviour
         {
             if (IsFloorCollision(collision) && !collision.collider.name.Contains("StunMap"))
             {
+                animator.SetBool("stunned", false);
                 state = State.Grounded;
                 isStunned = false;
                 canSwing = true;
