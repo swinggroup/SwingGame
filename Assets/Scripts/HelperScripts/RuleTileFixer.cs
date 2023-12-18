@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.U2D.Sprites;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class RuleTileFixer : MonoBehaviour
@@ -11,6 +9,7 @@ public class RuleTileFixer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
         // 1: duplicate the ruletile template folder
         // 2: rename the aseprite from ruletile -> whatever is appropriate, and re-slice the sprites
         // 3: rename the paths in this file
@@ -43,5 +42,6 @@ public class RuleTileFixer : MonoBehaviour
             string name = rule.m_Sprites[0].name;
             rule.m_Sprites[0] = newSprites[int.Parse(name[18..])]; // 18th index because "ruletile_template_" is 18 chars long
         }
+        */
     }
 }
