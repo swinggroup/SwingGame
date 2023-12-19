@@ -119,7 +119,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: buddha_mountain
+  - name: buddha_mountain_Frame_0
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -130,7 +130,7 @@ ScriptedImporter:
       y: 4
       width: 1000
       height: 946
-    spriteID: c648863d3950ecc43986dcc86a95ce07
+    spriteID: ab33774bb0b7fda418b252d023ea6dbc
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -150,7 +150,7 @@ ScriptedImporter:
       y: 958
       width: 1000
       height: 946
-    spriteID: 84a8087243b75b54499e2f145d274698
+    spriteID: 3a3acce00e01a504d9469b8c0ddaaead
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -170,7 +170,7 @@ ScriptedImporter:
       y: 4
       width: 1000
       height: 946
-    spriteID: 2505a72c11279dd4383df9bdbca04ae3
+    spriteID: f882133dd4a7b5c4cb7180f3b6d14324
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -190,7 +190,7 @@ ScriptedImporter:
       y: 958
       width: 1000
       height: 946
-    spriteID: d487bd5368187104e8b29e4b991e387f
+    spriteID: 3a5718c4976fb374091c92ebd48ac5fd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -215,7 +215,7 @@ ScriptedImporter:
         y: 0
         width: 1000
         height: 946
-      spriteId: c648863d3950ecc43986dcc86a95ce07
+      spriteId: ab33774bb0b7fda418b252d023ea6dbc
     - name: buddha_mountain_Frame_1
       frameIndex: 1
       cellRect:
@@ -223,7 +223,7 @@ ScriptedImporter:
         y: 0
         width: 1000
         height: 946
-      spriteId: 84a8087243b75b54499e2f145d274698
+      spriteId: 3a3acce00e01a504d9469b8c0ddaaead
     - name: buddha_mountain_Frame_2
       frameIndex: 2
       cellRect:
@@ -231,7 +231,7 @@ ScriptedImporter:
         y: 0
         width: 1000
         height: 946
-      spriteId: 2505a72c11279dd4383df9bdbca04ae3
+      spriteId: f882133dd4a7b5c4cb7180f3b6d14324
     - name: buddha_mountain_Frame_3
       frameIndex: 3
       cellRect:
@@ -239,7 +239,7 @@ ScriptedImporter:
         y: 0
         width: 1000
         height: 946
-      spriteId: d487bd5368187104e8b29e4b991e387f
+      spriteId: 3a5718c4976fb374091c92ebd48ac5fd
     linkedCells: []
     parentIndex: -1
   platformSettings:
