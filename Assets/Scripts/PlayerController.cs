@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
+    public static readonly float MAX_RUN_SPEED = 15f;
 
     /******************************************************************************************
      * State / Pseudo-State variables 
@@ -125,6 +126,23 @@ public class PlayerController : MonoBehaviour
             isStunned = false;
             onSlope = false;
         }
+        if(state==State.Grounded && isStunned == false) {
+            if (Input.GetKey(KeyCode.A))
+            {
+                if (rb.velocity.x + 1f > -1f * MAX_RUN_SPEED)
+                {
+                    rb.velocity += new Vector2(-1f, 0);
+                }
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                if(rb.velocity.x + 1f < MAX_RUN_SPEED)
+                {
+                    rb.velocity += new Vector2(1f, 0);
+                }
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             rb.velocity += Input.GetKeyDown(KeyCode.LeftArrow) ? new Vector2(-arrowKeyVelocityMagnitude, 0) : new Vector2(arrowKeyVelocityMagnitude, 0);

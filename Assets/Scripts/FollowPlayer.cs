@@ -50,7 +50,7 @@ public class FollowPlayer : MonoBehaviour
         {
             GoAgain();
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        /*if (Input.GetKeyDown(KeyCode.W))
         {
             up = true;
         }
@@ -82,7 +82,7 @@ public class FollowPlayer : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.D))
         {
             right = false;
-        }
+        }*/
 
         if (up)
         {
