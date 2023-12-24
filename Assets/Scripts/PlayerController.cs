@@ -470,12 +470,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            rb.velocity = rb.velocity.normalized*terminalVelocity;
-        }
-
-            if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
@@ -500,6 +495,11 @@ public class PlayerController : MonoBehaviour
         force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
         rb.AddForce(force, ForceMode2D.Force);
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);*/
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.velocity += 0.2f * (new Vector2(rb.velocity.normalized.x, rb.velocity.normalized.y));
+        }
     }
 
     IEnumerator DelaySwing(float delay)
