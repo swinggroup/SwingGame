@@ -472,7 +472,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            rb.velocity= rb.velocity.normalized*25;
+            rb.velocity = rb.velocity.normalized*terminalVelocity;
         }
 
             if (Input.GetMouseButtonUp(0))
