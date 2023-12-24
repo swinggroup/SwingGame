@@ -8,6 +8,7 @@ using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -76,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public bool jumpedRecently = false;
     int boostFixedFrames;
     public Rigidbody2D rb;
+    private DistanceJoint2D dJoint;
     ConstantForce2D currConstantForce; // for boosting
     public BoxCollider2D boxCollider;
     Vector2 spinVelocity;
@@ -91,6 +93,7 @@ public class PlayerController : MonoBehaviour
     {
         spawnZone = this.gameObject.transform.position;
         rb = this.GetComponent<Rigidbody2D>();
+        dJoint = this.GetComponent<DistanceJoint2D>();
         rb.gravityScale = gravity;
         boxCollider = this.GetComponent<BoxCollider2D>();
         CloudDistanceList = new();
@@ -366,6 +369,7 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
+            dJoint.enabled = false;
             rope.DeleteRope();
         }
     }
@@ -376,7 +380,13 @@ public class PlayerController : MonoBehaviour
         // if rope is taut, go into swinging
         if (rope.IsTaut())
         {
-            rb.gravityScale = 0;
+            //ATTACH HINGE JOINTS BETWEEN PLAYER AND ROPE END
+
+            dJoint.enabled = true;
+            dJoint.connectedAnchor = rope.anchorPoint;
+            dJoint.distance = (float) rope.length;
+
+            /*rb.gravityScale = 0;
             spinVelocity = rb.velocity;
 
             // set initial velocity to be tangent to circle
@@ -392,12 +402,15 @@ public class PlayerController : MonoBehaviour
                 rotation -= 90;
             }
             vec1 = Quaternion.Euler(0, 0, rotation) * vec1;
+
+            //Vector2 vec3 = vec2 * 5;
+            //rb.velocity = vec1 + vec3;
             rb.velocity = vec1;
 
             // record initial y pos and reset flag / flag switches
             RevolutionData.threshold = this.transform.position.y;
             RevolutionData.positionRelativeToThreshold = 0;
-            RevolutionData.positionSwitchCount = 0;
+            RevolutionData.positionSwitchCount = 0;*/
 
             state = State.Swinging;
         }
@@ -452,22 +465,29 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
+            dJoint.enabled = false;
             rope.DeleteRope();
             return;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity+=new Vector2(rb.velocity.normalized.x * 40, rb.velocity.normalized.y * 40);
+        }
+
+            if (Input.GetMouseButtonUp(0))
         {
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
+            dJoint.enabled = false;
             rope.DeleteRope();
         }
     }
 
     void HandleSwingingPhysics()
     {
-        if (rb.velocity.magnitude < 5f)
+        /*if (rb.velocity.magnitude < 5f)
         {
             rb.velocity = rb.velocity.normalized * 5f;
         }
@@ -479,7 +499,7 @@ public class PlayerController : MonoBehaviour
         Vector2 force = rope.NormalizedPlayerToAnchor();
         force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
         rb.AddForce(force, ForceMode2D.Force);
-        rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
+        rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);*/
     }
 
     IEnumerator DelaySwing(float delay)
@@ -651,12 +671,14 @@ public class PlayerController : MonoBehaviour
             canSwing = false;
             if (rope.RopeExists())
             {
+                dJoint.enabled = false;
                 rope.DeleteRope();
             }
         }
         if (collision.collider.name == "BoostMap")
         {
             HandleBoosting(collision);
+            dJoint.enabled = false;
             rope.DeleteRope();
         }
         if(isStunned)
@@ -701,8 +723,10 @@ public class PlayerController : MonoBehaviour
                 else if (IsFloorCollision(collision))
                 {
                     StartCoroutine(DelaySwing(DELAY_SWING));
+                    dJoint.enabled = false;
                     rope.DeleteRope();
                 }
+                dJoint.enabled = false;
                 rope.DeleteRope();
                 // Do not transition state to airborne so not taut bounce mechanic still works.
 
@@ -718,6 +742,7 @@ public class PlayerController : MonoBehaviour
                 }
                 // Transition state to airborne since OnCollisionStay is not always called to prevent being in Swinging state after rope is deleted.
                 state = State.Airborne;
+                dJoint.enabled = false;
                 rope.DeleteRope();
                 break;
         }
