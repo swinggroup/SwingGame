@@ -470,9 +470,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            rb.velocity+=new Vector2(rb.velocity.normalized.x * 40, rb.velocity.normalized.y * 40);
+            rb.velocity= rb.velocity.normalized*25;
         }
 
             if (Input.GetMouseButtonUp(0))
