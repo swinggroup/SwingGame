@@ -498,7 +498,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            rb.velocity += 0.2f * (new Vector2(rb.velocity.normalized.x, rb.velocity.normalized.y));
+            rb.velocity += 0.3f * (new Vector2(rb.velocity.normalized.x, rb.velocity.normalized.y));
         }
     }
 
