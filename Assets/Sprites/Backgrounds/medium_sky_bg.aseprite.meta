@@ -128,8 +128,8 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 1000
-      height: 20
+      width: 68
+      height: 1000
     spriteID: df30c44e08f708848a0b684fb78c07ed
     spriteBone: []
     spriteOutline: []
@@ -153,8 +153,8 @@ ScriptedImporter:
       cellRect:
         x: 0
         y: 0
-        width: 1000
-        height: 20
+        width: 68
+        height: 1000
       spriteId: df30c44e08f708848a0b684fb78c07ed
     linkedCells: []
     parentIndex: -1
@@ -209,4 +209,4 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 1000, y: 20}
+  canvasSize: {x: 68, y: 1000}

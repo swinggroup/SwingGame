@@ -22,8 +22,8 @@ public class ParallaxLayer : MonoBehaviour
     readonly private float PARALLAX_11 = 0.63f;
     readonly private float PARALLAX_12 = 0.68f;
     readonly private float PARALLAX_13 = 0.73f;
-    readonly private float PARALLAX_14 = 0.78f;
-    readonly private float PARALLAX_15 = 0.83f;
+    readonly private float PARALLAX_14 = 0.83f;
+    readonly private float PARALLAX_15 = 0.88f;
 
     // Start is called before the first frame update
     void Start()
