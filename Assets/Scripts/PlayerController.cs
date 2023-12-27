@@ -647,6 +647,7 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("stunned", false);
                 state = State.Grounded;
+                delayingSwing = false;
                 isStunned = false;
                 canSwing = true;
             }
@@ -655,6 +656,8 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case State.Grounded:
+                // No swing CD if we're grounded, but we need to reset canSwing
+                canSwing = true;
                 break;
             case State.Airborne:
                 if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
@@ -682,15 +685,18 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (IsFloorCollision(collision))
                 {
-                    StartCoroutine(DelaySwing(DELAY_SWING));
+                    // No swing CD if we're grounded
                     rope.DeleteRope();
                 }
                 rope.DeleteRope();
                 // Do not transition state to airborne so not taut bounce mechanic still works.
-
                 break;
             case State.Swinging:
-                StartCoroutine(DelaySwing(DELAY_SWING));
+                // No swing CD if we're grounded
+                if (!IsFloorCollision(collision))
+                {
+                    StartCoroutine(DelaySwing(DELAY_SWING));
+                }
                 // Wall bounce when swinging into wall
                 // Debug.Log("player velocity: " + rb.velocity);
                 if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
@@ -748,6 +754,8 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case State.Grounded:
+                // No swing CD if we're grounded, but we need to reset canSwing
+                canSwing = true;
                 // if grounded and hit a wall (should be rolling) we stop and bonk
                 if ((leftCollision && rb.velocity.x < 0) || (rightCollision && rb.velocity.x > 0))
                 {
@@ -761,7 +769,11 @@ public class PlayerController : MonoBehaviour
                 break;
             case State.Swinging:
                 state = State.Airborne;
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                // No swing CD if we're grounded
+                if (!floorCollision)
+                {
+                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                }
                 break;
             default:
                 Debug.LogError("broke oncollisionstay");
