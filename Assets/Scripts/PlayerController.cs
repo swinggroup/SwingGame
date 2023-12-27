@@ -43,10 +43,12 @@ public class PlayerController : MonoBehaviour
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
     private readonly float arrowKeyVelocityMagnitude = 200f;
+    private readonly float wavedashVelocity = 17f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
+
 
     /******************************************************************************************
      * State / Pseudo-State variables 
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
     bool canSwing = true;
     bool isStunned = false;
     bool onSlope = false;
+    bool facingRight = true;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
 
@@ -109,7 +112,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(JumpedRecently());
         }
@@ -117,6 +120,17 @@ public class PlayerController : MonoBehaviour
         {
             spawnZone = this.transform.position;
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            facingRight = false;
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            facingRight = true;
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = spawnZone;
@@ -210,6 +224,8 @@ public class PlayerController : MonoBehaviour
         }
         */
 
+        // Removing for orientation mechanics
+        /*
         if (rb.velocity.x > 0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = false;
@@ -218,6 +234,7 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = true;
         }
+        */
 
         // Track how long we keep applying the constant force to boost
         if (boostFixedFrames == 0 || state == State.Swinging)
@@ -532,7 +549,7 @@ public class PlayerController : MonoBehaviour
         {
             cloudMap.SetTile(pair.Item1, pair.Item2);
         }
-        
+
 
     }
 
@@ -641,7 +658,7 @@ public class PlayerController : MonoBehaviour
             HandleBoosting(collision);
             rope.DeleteRope();
         }
-        if(isStunned)
+        if (isStunned)
         {
             if (IsFloorCollision(collision) && !collision.collider.name.Contains("StunMap"))
             {
@@ -696,6 +713,10 @@ public class PlayerController : MonoBehaviour
                 if (!IsFloorCollision(collision))
                 {
                     StartCoroutine(DelaySwing(DELAY_SWING));
+                }
+                else // on floor collision while swinging, wavedash
+                {
+                    rb.velocity = new Vector2(facingRight ? wavedashVelocity : -wavedashVelocity, 0);
                 }
                 // Wall bounce when swinging into wall
                 // Debug.Log("player velocity: " + rb.velocity);
@@ -881,7 +902,7 @@ public class PlayerController : MonoBehaviour
             {
                 onSlope = false;
                 return;
-            } 
+            }
             /*
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
