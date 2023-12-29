@@ -48,6 +48,9 @@ public class PlayerController : MonoBehaviour
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
+    public static readonly int MAX_BACKJUMP_FRAMES = 30;
+    public static readonly float JUMP_FORCE = 8;
+    public static readonly float BACKJUMP_FORCE = 7;
 
 
     /******************************************************************************************
@@ -75,6 +78,7 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
     int jumpFixedFrames;
+    float jumpForce;
     public bool jumpedRecently = false;
     int boostFixedFrames;
     public Rigidbody2D rb;
@@ -295,14 +299,30 @@ public class PlayerController : MonoBehaviour
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
         if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
-            // This function could be called again causing a double jump sound if jumpedRecently is still true.
-            jumpedRecently = false;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
-            jumpFixedFrames = MAX_JUMP_FRAMES;
-            rb.AddForce(new Vector2(0, 2600));
-            state = State.Airborne;
-            onSlope = false;
+            // backflip if jumping while sliding backwards
+            if ((rb.velocity.x < 0 && facingRight) || (rb.velocity.x > 0 && !facingRight))
+            {
+                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
+                jumpedRecently = false;
+                rb.velocity = new Vector2(2 * rb.velocity.x, 0);
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                jumpFixedFrames = MAX_BACKJUMP_FRAMES;
+                jumpForce = BACKJUMP_FORCE;
+                rb.AddForce(new Vector2(3 * rb.velocity.x, 2600));
+                state = State.Airborne;
+                onSlope = false;
+            } else
+            {
+                // This function could be called again causing a double jump sound if jumpedRecently is still true.
+                jumpedRecently = false;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                jumpFixedFrames = MAX_JUMP_FRAMES;
+                jumpForce = JUMP_FORCE;
+                rb.AddForce(new Vector2(0, 2600));
+                state = State.Airborne;
+                onSlope = false;
+            }
         }
     }
 
@@ -350,7 +370,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
-            rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
+            rb.AddForce(new Vector2(0, jumpFixedFrames * jumpForce));
             jumpFixedFrames--;
         }
         else if (Input.GetKeyUp(KeyCode.Space))
