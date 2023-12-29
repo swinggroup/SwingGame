@@ -308,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
             // backflip if jumping while sliding backwards
-            if ((rb.velocity.x < 0 && facingRight) || (rb.velocity.x > 0 && !facingRight))
+            if ((rb.velocity.x < -1 && facingRight) || (rb.velocity.x > 1 && !facingRight))
             {
                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
                 jumpedRecently = false;
