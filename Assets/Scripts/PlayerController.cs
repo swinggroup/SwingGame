@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip whiffSound;
     public AudioClip jumpSound;
     public AudioClip thudSound;
+    public AudioClip whipSound;
     public Tilemap cloudMap;
     public Tilemap unhookableMap;
     public Tilemap BoostMap;
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
     bool canSwing = true;
     bool isStunned = false;
     bool onSlope = false;
-    bool facingRight = true;
+    public bool facingRight = true;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
 
@@ -104,6 +105,12 @@ public class PlayerController : MonoBehaviour
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true) screenDebug.SetActive(true);
         else screenDebug.SetActive(false);
+    }
+
+    IEnumerator Whip()
+    {
+        yield return new WaitForSeconds(0.1f);
+        rope.DeleteRope();
     }
 
     IEnumerator JumpedRecently()
@@ -351,14 +358,26 @@ public class PlayerController : MonoBehaviour
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
-                // Get the hit coordinate
-                Vector2 swingPoint = hit.point;
+                // if going backwards, whip away from the surface
+                if ((rb.velocity.x > 0.01f && !facingRight) || (rb.velocity.x < -0.01f && facingRight))
+                {
+                    Vector2 swingPoint = hit.point;
+                    rope.NewRope(swingPoint); // todo: make it look like a whip
+                    StartCoroutine(Whip());
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(whipSound);
+                    rb.velocity += 3 * (rb.position - swingPoint);
+                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                } else // otherwise do normal swing
+                {
+                    // Get the hit coordinate
+                    Vector2 swingPoint = hit.point;
 
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
-                rope.NewRope(swingPoint);
-                // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
-                state = State.Attached;
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
+                    // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
+                    rope.NewRope(swingPoint);
+                    // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
+                    state = State.Attached;
+                }
             }
             else
             {

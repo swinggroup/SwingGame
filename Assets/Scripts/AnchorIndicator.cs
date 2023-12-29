@@ -9,6 +9,7 @@ public class AnchorIndicator : MonoBehaviour
     public PlayerController player;
     // Start is called before the first frame update
     private const float OVERLAP_CIRCLE_RADIUS = 1.8f;
+    private Color defaultColor;
     void Start()
     {
 
@@ -16,6 +17,12 @@ public class AnchorIndicator : MonoBehaviour
 
     void HandleAnchorIndicator()
     {
+        if ((player.rb.velocity.x < -0.1f && player.facingRight) || (player.rb.velocity.x > 0.1f && !player.facingRight)) {
+            defaultColor = Color.cyan;
+        } else
+        {
+            defaultColor = Color.red;
+        }
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
         Vector2 unitVector = (mousePos - ourPos).normalized;
@@ -26,7 +33,7 @@ public class AnchorIndicator : MonoBehaviour
 
         if (raycastHit && raycastHit.collider.CompareTag("Hookable"))
         {
-            this.GetComponent<SpriteRenderer>().color = Color.red;
+            this.GetComponent<SpriteRenderer>().color = defaultColor;
             this.transform.position = raycastHit.point;
         }
         else if (raycastHit && raycastHit.collider.CompareTag("Unhookable"))
