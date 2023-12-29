@@ -258,14 +258,22 @@ public class PlayerController : MonoBehaviour
 
                 // If player is flickering between idle and rolling, the condition is too strict
                 // and not catching float error when the rigid body is still.
-                if (Mathf.Abs(rb.velocity.x) > 1f)
+                if ((rb.velocity.x > 1f && facingRight) || (rb.velocity.x < -1f && !facingRight))
                 {
                     animator.SetBool("rolling", true);
-                    animator.SetBool("bonk", false);
+                    animator.SetBool("backsliding", false);
+                    //animator.SetBool("bonk", false);
+                }
+                else if ((rb.velocity.x > 1f && !facingRight) || (rb.velocity.x < -1f && facingRight))
+                {
+                    animator.SetBool("backsliding", true);
+                    animator.SetBool("rolling", false);
+                    //animator.SetBool("bonk", false);
                 }
                 else
                 {
                     animator.SetBool("rolling", false);
+                    animator.SetBool("backsliding", false);
                 }
                 break;
             case State.Airborne:
@@ -274,17 +282,17 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.y < 0)
                 {
                     animator.SetBool("falling", true);
-                    animator.SetBool("bonk", false);
+                    // animator.SetBool("bonk", false);
                 }
                 break;
             case State.Attached:
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
                 HandleAttachedPhysics();
                 break;
             case State.Swinging:
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
                 animator.SetBool("falling", false);
                 HandleSwingingPhysics();
                 break;
@@ -302,7 +310,7 @@ public class PlayerController : MonoBehaviour
             // backflip if jumping while sliding backwards
             if ((rb.velocity.x < 0 && facingRight) || (rb.velocity.x > 0 && !facingRight))
             {
-                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
+                // This function could be called again causing a double jump sound if jumpedRecently is still true.
                 jumpedRecently = false;
                 rb.velocity = new Vector2(2 * rb.velocity.x, 0);
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
@@ -311,7 +319,8 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector2(3 * rb.velocity.x, 2600));
                 state = State.Airborne;
                 onSlope = false;
-            } else
+            }
+            else
             {
                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
                 jumpedRecently = false;
@@ -583,7 +592,7 @@ public class PlayerController : MonoBehaviour
             if (state == State.Airborne)
             {
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
             }
         }
     }
@@ -800,7 +809,7 @@ public class PlayerController : MonoBehaviour
                 // if grounded and hit a wall (should be rolling) we stop and bonk
                 if ((leftCollision && rb.velocity.x < 0) || (rightCollision && rb.velocity.x > 0))
                 {
-                    animator.SetBool("bonk", true);
+                    //animator.SetBool("bonk", true);
                     rb.velocity = new Vector3(0, 0, 0);
                 }
                 break;
@@ -945,7 +954,16 @@ public class PlayerController : MonoBehaviour
             {
                 boxCollider.sharedMaterial = noFrictionMaterial;
                 onSlope = true;
-                animator.SetBool("rolling", true);
+                if ((rb.velocity.x > 0 && facingRight) || (rb.velocity.x < 0 && !facingRight))
+                {
+                    animator.SetBool("rolling", true);
+                    animator.SetBool("backsliding", false);
+                }
+                else
+                {
+                    animator.SetBool("backsliding", true);
+                    animator.SetBool("rolling", false);
+                }
             }
             /*
             var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;
