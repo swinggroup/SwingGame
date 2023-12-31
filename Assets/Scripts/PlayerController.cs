@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2();
             canSwing = true;
             isStunned = false;
+            animator.SetBool("stunned", false);
             onSlope = false;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
