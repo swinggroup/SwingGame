@@ -346,7 +346,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.gravityScale = gravity;
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
+        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && canSwing && !isStunned)
         {
             canSwing = false;
             Vector2 mousePos = anchorIndicator.transform.position;
@@ -358,8 +358,8 @@ public class PlayerController : MonoBehaviour
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
-                // if going backwards, whip away from the surface
-                if ((rb.velocity.x > 0.01f && !facingRight) || (rb.velocity.x < -0.01f && facingRight))
+                // maybe too hard, let's try right click // if going backwards, whip away from the surface
+                if (Input.GetMouseButtonDown(1)) // ((rb.velocity.x > 0.01f && !facingRight) || (rb.velocity.x < -0.01f && facingRight))
                 {
                     Vector2 swingPoint = hit.point;
                     rope.NewRope(swingPoint); // todo: make it look like a whip
