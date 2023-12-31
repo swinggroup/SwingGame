@@ -121,146 +121,6 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: lightning1
     originalName: 
-    pivot: {x: 0.55, y: 0.5652173}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 101
-      y: 90
-      width: 20
-      height: 23
-    spriteID: aa146d9072dafaa4695507baf7d9d540
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 101, y: 90}
-  - name: lightning1_Frame_1
-    originalName: 
-    pivot: {x: 0.50000006, y: 0.50000006}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 57
-      y: 209
-      width: 34
-      height: 20
-    spriteID: b5380d5aed1594a4e9b27d4f19d70ece
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 57, y: 209}
-  - name: lightning1_Frame_2
-    originalName: 
-    pivot: {x: 0.47222227, y: 0.4166667}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 57
-      y: 90
-      width: 36
-      height: 36
-    spriteID: aa36b36801c54804487af6d77de98ac9
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 57, y: 90}
-  - name: lightning1_Frame_3
-    originalName: 
-    pivot: {x: 0.4651163, y: 0.48780486}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 52
-      width: 43
-      height: 41
-    spriteID: 419565bf41e3ead4582654fe992b472c
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 52}
-  - name: lightning1_Frame_4
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 101
-      width: 42
-      height: 38
-    spriteID: 917ae38152879a94085b3f584a751901
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 101}
-  - name: lightning1_Frame_5
-    originalName: 
-    pivot: {x: 0.48780486, y: 0.48571432}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 57
-      y: 47
-      width: 41
-      height: 35
-    spriteID: fb3a2a6144e6f4d49ad46474df262865
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 57, y: 47}
-  - name: lightning1_Frame_6
-    originalName: 
-    pivot: {x: 0.45000002, y: 0.51612896}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 57
-      y: 134
-      width: 40
-      height: 31
-    spriteID: ff131cf65a6f0884aaa7c20059c11d27
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 57, y: 134}
-  - name: lightning1_Frame_7
-    originalName: 
     pivot: {x: 0.5, y: 0.47222227}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -270,7 +130,7 @@ ScriptedImporter:
       y: 192
       width: 42
       height: 36
-    spriteID: 045931323ddb9744984681aa5a7797d0
+    spriteID: aa146d9072dafaa4695507baf7d9d540
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -279,7 +139,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 192}
-  - name: lightning1_Frame_8
+  - name: lightning1_Frame_1
     originalName: 
     pivot: {x: 0.53333336, y: 0.47500002}
     alignment: 9
@@ -290,7 +150,7 @@ ScriptedImporter:
       y: 4
       width: 45
       height: 40
-    spriteID: 173f6c79487224042a4454a52a899fc3
+    spriteID: b5380d5aed1594a4e9b27d4f19d70ece
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -299,7 +159,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: lightning1_Frame_9
+  - name: lightning1_Frame_2
     originalName: 
     pivot: {x: 0.52380955, y: 0.48648646}
     alignment: 9
@@ -310,7 +170,7 @@ ScriptedImporter:
       y: 147
       width: 42
       height: 37
-    spriteID: 6d0305cdaf8637241add0593329c8329
+    spriteID: aa36b36801c54804487af6d77de98ac9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -319,7 +179,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 147}
-  - name: lightning1_Frame_10
+  - name: lightning1_Frame_3
     originalName: 
     pivot: {x: 0.511628, y: 0.45714283}
     alignment: 9
@@ -330,7 +190,7 @@ ScriptedImporter:
       y: 4
       width: 43
       height: 35
-    spriteID: bd81168f1c87a5d45975b8cfcb877f0d
+    spriteID: 419565bf41e3ead4582654fe992b472c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -339,7 +199,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 57, y: 4}
-  - name: lightning1_Frame_11
+  - name: lightning1_Frame_4
     originalName: 
     pivot: {x: 0.48780486, y: 0.46428567}
     alignment: 9
@@ -347,10 +207,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 57
-      y: 173
+      y: 91
       width: 41
       height: 28
-    spriteID: 3dc3da04973b54d419c3d1c89efb4788
+    spriteID: 917ae38152879a94085b3f584a751901
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -358,7 +218,107 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 57, y: 173}
+    uvTransform: {x: 57, y: 91}
+  - name: lightning1_Frame_5
+    originalName: 
+    pivot: {x: 0.55, y: 0.5652173}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 101
+      y: 47
+      width: 20
+      height: 23
+    spriteID: fb3a2a6144e6f4d49ad46474df262865
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 101, y: 47}
+  - name: lightning1_Frame_6
+    originalName: 
+    pivot: {x: 0.50000006, y: 0.50000006}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 127
+      width: 34
+      height: 20
+    spriteID: ff131cf65a6f0884aaa7c20059c11d27
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 127}
+  - name: lightning1_Frame_7
+    originalName: 
+    pivot: {x: 0.47222227, y: 0.4166667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 47
+      width: 36
+      height: 36
+    spriteID: 045931323ddb9744984681aa5a7797d0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 47}
+  - name: lightning1_Frame_8
+    originalName: 
+    pivot: {x: 0.4651163, y: 0.48780486}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 52
+      width: 43
+      height: 41
+    spriteID: 173f6c79487224042a4454a52a899fc3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 52}
+  - name: lightning1_Frame_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 101
+      width: 42
+      height: 38
+    spriteID: 6d0305cdaf8637241add0593329c8329
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 101}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -371,99 +331,83 @@ ScriptedImporter:
     - name: lightning1_Frame_0
       frameIndex: 0
       cellRect:
-        x: 13
-        y: 11
-        width: 20
-        height: 23
+        x: 3
+        y: 7
+        width: 42
+        height: 36
       spriteId: aa146d9072dafaa4695507baf7d9d540
     - name: lightning1_Frame_1
       frameIndex: 1
-      cellRect:
-        x: 7
-        y: 14
-        width: 34
-        height: 20
-      spriteId: b5380d5aed1594a4e9b27d4f19d70ece
-    - name: lightning1_Frame_2
-      frameIndex: 2
-      cellRect:
-        x: 7
-        y: 9
-        width: 36
-        height: 36
-      spriteId: aa36b36801c54804487af6d77de98ac9
-    - name: lightning1_Frame_3
-      frameIndex: 3
-      cellRect:
-        x: 4
-        y: 4
-        width: 43
-        height: 41
-      spriteId: 419565bf41e3ead4582654fe992b472c
-    - name: lightning1_Frame_4
-      frameIndex: 4
-      cellRect:
-        x: 3
-        y: 5
-        width: 42
-        height: 38
-      spriteId: 917ae38152879a94085b3f584a751901
-    - name: lightning1_Frame_5
-      frameIndex: 5
-      cellRect:
-        x: 4
-        y: 7
-        width: 41
-        height: 35
-      spriteId: fb3a2a6144e6f4d49ad46474df262865
-    - name: lightning1_Frame_6
-      frameIndex: 6
-      cellRect:
-        x: 6
-        y: 8
-        width: 40
-        height: 31
-      spriteId: ff131cf65a6f0884aaa7c20059c11d27
-    - name: lightning1_Frame_7
-      frameIndex: 7
-      cellRect:
-        x: 3
-        y: 7
-        width: 42
-        height: 36
-      spriteId: 045931323ddb9744984681aa5a7797d0
-    - name: lightning1_Frame_8
-      frameIndex: 8
       cellRect:
         x: 0
         y: 5
         width: 45
         height: 40
-      spriteId: 173f6c79487224042a4454a52a899fc3
-    - name: lightning1_Frame_9
-      frameIndex: 9
+      spriteId: b5380d5aed1594a4e9b27d4f19d70ece
+    - name: lightning1_Frame_2
+      frameIndex: 2
       cellRect:
         x: 2
         y: 6
         width: 42
         height: 37
-      spriteId: 6d0305cdaf8637241add0593329c8329
-    - name: lightning1_Frame_10
-      frameIndex: 10
+      spriteId: aa36b36801c54804487af6d77de98ac9
+    - name: lightning1_Frame_3
+      frameIndex: 3
       cellRect:
         x: 2
         y: 8
         width: 43
         height: 35
-      spriteId: bd81168f1c87a5d45975b8cfcb877f0d
-    - name: lightning1_Frame_11
-      frameIndex: 11
+      spriteId: 419565bf41e3ead4582654fe992b472c
+    - name: lightning1_Frame_4
+      frameIndex: 4
       cellRect:
         x: 4
         y: 11
         width: 41
         height: 28
-      spriteId: 3dc3da04973b54d419c3d1c89efb4788
+      spriteId: 917ae38152879a94085b3f584a751901
+    - name: lightning1_Frame_16
+      frameIndex: 16
+      cellRect:
+        x: 13
+        y: 11
+        width: 20
+        height: 23
+      spriteId: fb3a2a6144e6f4d49ad46474df262865
+    - name: lightning1_Frame_17
+      frameIndex: 17
+      cellRect:
+        x: 7
+        y: 14
+        width: 34
+        height: 20
+      spriteId: ff131cf65a6f0884aaa7c20059c11d27
+    - name: lightning1_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 7
+        y: 9
+        width: 36
+        height: 36
+      spriteId: 045931323ddb9744984681aa5a7797d0
+    - name: lightning1_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 4
+        y: 4
+        width: 43
+        height: 41
+      spriteId: 173f6c79487224042a4454a52a899fc3
+    - name: lightning1_Frame_20
+      frameIndex: 20
+      cellRect:
+        x: 3
+        y: 5
+        width: 42
+        height: 38
+      spriteId: 6d0305cdaf8637241add0593329c8329
     linkedCells: []
     parentIndex: -1
   platformSettings:
