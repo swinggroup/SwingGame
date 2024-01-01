@@ -7,7 +7,6 @@ public class RandomLightningOffset : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("startinG?");
         foreach (Transform t in transform)
         {
             t.gameObject.GetComponent<Animator>().SetFloat("cycleoffset", Random.Range(0f, 1f));
