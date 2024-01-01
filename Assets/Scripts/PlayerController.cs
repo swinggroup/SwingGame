@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour
                 if (Mathf.Abs(rb.velocity.x) > 1f)
                 {
                     animator.SetBool("rolling", true);
-                    animator.SetBool("bonk", false);
+                    //animator.SetBool("bonk", false);
                 }
                 else
                 {
@@ -254,17 +254,17 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.y < 0)
                 {
                     animator.SetBool("falling", true);
-                    animator.SetBool("bonk", false);
+                    //animator.SetBool("bonk", false);
                 }
                 break;
             case State.Attached:
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
                 HandleAttachedPhysics();
                 break;
             case State.Swinging:
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
                 animator.SetBool("falling", false);
                 HandleSwingingPhysics();
                 break;
@@ -547,7 +547,7 @@ public class PlayerController : MonoBehaviour
             if (state == State.Airborne)
             {
                 animator.SetBool("jump", true);
-                animator.SetBool("bonk", false);
+                //animator.SetBool("bonk", false);
             }
         }
     }
@@ -752,7 +752,7 @@ public class PlayerController : MonoBehaviour
                 // if grounded and hit a wall (should be rolling) we stop and bonk
                 if ((leftCollision && rb.velocity.x < 0) || (rightCollision && rb.velocity.x > 0))
                 {
-                    animator.SetBool("bonk", true);
+                    //animator.SetBool("bonk", true);
                     rb.velocity = new Vector3(0, 0, 0);
                 }
                 break;
