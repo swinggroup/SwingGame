@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 spawnZone;
     public bool debugOn;
     public GameObject screenDebug;
+    private bool flightMode;
 
     /******************************************************************************************
      * Assigned via Inspector: animation, sfx, tilemaps, rope
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
-    private readonly float arrowKeyVelocityMagnitude = 200f;
+    private readonly float arrowKeyVelocityMagnitude = 20f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -88,6 +89,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        flightMode = false;
         spawnZone = this.gameObject.transform.position;
         rb = this.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravity;
@@ -109,13 +111,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(JumpedRecently());
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
             spawnZone = this.transform.position;
+        }
+        if (Input.GetKeyDown(KeyCode.F)) // toggle flight mode
+        {
+            flightMode = !flightMode;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -292,7 +298,14 @@ public class PlayerController : MonoBehaviour
 
     void HandleAirborne()
     {
-        rb.gravityScale = gravity;
+        // Developer mode: flightmode; in the future, just enable gravity every frame
+        if (flightMode)
+        {
+            rb.gravityScale = 0;
+        } else
+        {
+            rb.gravityScale = gravity;
+        }
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
         if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
         {
@@ -533,7 +546,7 @@ public class PlayerController : MonoBehaviour
         {
             cloudMap.SetTile(pair.Item1, pair.Item2);
         }
-        
+
 
     }
 
@@ -642,7 +655,7 @@ public class PlayerController : MonoBehaviour
             HandleBoosting(collision);
             rope.DeleteRope();
         }
-        if(isStunned)
+        if (isStunned)
         {
             if (IsFloorCollision(collision) && !collision.collider.name.Contains("StunMap"))
             {
@@ -870,7 +883,7 @@ public class PlayerController : MonoBehaviour
             {
                 onSlope = false;
                 return;
-            } 
+            }
             /*
             if (Vector2.Dot(Vector2.left, hit.normal) > 0.1f)
             {
