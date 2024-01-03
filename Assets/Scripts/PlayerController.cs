@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using Unity.Burst.CompilerServices;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public bool debugOn;
     public GameObject screenDebug;
     private bool flightMode;
+    public GameObject circle;
 
     /******************************************************************************************
      * Assigned via Inspector: animation, sfx, tilemaps, rope
@@ -478,6 +480,28 @@ public class PlayerController : MonoBehaviour
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
+    void CloudHook(List<Vector3Int> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles, GameObject circle)
+    {
+        int count = 0;
+        foreach (var world in worldPos)
+        {
+            count++;
+            if (cloudMap.HasTile(world))
+            {
+                Debug.Log(count);
+
+                circle.SetActive(true);
+                circle.transform.position = world;
+                Vector3Int cloudPos = world;
+
+                HashSet<Tuple<int, int>> visited = new();
+                RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+                break;
+            }
+        }
+       
+    }
+
     IEnumerator DelaySwing(float delay)
     {
         delayingSwing = true;
@@ -485,33 +509,21 @@ public class PlayerController : MonoBehaviour
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
 
-        // If we hook onto a Cloud
-        if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
+        float discrepency = 0.05f;
 
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
+        List<Vector3Int> world = new List<Vector3Int>{
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(rope.anchorPoint)),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepency, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepency, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y + discrepency, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y - discrepency, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y + discrepency, 0))),
+            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y - discrepency, 0)))
+        };
 
-        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f))) != null))
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f));
-
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
-
-        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f))) != null))
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f));
-
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
+        CloudHook(world, cloudTiles, circle);
 
         // If we hook onto a CloudDistance
         if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
