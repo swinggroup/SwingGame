@@ -11,8 +11,8 @@ public class RuleTileFixer : MonoBehaviour
     {
         // 0: enable this object
         // 1: duplicate the ruletile template folder
-        // 2: rename the aseprite from ruletile -> whatever is appropriate, and re-slice the sprites (this is to rename the individual sprites)
-        // 3: rename the rule tile to whatever is appropriate as well
+        // 2: rename the aseprite from ruletile -> whatever is appropriate (usually xxxmap_tiles), and re-slice the sprites (this is to rename the individual sprites)
+        // 3: rename the rule tile to whatever is appropriate as well (usually xxxmap_ruletile)
         // 4: rename the paths in this file
         // 5: run this script (just start and stop the game, may have to run it a few times - check the ruletile if the tiles are updated or not)
         // 6: disable this object (V IMPORTANT YOU MIGHT OVERWRITE YOUR ART LATER IF THIS RUNS AGAIN)
@@ -21,12 +21,12 @@ public class RuleTileFixer : MonoBehaviour
         List<Sprite> newSprites = new();
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (aseprite file)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/stunmap2_ruletile/stunmap2_tiles.aseprite");
+        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/starmap2_ruletile/starmap2_tiles.aseprite");
         foreach (Object s in aseprite)
         {
             // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE, ENDING WITH AN UNDERSCORE (aseprite file without extension + underscore)
             // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-            if (s.name.StartsWith("stunmap2_tiles_"))
+            if (s.name.StartsWith("starmap2_tiles_"))
             {
                 newSprites.Add((Sprite) s);
             }
@@ -35,7 +35,7 @@ public class RuleTileFixer : MonoBehaviour
         // get the ruletile
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (the renamed ruletile)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/stunmap2_ruletile/stunmap2_ruletile.asset", typeof(RuleTile));
+        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/starmap2_ruletile/starmap2_ruletile.asset", typeof(RuleTile));
 
         // for each rule, change the sprite file
         List<RuleTile.TilingRule> rules = ruleTile.m_TilingRules;
