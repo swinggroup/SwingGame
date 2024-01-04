@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: black_circles1
     originalName: 
-    pivot: {x: 0.5032573, y: 0.5}
+    pivot: {x: 0.5031746, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 307
-      height: 194
+      width: 315
+      height: 202
     spriteID: 0c95cc834ecbe7c41b77f398df580586
     spriteBone: []
     spriteOutline: []
@@ -151,10 +151,10 @@ ScriptedImporter:
     - name: black_circles1
       frameIndex: 0
       cellRect:
-        x: 5
-        y: 11
-        width: 307
-        height: 194
+        x: 1
+        y: 7
+        width: 315
+        height: 202
       spriteId: 0c95cc834ecbe7c41b77f398df580586
     linkedCells: []
     parentIndex: -1
