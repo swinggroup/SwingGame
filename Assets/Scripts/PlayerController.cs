@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     public bool debugOn;
     public GameObject screenDebug;
     private bool flightMode;
-    public GameObject circle;
 
     /******************************************************************************************
      * Assigned via Inspector: animation, sfx, tilemaps, rope
@@ -480,26 +479,25 @@ public class PlayerController : MonoBehaviour
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
-    void CloudHook(List<Vector3Int> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles, GameObject circle)
+    void CloudHook(List<Vector3> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles)
     {
         int count = 0;
-        foreach (var world in worldPos)
+        foreach (var pos in worldPos)
         {
-            count++;
+            Vector3Int world = cloudMap.WorldToCell(Vector3Int.RoundToInt(pos));
+
             if (cloudMap.HasTile(world))
             {
-                Debug.Log(count);
-
-                circle.SetActive(true);
-                circle.transform.position = world;
                 Vector3Int cloudPos = world;
 
                 HashSet<Tuple<int, int>> visited = new();
                 RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
                 break;
             }
+            count++;
+
         }
-       
+
     }
 
     IEnumerator DelaySwing(float delay)
@@ -509,21 +507,21 @@ public class PlayerController : MonoBehaviour
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
 
-        float discrepency = 0.05f;
+        float discrepency = 0.6f;
 
-        List<Vector3Int> world = new List<Vector3Int>{
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(rope.anchorPoint)),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepency, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepency, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y + discrepency, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y - discrepency, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y + discrepency, 0))),
-            cloudMap.WorldToCell(Vector3Int.RoundToInt(new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y - discrepency, 0)))
+        List<Vector3> world = new List<Vector3>{
+            rope.anchorPoint,
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepency, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y - discrepency, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y - discrepency, 0)
         };
 
-        CloudHook(world, cloudTiles, circle);
+        CloudHook(world, cloudTiles);
 
         // If we hook onto a CloudDistance
         if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
@@ -550,7 +548,6 @@ public class PlayerController : MonoBehaviour
 
         while (playerOverlapping())
         {
-            Debug.Log("Player overlap");
             yield return new WaitForSeconds(1);
         }
 
