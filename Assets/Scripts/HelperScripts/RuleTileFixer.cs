@@ -21,12 +21,12 @@ public class RuleTileFixer : MonoBehaviour
         List<Sprite> newSprites = new();
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (aseprite file)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/starmap2_ruletile/starmap2_tiles.aseprite");
+        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/boostmap2_ruletile/boostmap2_tiles.aseprite");
         foreach (Object s in aseprite)
         {
             // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE, ENDING WITH AN UNDERSCORE (aseprite file without extension + underscore)
             // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-            if (s.name.StartsWith("starmap2_tiles_"))
+            if (s.name.StartsWith("boostmap2_tiles_"))
             {
                 newSprites.Add((Sprite) s);
             }
@@ -35,7 +35,7 @@ public class RuleTileFixer : MonoBehaviour
         // get the ruletile
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (the renamed ruletile)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/starmap2_ruletile/starmap2_ruletile.asset", typeof(RuleTile));
+        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/boostmap2_ruletile/boostmap2_ruletile.asset", typeof(RuleTile));
 
         // for each rule, change the sprite file
         List<RuleTile.TilingRule> rules = ruleTile.m_TilingRules;
