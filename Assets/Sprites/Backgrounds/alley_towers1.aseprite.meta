@@ -121,14 +121,14 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: alley_towers1
     originalName: 
-    pivot: {x: 2.3891752, y: -1.8077857}
+    pivot: {x: 2.0064936, y: -1.8077857}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 388
+      width: 462
       height: 411
     spriteID: 3406c5b54611f5742bcd3f3671beb265
     spriteBone: []
@@ -153,7 +153,7 @@ ScriptedImporter:
       cellRect:
         x: 73
         y: 743
-        width: 388
+        width: 462
         height: 411
       spriteId: 3406c5b54611f5742bcd3f3671beb265
     linkedCells: []
