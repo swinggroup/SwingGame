@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public Rope rope;
     public AnchorIndicator anchorIndicator;
+    public AudioSource windSource;
 
     /******************************************************************************************
      * Constants 
@@ -112,6 +113,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // New wind section
+
+        if (rb.velocity.magnitude > 15)
+        {
+            if(!windSource.isPlaying)
+            {
+                windSource.Play();
+            }
+            windSource.volume = (rb.velocity.magnitude - 15) / 25f;
+        }
+        else
+        {
+            windSource.Stop();
+        }
+        // End wind section
+
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(JumpedRecently());
