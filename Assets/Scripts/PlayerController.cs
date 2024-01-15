@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 mousePos = Input.mousePosition;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(JumpedRecently());
@@ -131,12 +132,12 @@ public class PlayerController : MonoBehaviour
         {
             spawnZone = this.transform.position;
         }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (mousePos.x < Screen.width / 2.0f && facingRight)//Input.GetKeyDown(KeyCode.Z))
         {
             facingRight = false;
             GetComponent<SpriteRenderer>().flipX = true;
         }
-        else if (Input.GetKeyDown(KeyCode.C))
+        else if ((mousePos.x > Screen.width / 2.0f) && !facingRight)//Input.GetKeyDown(KeyCode.C))
         {
             facingRight = true;
             GetComponent<SpriteRenderer>().flipX = false;
