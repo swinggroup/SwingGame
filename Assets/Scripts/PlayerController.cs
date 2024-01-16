@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using Unity.Burst.CompilerServices;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 spawnZone;
     public bool debugOn;
     public GameObject screenDebug;
+    private bool flightMode;
 
     /******************************************************************************************
      * Assigned via Inspector: animation, sfx, tilemaps, rope
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
 
     public Rope rope;
     public AnchorIndicator anchorIndicator;
+    public AudioSource windSource;
 
     /******************************************************************************************
      * Constants 
@@ -43,8 +46,8 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
-    private readonly float arrowKeyVelocityMagnitude = 200f;
     private readonly float wavedashVelocity = 17f;
+    private readonly float arrowKeyVelocityMagnitude = 20f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
@@ -96,6 +99,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        flightMode = false;
         spawnZone = this.gameObject.transform.position;
         rb = this.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravity;
@@ -124,6 +128,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Vector3 mousePos = Input.mousePosition;
+
+        if (rb.velocity.magnitude > 15)
+        {
+            if(!windSource.isPlaying)
+            {
+                windSource.Play();
+            }
+            windSource.volume = (rb.velocity.magnitude - 15) / 25f;
+        }
+        else
+        {
+            windSource.Stop();
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(JumpedRecently());
@@ -132,23 +150,28 @@ public class PlayerController : MonoBehaviour
         {
             spawnZone = this.transform.position;
         }
-        if (mousePos.x < Screen.width / 2.0f && facingRight)//Input.GetKeyDown(KeyCode.Z))
+        if (mousePos.x < Screen.width / 2.0f && facingRight)
         {
             facingRight = false;
             GetComponent<SpriteRenderer>().flipX = true;
         }
-        else if ((mousePos.x > Screen.width / 2.0f) && !facingRight)//Input.GetKeyDown(KeyCode.C))
+        else if ((mousePos.x > Screen.width / 2.0f) && !facingRight)
         {
             facingRight = true;
             GetComponent<SpriteRenderer>().flipX = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.F)) // toggle flight mode
+        {
+            flightMode = !flightMode;
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = spawnZone;
             rb.velocity = new Vector2();
             canSwing = true;
             isStunned = false;
+            animator.SetBool("stunned", false);
             onSlope = false;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
@@ -290,7 +313,6 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.y < 0)
                 {
                     animator.SetBool("falling", true);
-                    // animator.SetBool("bonk", false);
                 }
                 break;
             case State.Attached:
@@ -345,7 +367,14 @@ public class PlayerController : MonoBehaviour
 
     void HandleAirborne()
     {
-        rb.gravityScale = gravity;
+        // Developer mode: flightmode; in the future, just enable gravity every frame
+        if (flightMode)
+        {
+            rb.gravityScale = 0;
+        } else
+        {
+            rb.gravityScale = gravity;
+        }
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
         if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && canSwing && !isStunned)
         {
@@ -530,6 +559,27 @@ public class PlayerController : MonoBehaviour
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
+    void CloudHook(List<Vector3> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles)
+    {
+        int count = 0;
+        foreach (var pos in worldPos)
+        {
+            Vector3Int world = cloudMap.WorldToCell(Vector3Int.RoundToInt(pos));
+
+            if (cloudMap.HasTile(world))
+            {
+                Vector3Int cloudPos = world;
+
+                HashSet<Tuple<int, int>> visited = new();
+                RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
+                break;
+            }
+            count++;
+
+        }
+
+    }
+
     IEnumerator DelaySwing(float delay)
     {
         delayingSwing = true;
@@ -537,33 +587,21 @@ public class PlayerController : MonoBehaviour
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
 
-        // If we hook onto a Cloud
-        if (cloudMap.GetTile(cloudMap.WorldToCell(rope.anchorPoint)) != null)
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(rope.anchorPoint);
+        float discrepency = 0.6f;
 
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
+        List<Vector3> world = new List<Vector3>{
+            rope.anchorPoint,
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepency, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y - discrepency, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y + discrepency, 0),
+            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y - discrepency, 0)
+        };
 
-        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f))) != null))
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y + 0.0005f));
-
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
-
-        if ((cloudMap.GetTile(cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f))) != null))
-        {
-            Debug.Log("hooked on cloud");
-            Vector3Int cloudPos = cloudMap.WorldToCell(new Vector2(rope.anchorPoint.x, rope.anchorPoint.y - 0.0005f));
-
-            HashSet<Tuple<int, int>> visited = new();
-            RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
-        }
+        CloudHook(world, cloudTiles);
 
         // If we hook onto a CloudDistance
         if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
@@ -590,7 +628,6 @@ public class PlayerController : MonoBehaviour
 
         while (playerOverlapping())
         {
-            Debug.Log("Player overlap");
             yield return new WaitForSeconds(1);
         }
 
