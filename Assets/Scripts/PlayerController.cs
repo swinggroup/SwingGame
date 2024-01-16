@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip whiffSound;
     public AudioClip jumpSound;
     public AudioClip thudSound;
+    public AudioClip whipSound;
     public Tilemap cloudMap;
     public Tilemap unhookableMap;
     public Tilemap BoostMap;
@@ -45,11 +46,16 @@ public class PlayerController : MonoBehaviour
     private readonly float gravity = 6f;
     private readonly float terminalVelocity = 27f;
     private readonly float accelFactor = 0.2f;
+    private readonly float wavedashVelocity = 17f;
     private readonly float arrowKeyVelocityMagnitude = 20f;
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
+    public static readonly int MAX_BACKJUMP_FRAMES = 30;
+    public static readonly float JUMP_FORCE = 8;
+    public static readonly float BACKJUMP_FORCE = 7;
+
 
     /******************************************************************************************
      * State / Pseudo-State variables 
@@ -62,6 +68,7 @@ public class PlayerController : MonoBehaviour
     bool canSwing = true;
     bool isStunned = false;
     bool onSlope = false;
+    public bool facingRight = true;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
 
@@ -75,6 +82,7 @@ public class PlayerController : MonoBehaviour
         public static int positionSwitchCount;
     }
     int jumpFixedFrames;
+    float jumpForce;
     public bool jumpedRecently = false;
     int boostFixedFrames;
     public Rigidbody2D rb;
@@ -103,6 +111,12 @@ public class PlayerController : MonoBehaviour
         else screenDebug.SetActive(false);
     }
 
+    IEnumerator Whip()
+    {
+        yield return new WaitForSeconds(0.1f);
+        rope.DeleteRope();
+    }
+
     IEnumerator JumpedRecently()
     {
         jumpedRecently = true;
@@ -113,7 +127,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // New wind section
+        Vector3 mousePos = Input.mousePosition;
 
         if (rb.velocity.magnitude > 15)
         {
@@ -127,8 +141,6 @@ public class PlayerController : MonoBehaviour
         {
             windSource.Stop();
         }
-        // End wind section
-
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -138,6 +150,17 @@ public class PlayerController : MonoBehaviour
         {
             spawnZone = this.transform.position;
         }
+        if (mousePos.x < Screen.width / 2.0f && facingRight)
+        {
+            facingRight = false;
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if ((mousePos.x > Screen.width / 2.0f) && !facingRight)
+        {
+            facingRight = true;
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+
         if (Input.GetKeyDown(KeyCode.F)) // toggle flight mode
         {
             flightMode = !flightMode;
@@ -236,6 +259,8 @@ public class PlayerController : MonoBehaviour
         }
         */
 
+        // Removing for orientation mechanics
+        /*
         if (rb.velocity.x > 0.1f)
         {
             GetComponent<SpriteRenderer>().flipX = false;
@@ -244,6 +269,7 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = true;
         }
+        */
 
         // Track how long we keep applying the constant force to boost
         if (boostFixedFrames == 0 || state == State.Swinging)
@@ -263,14 +289,22 @@ public class PlayerController : MonoBehaviour
 
                 // If player is flickering between idle and rolling, the condition is too strict
                 // and not catching float error when the rigid body is still.
-                if (Mathf.Abs(rb.velocity.x) > 1f)
+                if ((rb.velocity.x > 1f && facingRight) || (rb.velocity.x < -1f && !facingRight))
                 {
                     animator.SetBool("rolling", true);
+                    animator.SetBool("backsliding", false);
+                    //animator.SetBool("bonk", false);
+                }
+                else if ((rb.velocity.x > 1f && !facingRight) || (rb.velocity.x < -1f && facingRight))
+                {
+                    animator.SetBool("backsliding", true);
+                    animator.SetBool("rolling", false);
                     //animator.SetBool("bonk", false);
                 }
                 else
                 {
                     animator.SetBool("rolling", false);
+                    animator.SetBool("backsliding", false);
                 }
                 break;
             case State.Airborne:
@@ -279,7 +313,6 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.y < 0)
                 {
                     animator.SetBool("falling", true);
-                    //animator.SetBool("bonk", false);
                 }
                 break;
             case State.Attached:
@@ -304,14 +337,31 @@ public class PlayerController : MonoBehaviour
         if (Camera.main.GetComponent<FollowPlayer>().movingCam) return;
         if ((Input.GetKeyDown(KeyCode.Space) || jumpedRecently) && !isStunned)
         {
-            // This function could be called again causing a double jump sound if jumpedRecently is still true.
-            jumpedRecently = false;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
-            jumpFixedFrames = MAX_JUMP_FRAMES;
-            rb.AddForce(new Vector2(0, 2600));
-            state = State.Airborne;
-            onSlope = false;
+            // backflip if jumping while sliding backwards
+            if ((rb.velocity.x < -1 && facingRight) || (rb.velocity.x > 1 && !facingRight))
+            {
+                // This function could be called again causing a double jump sound if jumpedRecently is still true.
+                jumpedRecently = false;
+                rb.velocity = new Vector2(2 * rb.velocity.x, 0);
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                jumpFixedFrames = MAX_BACKJUMP_FRAMES;
+                jumpForce = BACKJUMP_FORCE;
+                rb.AddForce(new Vector2(3 * rb.velocity.x, 2600));
+                state = State.Airborne;
+                onSlope = false;
+            }
+            else
+            {
+                // This function could be called again causing a double jump sound if jumpedRecently is still true.
+                jumpedRecently = false;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                jumpFixedFrames = MAX_JUMP_FRAMES;
+                jumpForce = JUMP_FORCE;
+                rb.AddForce(new Vector2(0, 2600));
+                state = State.Airborne;
+                onSlope = false;
+            }
         }
     }
 
@@ -326,7 +376,7 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravity;
         }
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        if (Input.GetMouseButtonDown(0) && canSwing && !isStunned)
+        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && canSwing && !isStunned)
         {
             canSwing = false;
             Vector2 mousePos = anchorIndicator.transform.position;
@@ -338,14 +388,26 @@ public class PlayerController : MonoBehaviour
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
-                // Get the hit coordinate
-                Vector2 swingPoint = hit.point;
+                // maybe too hard, let's try right click // if going backwards, whip away from the surface
+                if (Input.GetMouseButtonDown(1)) // ((rb.velocity.x > 0.01f && !facingRight) || (rb.velocity.x < -0.01f && facingRight))
+                {
+                    Vector2 swingPoint = hit.point;
+                    rope.NewRope(swingPoint); // todo: make it look like a whip
+                    StartCoroutine(Whip());
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(whipSound);
+                    rb.velocity += 3 * (rb.position - swingPoint);
+                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                } else // otherwise do normal swing
+                {
+                    // Get the hit coordinate
+                    Vector2 swingPoint = hit.point;
 
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
-                // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
-                rope.NewRope(swingPoint);
-                // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
-                state = State.Attached;
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
+                    // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
+                    rope.NewRope(swingPoint);
+                    // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
+                    state = State.Attached;
+                }
             }
             else
             {
@@ -366,7 +428,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space) && jumpFixedFrames > 0)
         {
-            rb.AddForce(new Vector2(0, jumpFixedFrames * 8f));
+            rb.AddForce(new Vector2(0, jumpFixedFrames * jumpForce));
             jumpFixedFrames--;
         }
         else if (Input.GetKeyUp(KeyCode.Space))
@@ -688,6 +750,7 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("stunned", false);
                 state = State.Grounded;
+                delayingSwing = false;
                 isStunned = false;
                 canSwing = true;
             }
@@ -696,6 +759,8 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case State.Grounded:
+                // No swing CD if we're grounded, but we need to reset canSwing
+                canSwing = true;
                 break;
             case State.Airborne:
                 if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
@@ -723,15 +788,22 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (IsFloorCollision(collision))
                 {
-                    StartCoroutine(DelaySwing(DELAY_SWING));
+                    // No swing CD if we're grounded
                     rope.DeleteRope();
                 }
                 rope.DeleteRope();
                 // Do not transition state to airborne so not taut bounce mechanic still works.
-
                 break;
             case State.Swinging:
-                StartCoroutine(DelaySwing(DELAY_SWING));
+                // No swing CD if we're grounded
+                if (!IsFloorCollision(collision))
+                {
+                    StartCoroutine(DelaySwing(DELAY_SWING));
+                }
+                else // on floor collision while swinging, wavedash
+                {
+                    rb.velocity = new Vector2(facingRight ? wavedashVelocity : -wavedashVelocity, 0);
+                }
                 // Wall bounce when swinging into wall
                 // Debug.Log("player velocity: " + rb.velocity);
                 if ((IsLeftCollision(collision) && collision.relativeVelocity.x > 0) || (IsRightCollision(collision) && collision.relativeVelocity.x < 0))
@@ -789,6 +861,8 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case State.Grounded:
+                // No swing CD if we're grounded, but we need to reset canSwing
+                canSwing = true;
                 // if grounded and hit a wall (should be rolling) we stop and bonk
                 if ((leftCollision && rb.velocity.x < 0) || (rightCollision && rb.velocity.x > 0))
                 {
@@ -802,7 +876,11 @@ public class PlayerController : MonoBehaviour
                 break;
             case State.Swinging:
                 state = State.Airborne;
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                // No swing CD if we're grounded
+                if (!floorCollision)
+                {
+                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                }
                 break;
             default:
                 Debug.LogError("broke oncollisionstay");
@@ -933,7 +1011,16 @@ public class PlayerController : MonoBehaviour
             {
                 boxCollider.sharedMaterial = noFrictionMaterial;
                 onSlope = true;
-                animator.SetBool("rolling", true);
+                if ((rb.velocity.x > 0 && facingRight) || (rb.velocity.x < 0 && !facingRight))
+                {
+                    animator.SetBool("rolling", true);
+                    animator.SetBool("backsliding", false);
+                }
+                else
+                {
+                    animator.SetBool("backsliding", true);
+                    animator.SetBool("rolling", false);
+                }
             }
             /*
             var adjustedVelocity = adjustingDirection * rb.velocity.magnitude;

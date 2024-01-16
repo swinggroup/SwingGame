@@ -16,6 +16,12 @@ public class FairyMove : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        if ((player.rb.velocity.x < -0.1f && player.facingRight) || (player.rb.velocity.x > 0.1f && !player.facingRight)) {
+            this.GetComponent<SpriteRenderer>().color = Color.cyan;
+        } else
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.white;
+        }
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = mousePos;
         if (player.state == PlayerController.State.Attached || player.state == PlayerController.State.Swinging)
