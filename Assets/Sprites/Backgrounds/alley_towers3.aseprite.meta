@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: alley_towers3
     originalName: 
-    pivot: {x: 0.46386945, y: 0.5248485}
+    pivot: {x: 0.50352734, y: 0.54919684}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 1716
-      height: 1650
+      width: 1134
+      height: 996
     spriteID: 182f1fc3618a7fd4c9475adc40fe5c8e
     spriteBone: []
     spriteOutline: []
@@ -151,10 +151,10 @@ ScriptedImporter:
     - name: alley_towers3
       frameIndex: 0
       cellRect:
-        x: 204
-        y: 134
-        width: 1716
-        height: 1650
+        x: 29
+        y: 53
+        width: 1135
+        height: 996
       spriteId: 182f1fc3618a7fd4c9475adc40fe5c8e
     linkedCells: []
     parentIndex: -1
@@ -209,4 +209,4 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 2000, y: 2000}
+  canvasSize: {x: 1200, y: 1200}
