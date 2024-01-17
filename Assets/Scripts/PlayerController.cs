@@ -22,11 +22,23 @@ public class PlayerController : MonoBehaviour
      * Assigned via Inspector: animation, sfx, tilemaps, rope
      *******************************************************************************************/
     public Animator animator;
+    public AudioSource drums;
+    public AudioLowPassFilter drumsFilter;
+    public bool musicOn;
+    public AudioSource theme;
+    public AudioLowPassFilter themeLowFilter;
+    public AudioHighPassFilter themeHighFilter;
     public AudioClip grappleSound;
     public AudioClip whiffSound;
     public AudioClip jumpSound;
     public AudioClip thudSound;
     public AudioClip whipSound;
+    public AudioClip boostSound;
+    public AudioClip stunSound;
+    public AudioClip breakLineSound;
+    public AudioClip backflipSound;
+    public AudioClip scrapeSound;
+    public AudioClip wavedashSound;
     public Tilemap cloudMap;
     public Tilemap unhookableMap;
     public Tilemap BoostMap;
@@ -99,6 +111,11 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(musicOn)
+        {
+            theme.Play();
+            drums.Play();
+        }
         flightMode = false;
         spawnZone = this.gameObject.transform.position;
         rb = this.GetComponent<Rigidbody2D>();
@@ -235,6 +252,22 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (state.Equals(State.Grounded))
+        {
+            if (rb.velocity.magnitude < 1)
+            {
+                drumsFilter.cutoffFrequency = 2000;
+                //themeLowFilter.cutoffFrequency = 2000;
+                //themeHighFilter.cutoffFrequency = 2000;
+
+            }
+        }
+        else
+        {
+            drumsFilter.cutoffFrequency = 22000;
+            themeLowFilter.cutoffFrequency = 22000;
+            themeHighFilter.cutoffFrequency = 0;
+        }
         if (rb.velocity.magnitude > terminalVelocity)
         {
             rb.velocity = rb.velocity.normalized * terminalVelocity;
@@ -301,6 +334,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else if ((rb.velocity.x > 1f && !facingRight) || (rb.velocity.x < -1f && facingRight))
                 {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(scrapeSound, 2f);
                     animator.SetBool("backsliding", true);
                     animator.SetBool("rolling", false);
                     //animator.SetBool("bonk", false);
@@ -347,9 +381,9 @@ public class PlayerController : MonoBehaviour
                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
                 jumpedRecently = false;
                 rb.velocity = new Vector2(2 * rb.velocity.x, 0);
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
                 jumpFixedFrames = MAX_BACKJUMP_FRAMES;
                 jumpForce = BACKJUMP_FORCE;
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(backflipSound, 7f);
                 rb.AddForce(new Vector2(3 * rb.velocity.x, 2600));
                 state = State.Airborne;
                 onSlope = false;
@@ -359,9 +393,9 @@ public class PlayerController : MonoBehaviour
                 // This function could be called again causing a double jump sound if jumpedRecently is still true.
                 jumpedRecently = false;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
                 jumpFixedFrames = MAX_JUMP_FRAMES;
                 jumpForce = JUMP_FORCE;
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
                 rb.AddForce(new Vector2(0, 2600));
                 state = State.Airborne;
                 onSlope = false;
@@ -536,6 +570,7 @@ public class PlayerController : MonoBehaviour
             swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(breakLineSound, 3f);
             rope.DeleteRope();
             return;
         }
@@ -718,6 +753,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBoosting(Collision2D collision)
     {
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(boostSound, 9f);
         if (state == State.Attached || state == State.Swinging)
         {
             StartCoroutine(HandleClouds());
@@ -752,6 +788,7 @@ public class PlayerController : MonoBehaviour
         Camera.main.GetComponent<AudioSource>().PlayOneShot(thudSound);
         if (collision.collider.name.Contains("StunMap"))
         {
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(stunSound, 7f);
             isStunned = true;
             animator.SetBool("stunned", true);
             canSwing = false;
@@ -802,8 +839,10 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case State.Attached:
+
                 if ((IsLeftCollision(collision) && rb.velocity.x < 0) || (IsRightCollision(collision) && rb.velocity.x > 0))
                 {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(breakLineSound, 3f);
                     rb.velocity = new Vector2(collision.relativeVelocity.x / 2, rb.velocity.y);
                     return;
                 }
@@ -811,19 +850,25 @@ public class PlayerController : MonoBehaviour
                 {
                     // No swing CD if we're grounded
                     rope.DeleteRope();
+                } else
+                {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(breakLineSound, 3f);
                 }
                 rope.DeleteRope();
                 // Do not transition state to airborne so not taut bounce mechanic still works.
                 break;
             case State.Swinging:
+
                 // No swing CD if we're grounded
                 if (!IsFloorCollision(collision))
                 {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(breakLineSound, 3f);
                     StartCoroutine(HandleClouds());
                     StartCoroutine(DelaySwing(DELAY_SWING));
                 }
                 else // on floor collision while swinging, wavedash
                 {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(wavedashSound, 7f);
                     rb.velocity = new Vector2(facingRight ? wavedashVelocity : -wavedashVelocity, 0);
                 }
                 // Wall bounce when swinging into wall
@@ -1041,6 +1086,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(jumpSound);
                     animator.SetBool("backsliding", true);
                     animator.SetBool("rolling", false);
                 }
