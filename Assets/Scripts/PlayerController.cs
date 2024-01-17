@@ -598,6 +598,10 @@ public class PlayerController : MonoBehaviour
         double forceMagnitude = rb.mass * Vector2.SqrMagnitude(rb.velocity) / rope.length;
         Vector2 force = rope.NormalizedPlayerToAnchor();
         force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
+        if (Input.GetMouseButton(1)) // if hold right click, go closer to center
+        {
+            force *= 2f;
+        }
         rb.AddForce(force, ForceMode2D.Force);
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
@@ -866,10 +870,17 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(HandleClouds());
                     StartCoroutine(DelaySwing(DELAY_SWING));
                 }
-                else // on floor collision while swinging, wavedash
+                else // on floor collision while swinging, wavedash check
                 {
-                    Camera.main.GetComponent<AudioSource>().PlayOneShot(wavedashSound, 10f);
-                    rb.velocity = new Vector2(facingRight ? wavedashVelocity : -wavedashVelocity, 0);
+                    // if we have the proper angle, wavedash in the velocity direction
+                    float xVel = Mathf.Abs(rb.velocity.x);
+                    float yVel = Mathf.Abs(rb.velocity.y);
+                    float angle = Mathf.Atan2(yVel, xVel);
+                    if (angle < 0.524f) // 30 degrees = 0.524 radians
+                    {
+                        Camera.main.GetComponent<AudioSource>().PlayOneShot(wavedashSound, 10f);
+                        rb.velocity = new Vector2((rb.velocity.x > 0) ? wavedashVelocity : -wavedashVelocity, 0);
+                    }
                 }
                 // Wall bounce when swinging into wall
                 // Debug.Log("player velocity: " + rb.velocity);
