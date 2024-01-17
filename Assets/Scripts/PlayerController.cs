@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
     bool canSwing = true;
     bool isStunned = false;
     bool onSlope = false;
+    Coroutine swingDelayCoroutine;
     public bool facingRight = true;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
@@ -172,6 +173,10 @@ public class PlayerController : MonoBehaviour
             isStunned = false;
             animator.SetBool("stunned", false);
             onSlope = false;
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ResetSwingDelay();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -395,7 +400,7 @@ public class PlayerController : MonoBehaviour
                     Camera.main.GetComponent<AudioSource>().PlayOneShot(whipSound);
                     rb.velocity += 3 * (rb.position - swingPoint);
                     StartCoroutine(HandleClouds());
-                    StartCoroutine(DelaySwing(DELAY_NORMAL));
+                    swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
                 } else // otherwise do normal swing
                 {
                     // Get the hit coordinate
@@ -413,7 +418,7 @@ public class PlayerController : MonoBehaviour
                 // Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
                 // Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
-                StartCoroutine(DelaySwing(DELAY_NORMAL));
+                swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
         }
     }
@@ -442,7 +447,7 @@ public class PlayerController : MonoBehaviour
         {
 
             StartCoroutine(HandleClouds());
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rope.DeleteRope();
         }
@@ -528,7 +533,7 @@ public class PlayerController : MonoBehaviour
         if (RevolutionData.positionSwitchCount == 2) // we crossed the y threshold twice, so stop swinging
         {
             StartCoroutine(HandleClouds());
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
             rope.DeleteRope();
@@ -538,7 +543,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             StartCoroutine(HandleClouds());
-            StartCoroutine(DelaySwing(DELAY_NORMAL));
+            swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
             rope.DeleteRope();
@@ -640,6 +645,18 @@ public class PlayerController : MonoBehaviour
         this.GetComponent<SpriteRenderer>().color = Color.white;
         canSwing = true;
         delayingSwing = false;
+    }
+
+    public void ResetSwingDelay()
+    {
+        if (delayingSwing)
+        {
+            StopCoroutine(swingDelayCoroutine);
+            rope.anchorPoint = new();
+            this.GetComponent<SpriteRenderer>().color = Color.white;
+            canSwing = true;
+            delayingSwing = false;
+        }
     }
 
     IEnumerator DelayJumpAnimation(float delay)
