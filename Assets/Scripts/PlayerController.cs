@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
-using Unity.Burst.CompilerServices;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -51,6 +49,7 @@ public class PlayerController : MonoBehaviour
     public static readonly float GRAPPLE_RANGE = 9;
     public static readonly float DELAY_NORMAL = 0.4f;
     public static readonly float DELAY_SWING = 0.6f;
+    public static readonly float CLOUD_DELAY = 0.6f;
     public static readonly int MAX_JUMP_FRAMES = 23;
     public static readonly int MAX_BACKJUMP_FRAMES = 30;
     public static readonly float JUMP_FORCE = 8;
@@ -388,14 +387,14 @@ public class PlayerController : MonoBehaviour
 
             if (hit && (!hit.collider.CompareTag("Unhookable")))
             {
-                // maybe too hard, let's try right click // if going backwards, whip away from the surface
-                if (Input.GetMouseButtonDown(1)) // ((rb.velocity.x > 0.01f && !facingRight) || (rb.velocity.x < -0.01f && facingRight))
+                if (Input.GetMouseButtonDown(1)) // if right click, whip
                 {
                     Vector2 swingPoint = hit.point;
                     rope.NewRope(swingPoint); // todo: make it look like a whip
                     StartCoroutine(Whip());
                     Camera.main.GetComponent<AudioSource>().PlayOneShot(whipSound);
                     rb.velocity += 3 * (rb.position - swingPoint);
+                    StartCoroutine(HandleClouds());
                     StartCoroutine(DelaySwing(DELAY_NORMAL));
                 } else // otherwise do normal swing
                 {
@@ -441,6 +440,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
+
+            StartCoroutine(HandleClouds());
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rope.DeleteRope();
@@ -526,6 +527,7 @@ public class PlayerController : MonoBehaviour
 
         if (RevolutionData.positionSwitchCount == 2) // we crossed the y threshold twice, so stop swinging
         {
+            StartCoroutine(HandleClouds());
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
@@ -535,6 +537,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            StartCoroutine(HandleClouds());
             StartCoroutine(DelaySwing(DELAY_NORMAL));
             state = State.Airborne;
             rb.gravityScale = gravity;
@@ -559,9 +562,8 @@ public class PlayerController : MonoBehaviour
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
     }
 
-    void CloudHook(List<Vector3> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles)
+    void RemoveCloudGivenPoints(List<Vector3> worldPos, List<Tuple<Vector3Int, TileBase>> cloudTiles)
     {
-        int count = 0;
         foreach (var pos in worldPos)
         {
             Vector3Int world = cloudMap.WorldToCell(Vector3Int.RoundToInt(pos));
@@ -574,34 +576,30 @@ public class PlayerController : MonoBehaviour
                 RemoveCloud(cloudTiles, cloudPos, visited, cloudMap);
                 break;
             }
-            count++;
-
         }
-
     }
 
-    IEnumerator DelaySwing(float delay)
+    IEnumerator HandleClouds()
     {
-        delayingSwing = true;
-
         List<Tuple<Vector3Int, TileBase>> cloudTiles = new();
         List<Tuple<Vector3Int, TileBase>> cloudDistanceTiles = new();
 
-        float discrepency = 0.6f;
+        float discrepancy = 0.6f;
 
         List<Vector3> world = new List<Vector3>{
             rope.anchorPoint,
-            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepency, 0),
-            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepency, 0),
-            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y, 0),
-            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y + discrepency, 0),
-            new Vector3(rope.anchorPoint.x + discrepency, rope.anchorPoint.y - discrepency, 0),
-            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y, 0),
-            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y + discrepency, 0),
-            new Vector3(rope.anchorPoint.x - discrepency, rope.anchorPoint.y - discrepency, 0)
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y + discrepancy, 0),
+            new Vector3(rope.anchorPoint.x, rope.anchorPoint.y - discrepancy, 0),
+            new Vector3(rope.anchorPoint.x + discrepancy, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x + discrepancy, rope.anchorPoint.y + discrepancy, 0),
+            new Vector3(rope.anchorPoint.x + discrepancy, rope.anchorPoint.y - discrepancy, 0),
+            new Vector3(rope.anchorPoint.x - discrepancy, rope.anchorPoint.y, 0),
+            new Vector3(rope.anchorPoint.x - discrepancy, rope.anchorPoint.y + discrepancy, 0),
+            new Vector3(rope.anchorPoint.x - discrepancy, rope.anchorPoint.y - discrepancy, 0)
         };
 
-        CloudHook(world, cloudTiles);
+        // check if we swung on a cloud, if we did, remove the cloud
+        RemoveCloudGivenPoints(world, cloudTiles);
 
         // If we hook onto a CloudDistance
         if (cloudDistanceMap.GetTile(cloudDistanceMap.WorldToCell(rope.anchorPoint)) != null)
@@ -615,13 +613,8 @@ public class PlayerController : MonoBehaviour
             CloudDistanceList.Add(rope.anchorPoint.y + 30, cloudDistanceTiles);
         }
 
-        rope.anchorPoint = new();
-
-        this.GetComponent<SpriteRenderer>().color = delay == DELAY_NORMAL ? Color.red : Color.magenta;
-        yield return new WaitForSeconds(delay);
-        this.GetComponent<SpriteRenderer>().color = Color.white;
-        canSwing = true;
-        delayingSwing = false;
+        // set cloud delay
+        yield return new WaitForSeconds(CLOUD_DELAY); 
 
         // Function to verify that player is not overlapping with the respawning cloud. Delay spawn if so.
         bool playerOverlapping() => !cloudTiles.All(x => Physics2D.OverlapBox((Vector2Int)x.Item1, Vector2.one, 0f, LayerMask.GetMask("Default")).IsUnityNull());
@@ -631,12 +624,22 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
+        // respawn the cloud
         foreach (var pair in cloudTiles)
         {
             cloudMap.SetTile(pair.Item1, pair.Item2);
         }
+    }
 
-
+    IEnumerator DelaySwing(float delay)
+    {
+        delayingSwing = true;
+        rope.anchorPoint = new();
+        this.GetComponent<SpriteRenderer>().color = delay == DELAY_NORMAL ? Color.red : Color.magenta;
+        yield return new WaitForSeconds(delay);
+        this.GetComponent<SpriteRenderer>().color = Color.white;
+        canSwing = true;
+        delayingSwing = false;
     }
 
     IEnumerator DelayJumpAnimation(float delay)
@@ -700,6 +703,7 @@ public class PlayerController : MonoBehaviour
     {
         if (state == State.Attached || state == State.Swinging)
         {
+            StartCoroutine(HandleClouds());
             StartCoroutine(DelaySwing(DELAY_SWING));
         }
         state = State.Airborne;
@@ -798,6 +802,7 @@ public class PlayerController : MonoBehaviour
                 // No swing CD if we're grounded
                 if (!IsFloorCollision(collision))
                 {
+                    StartCoroutine(HandleClouds());
                     StartCoroutine(DelaySwing(DELAY_SWING));
                 }
                 else // on floor collision while swinging, wavedash
@@ -879,6 +884,7 @@ public class PlayerController : MonoBehaviour
                 // No swing CD if we're grounded
                 if (!floorCollision)
                 {
+                    StartCoroutine(HandleClouds());
                     StartCoroutine(DelaySwing(DELAY_NORMAL));
                 }
                 break;
