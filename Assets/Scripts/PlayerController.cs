@@ -383,7 +383,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(2 * rb.velocity.x, 0);
                 jumpFixedFrames = MAX_BACKJUMP_FRAMES;
                 jumpForce = BACKJUMP_FORCE;
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(backflipSound, 7f);
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(backflipSound, 10f);
                 rb.AddForce(new Vector2(3 * rb.velocity.x, 2600));
                 state = State.Airborne;
                 onSlope = false;
@@ -868,7 +868,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else // on floor collision while swinging, wavedash
                 {
-                    Camera.main.GetComponent<AudioSource>().PlayOneShot(wavedashSound, 7f);
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(wavedashSound, 10f);
                     rb.velocity = new Vector2(facingRight ? wavedashVelocity : -wavedashVelocity, 0);
                 }
                 // Wall bounce when swinging into wall
