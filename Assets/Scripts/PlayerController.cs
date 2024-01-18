@@ -600,7 +600,8 @@ public class PlayerController : MonoBehaviour
         force = new Vector2(force.x * (float)forceMagnitude, force.y * (float)forceMagnitude);
         if (Input.GetMouseButton(1)) // if hold right click, go closer to center
         {
-            force *= 2f;
+            float playerToAnchorMagnitude = (rope.anchorPoint - new Vector2(transform.position.x, transform.position.y)).magnitude;
+            force *= playerToAnchorMagnitude;
         }
         rb.AddForce(force, ForceMode2D.Force);
         rope.playerPhysicsTransform = rb.position + (rb.velocity * Time.fixedDeltaTime);
