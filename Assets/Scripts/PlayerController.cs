@@ -107,6 +107,13 @@ public class PlayerController : MonoBehaviour
     public bool floorCollision = false;
     private Vector3 adjustingDirection;
 
+    /******************************************************************************************
+     * Haiku Management
+     *******************************************************************************************/
+
+    private Dictionary<string, string[]> haiku;
+    //public GameObject haikuLooker;
+
 
     // Start is called before the first frame update
     void Start()
@@ -126,6 +133,7 @@ public class PlayerController : MonoBehaviour
         currConstantForce = this.gameObject.GetComponent<ConstantForce2D>();
         if (debugOn == true) screenDebug.SetActive(true);
         else screenDebug.SetActive(false);
+        haiku = new Dictionary<string, string[]>();
     }
 
     IEnumerator Whip()
@@ -144,6 +152,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            PrintHaiku();
+        }
+
         Vector3 mousePos = Input.mousePosition;
 
         if (rb.velocity.magnitude > 15)
@@ -248,6 +261,23 @@ public class PlayerController : MonoBehaviour
         stringBuilder.Append("Timestamp : " + Time.time + "\n");
         stringBuilder.Append("adjusting : " + onSlope + "\n");
         debugLogs.SetText(stringBuilder.ToString());
+    }
+
+    public void AddHaiku(string tag, string[] lines)
+    {
+        haiku.Add(tag, lines);
+    }
+
+    public void PrintHaiku()
+    {
+        for (int i = 0; i< haiku.Count; i++)
+        {
+            Debug.Log(haiku.ElementAt(i).Key);
+            for (int j = 0; j<haiku.ElementAt(i).Value.Length; j++)
+            {
+                Debug.Log(haiku.ElementAt(i).Value[j]);
+            }
+        }
     }
 
     void FixedUpdate()
