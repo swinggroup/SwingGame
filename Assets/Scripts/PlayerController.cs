@@ -112,7 +112,8 @@ public class PlayerController : MonoBehaviour
      *******************************************************************************************/
 
     private Dictionary<string, string[]> haiku;
-    //public GameObject haikuLooker;
+    public GameObject haikuLooker;
+    private bool showingHaiku;
 
 
     // Start is called before the first frame update
@@ -134,6 +135,8 @@ public class PlayerController : MonoBehaviour
         if (debugOn == true) screenDebug.SetActive(true);
         else screenDebug.SetActive(false);
         haiku = new Dictionary<string, string[]>();
+        showingHaiku = false;
+        haikuLooker.SetActive(false);
     }
 
     IEnumerator Whip()
@@ -149,12 +152,32 @@ public class PlayerController : MonoBehaviour
         jumpedRecently = false;
     }
 
+    void ShowHaiku()
+    {
+        showingHaiku = true;
+        haikuLooker.SetActive(true);
+    }
+
+    void HideHaiku()
+    {
+        showingHaiku = false;
+        haikuLooker.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.H))
         {
-            PrintHaiku();
+            if (!showingHaiku)
+            {
+                PrintHaiku();
+                ShowHaiku();
+            } else
+            {
+                HideHaiku();
+            }
+
         }
 
         Vector3 mousePos = Input.mousePosition;
