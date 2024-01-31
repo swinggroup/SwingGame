@@ -7,6 +7,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -112,8 +113,10 @@ public class PlayerController : MonoBehaviour
      *******************************************************************************************/
 
     private Dictionary<string, string[]> haiku;
-    public GameObject haikuLooker;
+    public GameObject haikuContent;
+    public GameObject haikuScroller;
     private bool showingHaiku;
+    public GameObject haikuPrefab;
 
 
     // Start is called before the first frame update
@@ -136,7 +139,7 @@ public class PlayerController : MonoBehaviour
         else screenDebug.SetActive(false);
         haiku = new Dictionary<string, string[]>();
         showingHaiku = false;
-        haikuLooker.SetActive(false);
+        haikuScroller.SetActive(false);
     }
 
     IEnumerator Whip()
@@ -154,14 +157,64 @@ public class PlayerController : MonoBehaviour
 
     void ShowHaiku()
     {
+
+        var list = haiku.Keys.ToList();
+        list.Sort();
+
+        haikuPrefab.SetActive(true);
+
+        //refresh
         showingHaiku = true;
-        haikuLooker.SetActive(true);
+        haikuScroller.SetActive(true);
+
+        float mody = Screen.height / 8;
+        float modx = Screen.width / 7;
+
+        int i = 0;
+        foreach (string key in list)
+        {
+            
+            var pos = new Vector3(haikuPrefab.transform.position.x + (modx * (i / 4)), haikuPrefab.transform.position.y - (i*mody), haikuPrefab.transform.position.z);
+            var newHaiku = Instantiate(haikuPrefab, pos, haikuPrefab.transform.rotation);
+            TextMeshProUGUI[] textMeshes = newHaiku.GetComponentsInChildren<TextMeshProUGUI>();
+            for (int k = 0; k < textMeshes.Length; k++)
+            {
+                Debug.Log("looking at " + textMeshes[k].name);
+                if (textMeshes[k].name == "Title")
+                {
+                    textMeshes[k].text = key;
+                } else if (textMeshes[k].name == "Body")
+                {
+                    textMeshes[k].text = string.Join("\n", haiku[key]);
+                }
+            }
+            newHaiku.transform.SetParent(haikuContent.transform);
+            newHaiku.transform.localScale = haikuPrefab.transform.localScale;
+            i++;
+
+            var image = haikuScroller.GetComponentInChildren<Image>();
+        }
+        haikuPrefab.SetActive(false);
+
     }
 
     void HideHaiku()
     {
+        //Delete all clones
+        foreach (var haiku in GameObject.FindGameObjectsWithTag("haiku"))
+        {
+            if (haiku.name != "haiku")
+            {
+                Debug.Log("destroying" + haiku.name);
+                Destroy(haiku);
+            }
+            else
+            {
+                Debug.Log("not destroying " + haiku.name);
+            }
+        }
         showingHaiku = false;
-        haikuLooker.SetActive(false);
+        haikuScroller.SetActive(false);
     }
 
     // Update is called once per frame
@@ -289,6 +342,10 @@ public class PlayerController : MonoBehaviour
     public void AddHaiku(string tag, string[] lines)
     {
         haiku.Add(tag, lines);
+        if(showingHaiku)
+        {
+            ShowHaiku();
+        }
     }
 
     public void PrintHaiku()
