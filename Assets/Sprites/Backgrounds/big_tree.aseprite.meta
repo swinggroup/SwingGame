@@ -121,7 +121,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: big_tree
     originalName: 
-    pivot: {x: 0.52957356, y: 0.5021231}
+    pivot: {x: 0.52957356, y: 0.49569893}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -129,7 +129,7 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 727
-      height: 942
+      height: 930
     spriteID: 401a02947cfb6fd4eaa541e488cd8c85
     spriteBone: []
     spriteOutline: []
@@ -141,15 +141,15 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: big_tree_Frame_1
     originalName: 
-    pivot: {x: 0.52957356, y: 0.5021231}
+    pivot: {x: 0.52957356, y: 0.49569893}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
-      y: 954
+      y: 942
       width: 727
-      height: 942
+      height: 930
     spriteID: 65b69681f6dee0a419289f66032909c3
     spriteBone: []
     spriteOutline: []
@@ -158,7 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 954}
+    uvTransform: {x: 4, y: 942}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -172,17 +172,17 @@ ScriptedImporter:
       frameIndex: 0
       cellRect:
         x: 115
-        y: 27
+        y: 39
         width: 727
-        height: 942
+        height: 930
       spriteId: 401a02947cfb6fd4eaa541e488cd8c85
     - name: big_tree_Frame_1
       frameIndex: 1
       cellRect:
         x: 115
-        y: 27
+        y: 39
         width: 727
-        height: 942
+        height: 930
       spriteId: 65b69681f6dee0a419289f66032909c3
     linkedCells: []
     parentIndex: -1
