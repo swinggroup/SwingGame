@@ -7,12 +7,22 @@ public class Dialogue : MonoBehaviour
 
     public enum State {PLAYING_TEXT, FINISHED_LINE, WAITING_FOR_DIALOGUE};
     public State state;
+
     public TextMesh text;
+    public GameObject dialogueBox;
+    public GameObject eButton;
+    public GameObject portrait;
+
+    private int currLine;
+    private string[] currText;
+    private Coroutine lineCoroutine;
 
     // Start is called before the first frame update
     void Start()
     {
         state = State.WAITING_FOR_DIALOGUE;
+        HideDialogue();
+        currLine = 0;
     }
 
     // Update is called once per frame
@@ -24,12 +34,26 @@ public class Dialogue : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     // finish the line and go to finished line state
+                    StopCoroutine(lineCoroutine);
+                    text.text = currText[currLine];
+                    state = State.FINISHED_LINE;
+                    ShowEButton();
+                    currLine++;
                 }
                 break;
             case State.FINISHED_LINE:
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    // go next line or end
+                    if (currLine == currText.Length)
+                    {
+                        state = State.WAITING_FOR_DIALOGUE;
+                        text.text = "";
+                        HideDialogue();
+                    } else
+                    {
+                        state = State.PLAYING_TEXT;
+                        lineCoroutine = StartCoroutine(PlayLine());
+                    }
                 }
                 break;
             case State.WAITING_FOR_DIALOGUE:
@@ -37,6 +61,32 @@ public class Dialogue : MonoBehaviour
             default:
                 break;
         } 
+    }
+    
+    private void HideDialogue()
+    {
+        eButton.GetComponent<Renderer>().enabled = false;
+        dialogueBox.GetComponent<Renderer>().enabled = false;
+        text.GetComponent<Renderer>().enabled = false;
+        portrait.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void ShowDialogue()
+    {
+        eButton.GetComponent<Renderer>().enabled = true;
+        dialogueBox.GetComponent<Renderer>().enabled = true;
+        text.GetComponent<Renderer>().enabled = true;
+        portrait.GetComponent<Renderer>().enabled = true;
+    }
+
+    private void HideEButton()
+    {
+        eButton.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void ShowEButton()
+    {
+        eButton.GetComponent<Renderer>().enabled = true;
     }
 
     public void InitializeDialogue(string[] text)
@@ -46,25 +96,27 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        state = State.PLAYING_TEXT;
-        // play first line of text
-        StartCoroutine(PlayLine(text[0]));
-        // show dialogue and text
-
-        // while has lines of text
-        //  play line of text
-        //  wait for e button
-        // hide dialogue and text
+        ShowDialogue();
+        HideEButton();
+        currText = text;
+        currLine = 0;
+        lineCoroutine = StartCoroutine(PlayLine());
     }
 
-    IEnumerator PlayLine(string line)
+    IEnumerator PlayLine()
     {
-        for (int i = 0; i < line.Length; i++)
+        string line = currText[currLine];
+        HideEButton();
+        Debug.Log(line);
+        for (int i = 0; i <= line.Length; i++)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.05f);
+            state = State.PLAYING_TEXT; // to avoid the initial e press also triggering the dialogue animation skip
             text.text = line.Substring(0, i);
+            Debug.Log(text.text);
         }
+        state = State.FINISHED_LINE;
+        ShowEButton();
+        currLine++;
     }
-
-    
 }

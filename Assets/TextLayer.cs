@@ -9,7 +9,6 @@ public class TextLayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(GetComponent<MeshRenderer>().sortingLayerName);
         GetComponent<MeshRenderer>().sortingOrder = 10001;
     }
 

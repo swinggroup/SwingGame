@@ -8,7 +8,6 @@ public class DialogueBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<MeshRenderer>().sortingOrder = 5000;
     }
 
     // Update is called once per frame
