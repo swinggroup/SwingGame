@@ -16,6 +16,7 @@ public class talker : MonoBehaviour
     private bool talked;
     private Vector3 home;
     private Color originalColor;
+    private GameObject dialogue;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class talker : MonoBehaviour
         talked = false;
         talking = false;
         text = GetComponentInChildren<TextMeshPro>();
+        dialogue = GameObject.Find("dialogue");
         len = lines.Length;
         circle = transform.Find("Circle").gameObject;
         home = text.transform.position;
@@ -41,6 +43,7 @@ public class talker : MonoBehaviour
                 {
                     talking = true;
                     StartCoroutine(IterateTalk());
+                    dialogue.GetComponent<Dialogue>().InitializeDialogue(lines);
                 }
             }
             else
