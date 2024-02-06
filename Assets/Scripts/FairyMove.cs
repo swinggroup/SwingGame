@@ -17,10 +17,10 @@ public class FairyMove : MonoBehaviour
     void LateUpdate()
     {
         if ((player.rb.velocity.x < -0.1f && player.facingRight) || (player.rb.velocity.x > 0.1f && !player.facingRight)) {
-            this.GetComponent<SpriteRenderer>().color = Color.cyan;
+            //this.GetComponent<SpriteRenderer>().color = Color.cyan;
         } else
         {
-            this.GetComponent<SpriteRenderer>().color = Color.white;
+            // this.GetComponent<SpriteRenderer>().color = Color.white;
         }
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = mousePos;

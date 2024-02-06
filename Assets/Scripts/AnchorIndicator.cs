@@ -21,7 +21,7 @@ public class AnchorIndicator : MonoBehaviour
             defaultColor = Color.cyan;
         } else
         {
-            defaultColor = Color.red;
+            defaultColor = Color.cyan; // was red
         }
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
@@ -102,7 +102,7 @@ public class AnchorIndicator : MonoBehaviour
         }
         if (player.state == PlayerController.State.Swinging || player.state == PlayerController.State.Attached)
         {
-            this.GetComponent<SpriteRenderer>().color = Color.yellow;
+            this.GetComponent<SpriteRenderer>().color = Color.blue;
             this.transform.position = player.rope.anchorPoint;
         }
     }

@@ -75,7 +75,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 9
+    defaultPivotAlignment: 1
     customPivotPosition: {x: 0.5, y: 0.5}
     spritePadding: 0
     generateModelPrefab: 1
@@ -87,7 +87,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 9
+    defaultPivotAlignment: 1
     customPivotPosition: {x: 0.5, y: 0.5}
     spritePadding: 0
     generateModelPrefab: 1
@@ -95,7 +95,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638343685050939290
+  platformSettingsDirtyTick: 638428291310794950
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: fairy_Frame_0
     originalName: 
-    pivot: {x: 0.48000002, y: 0.4782609}
+    pivot: {x: 0, y: 1}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 38
+      x: 4
       y: 4
-      width: 25
-      height: 23
+      width: 15
+      height: 21
     spriteID: 7a9b4e050cc3a004ba7b8166857c5f3a
     spriteBone: []
     spriteOutline: []
@@ -138,18 +138,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 38, y: 4}
+    uvTransform: {x: 4, y: 4}
   - name: fairy_Frame_1
     originalName: 
-    pivot: {x: 0.44000003, y: 0.5217392}
+    pivot: {x: 0, y: 1}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 71
-      y: 4
-      width: 25
-      height: 23
+      x: 4
+      y: 33
+      width: 15
+      height: 21
     spriteID: 93e846485a55d774da79f9d91287d956
     spriteBone: []
     spriteOutline: []
@@ -158,127 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 71, y: 4}
-  - name: fairy_Frame_2
-    originalName: 
-    pivot: {x: 0.46153846, y: 0.5}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 26
-      height: 24
-    spriteID: 1fe2b23dda8d2934cb62dcdca914ae5c
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
-  - name: fairy_Frame_3
-    originalName: 
-    pivot: {x: 0.44000003, y: 0.5217392}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 36
-      width: 25
-      height: 23
-    spriteID: bab37dcf0c1f4b742ac1c29edd3eb1b4
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 36}
-  - name: fairy_Frame_4
-    originalName: 
-    pivot: {x: 0.5, y: 0.52380955}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 37
-      y: 36
-      width: 26
-      height: 21
-    spriteID: 02d9c5e9b641cc648b6e2db4765bbe41
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 37, y: 36}
-  - name: fairy_Frame_5
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 71
-      y: 36
-      width: 24
-      height: 22
-    spriteID: e194fd4994beeb840aa43ac2524400cd
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 71, y: 36}
-  - name: fairy_Frame_6
-    originalName: 
-    pivot: {x: 0.5416667, y: 0.49999997}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 67
-      width: 24
-      height: 20
-    spriteID: 193faabae0dc9d54ba31bd3e10960294
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 67}
-  - name: fairy_Frame_7
-    originalName: 
-    pivot: {x: 0.38095236, y: 0.47619045}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 103
-      y: 36
-      width: 21
-      height: 21
-    spriteID: fbb9d209512e56c4daf20a1242dbf6d4
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 103, y: 36}
+    uvTransform: {x: 4, y: 33}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -291,67 +171,19 @@ ScriptedImporter:
     - name: fairy_Frame_0
       frameIndex: 0
       cellRect:
-        x: 3
-        y: 4
-        width: 25
-        height: 23
+        x: 0
+        y: 9
+        width: 15
+        height: 21
       spriteId: 7a9b4e050cc3a004ba7b8166857c5f3a
     - name: fairy_Frame_1
       frameIndex: 1
       cellRect:
-        x: 4
-        y: 3
-        width: 25
-        height: 23
+        x: 0
+        y: 9
+        width: 15
+        height: 21
       spriteId: 93e846485a55d774da79f9d91287d956
-    - name: fairy_Frame_2
-      frameIndex: 2
-      cellRect:
-        x: 3
-        y: 3
-        width: 26
-        height: 24
-      spriteId: 1fe2b23dda8d2934cb62dcdca914ae5c
-    - name: fairy_Frame_3
-      frameIndex: 3
-      cellRect:
-        x: 4
-        y: 3
-        width: 25
-        height: 23
-      spriteId: bab37dcf0c1f4b742ac1c29edd3eb1b4
-    - name: fairy_Frame_4
-      frameIndex: 4
-      cellRect:
-        x: 2
-        y: 4
-        width: 26
-        height: 21
-      spriteId: 02d9c5e9b641cc648b6e2db4765bbe41
-    - name: fairy_Frame_5
-      frameIndex: 5
-      cellRect:
-        x: 3
-        y: 4
-        width: 24
-        height: 22
-      spriteId: e194fd4994beeb840aa43ac2524400cd
-    - name: fairy_Frame_6
-      frameIndex: 6
-      cellRect:
-        x: 2
-        y: 5
-        width: 24
-        height: 20
-      spriteId: 193faabae0dc9d54ba31bd3e10960294
-    - name: fairy_Frame_7
-      frameIndex: 7
-      cellRect:
-        x: 7
-        y: 5
-        width: 21
-        height: 21
-      spriteId: fbb9d209512e56c4daf20a1242dbf6d4
     linkedCells: []
     parentIndex: -1
   platformSettings:
