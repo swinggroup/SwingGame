@@ -129,7 +129,7 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 1000
-      height: 948
+      height: 946
     spriteID: ab33774bb0b7fda418b252d023ea6dbc
     spriteBone: []
     spriteOutline: []
@@ -147,9 +147,9 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 960
+      y: 958
       width: 1000
-      height: 948
+      height: 946
     spriteID: 3a3acce00e01a504d9469b8c0ddaaead
     spriteBone: []
     spriteOutline: []
@@ -158,7 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 960}
+    uvTransform: {x: 4, y: 958}
   - name: buddha_mountain_Frame_2
     originalName: 
     pivot: {x: 0.5, y: 0}
@@ -169,7 +169,7 @@ ScriptedImporter:
       x: 1012
       y: 4
       width: 1000
-      height: 948
+      height: 946
     spriteID: f882133dd4a7b5c4cb7180f3b6d14324
     spriteBone: []
     spriteOutline: []
@@ -187,9 +187,9 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 1012
-      y: 960
+      y: 958
       width: 1000
-      height: 948
+      height: 946
     spriteID: 3a5718c4976fb374091c92ebd48ac5fd
     spriteBone: []
     spriteOutline: []
@@ -198,7 +198,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 1012, y: 960}
+    uvTransform: {x: 1012, y: 958}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -214,7 +214,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 1000
-        height: 948
+        height: 946
       spriteId: ab33774bb0b7fda418b252d023ea6dbc
     - name: buddha_mountain_Frame_1
       frameIndex: 1
@@ -222,7 +222,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 1000
-        height: 948
+        height: 946
       spriteId: 3a3acce00e01a504d9469b8c0ddaaead
     - name: buddha_mountain_Frame_2
       frameIndex: 2
@@ -230,7 +230,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 1000
-        height: 948
+        height: 946
       spriteId: f882133dd4a7b5c4cb7180f3b6d14324
     - name: buddha_mountain_Frame_3
       frameIndex: 3
@@ -238,7 +238,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 1000
-        height: 948
+        height: 946
       spriteId: 3a5718c4976fb374091c92ebd48ac5fd
     linkedCells: []
     parentIndex: -1
