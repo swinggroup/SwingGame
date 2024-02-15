@@ -8,6 +8,7 @@ using UnityEngine;
 public class talker : MonoBehaviour
 {
     public string[] lines;
+    public string spriteName;
     public GameObject player;
     private TextMeshPro text;
     private int len;
@@ -43,7 +44,7 @@ public class talker : MonoBehaviour
                 {
                     talking = true;
                     StartCoroutine(IterateTalk());
-                    dialogue.GetComponent<Dialogue>().InitializeDialogue(lines);
+                    dialogue.GetComponent<Dialogue>().InitializeDialogue(lines, spriteName);
                 }
             }
             else

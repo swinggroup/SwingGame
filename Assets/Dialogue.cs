@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public class Dialogue : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Dialogue : MonoBehaviour
     private int currLine;
     private string[] currText;
     private Coroutine lineCoroutine;
+    private SpriteLibrary lib;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,7 @@ public class Dialogue : MonoBehaviour
         state = State.WAITING_FOR_DIALOGUE;
         HideDialogue();
         currLine = 0;
+        lib = this.GetComponent<SpriteLibrary>();
     }
 
     // Update is called once per frame
@@ -89,13 +92,14 @@ public class Dialogue : MonoBehaviour
         eButton.GetComponent<Renderer>().enabled = true;
     }
 
-    public void InitializeDialogue(string[] text)
+    public void InitializeDialogue(string[] text, string characterName)
     {
         if (!state.Equals(State.WAITING_FOR_DIALOGUE))
         {
             return;
         }
 
+        portrait.GetComponent<SpriteRenderer>().sprite = lib.GetSprite("Portraits", characterName);
         ShowDialogue();
         HideEButton();
         currText = text;
