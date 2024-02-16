@@ -11,7 +11,7 @@ public class RuleTileFixer : MonoBehaviour
     {
         // 0: enable this object
         // 1: duplicate the ruletile template folder
-        // 2: rename the aseprite from ruletile -> whatever is appropriate (usually xxxmap_tiles), and re-slice the sprites (this is to rename the individual sprites)
+        // 2: rename the aseprite from ruletile_template -> whatever is appropriate (usually xxxmap_tiles), and re-slice the sprites (this is to rename the individual sprites)
         // 3: rename the rule tile to whatever is appropriate as well (usually xxxmap_ruletile)
         // 4: rename the paths in this file
         // 5: run this script (just start and stop the game, may have to run it a few times - check the ruletile if the tiles are updated or not)
@@ -21,12 +21,12 @@ public class RuleTileFixer : MonoBehaviour
         List<Sprite> newSprites = new();
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (aseprite file)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/boostmap2_ruletile/boostmap2_tiles.aseprite");
+        Object[] aseprite = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/Tiles/icemap_ruletile/icemap_tiles.aseprite");
         foreach (Object s in aseprite)
         {
             // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE, ENDING WITH AN UNDERSCORE (aseprite file without extension + underscore)
             // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-            if (s.name.StartsWith("boostmap2_tiles_"))
+            if (s.name.StartsWith("icemap_tiles_"))
             {
                 newSprites.Add((Sprite) s);
             }
@@ -35,7 +35,7 @@ public class RuleTileFixer : MonoBehaviour
         // get the ruletile
         // TODO: CHANGE THE PATH TO THE CORRECT ASSET HERE (the renamed ruletile)
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/boostmap2_ruletile/boostmap2_ruletile.asset", typeof(RuleTile));
+        RuleTile ruleTile = (RuleTile)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Tiles/icemap_ruletile/icemap_ruletile.asset", typeof(RuleTile));
 
         // for each rule, change the sprite file
         List<RuleTile.TilingRule> rules = ruleTile.m_TilingRules;
