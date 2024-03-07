@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
     bool isStunned = false;
     bool onSlope = false;
     Coroutine swingDelayCoroutine;
+    Coroutine flickTimeCoroutine;
     public bool facingRight = true;
     public bool delayingSwing = false;
     public bool delayingJumpAnimation = false;
@@ -513,6 +514,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator FlickTime()
+    {
+        yield return new WaitForSeconds(0.2f);
+        flickTimeCoroutine = null;
+    }
+
     void HandleAirborne()
     {
         // Developer mode: flightmode; in the future, just enable gravity every frame
@@ -523,7 +530,48 @@ public class PlayerController : MonoBehaviour
         {
             rb.gravityScale = gravity;
         }
+
+        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
+        if (Vector2.Distance(mouse, ourPos) < 3)
+        {
+            if (flickTimeCoroutine != null) StopCoroutine(flickTimeCoroutine);
+            flickTimeCoroutine = StartCoroutine(FlickTime());
+        } else
+        {
+            if (flickTimeCoroutine != null && Vector2.Distance(mouse, ourPos) > GRAPPLE_RANGE && canSwing && !isStunned)
+            {
+                canSwing = false;
+                Vector2 mousePos = anchorIndicator.transform.position;
+
+                // Get the unit vector towards the anchor indicator
+                Vector2 unitVector = (mousePos - ourPos).normalized;
+                // Raycast to first platform hit
+                RaycastHit2D hit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
+
+                if (hit && (!hit.collider.CompareTag("Unhookable")))
+                {
+                    // Get the hit coordinate
+                    Vector2 swingPoint = hit.point;
+
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(grappleSound);
+                    // Passing in anchorIndicator point can cause rope swinging on air, stick with swingPoint.
+                    rope.NewRope(swingPoint);
+                    // Debug.Log("anchor point: " + rope.anchorPoint.ToString("0.000000000000000"));
+                    state = State.Attached;
+                }
+                else
+                {
+                    // Debug.Log("Raycast range: " + PlayerController.GRAPPLE_RANGE + 0.1f);
+                    // Debug.Log("Anchor Indicator range: " + ((Vector2)anchorIndicator.transform.position - ourPos).magnitude);
+                    Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
+                    swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
+                }
+               
+            }
+        }
+
+        /*
         if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && canSwing && !isStunned)
         {
             canSwing = false;
@@ -564,7 +612,7 @@ public class PlayerController : MonoBehaviour
                 Camera.main.GetComponent<AudioSource>().PlayOneShot(whiffSound);
                 swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
             }
-        }
+        }*/
     }
 
     void HandleAirbornePhysics()
