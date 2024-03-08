@@ -531,15 +531,15 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravity;
         }
 
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        if (Vector2.Distance(mouse, ourPos) < 3)
+        if (MouseInPlayerRadius())
         {
             if (flickTimeCoroutine != null) StopCoroutine(flickTimeCoroutine);
             flickTimeCoroutine = StartCoroutine(FlickTime());
         } else
         {
-            if (flickTimeCoroutine != null && Vector2.Distance(mouse, ourPos) > GRAPPLE_RANGE && canSwing && !isStunned)
+            Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
+            if (flickTimeCoroutine != null && Vector2.Distance(mouse, ourPos) > 5 && canSwing && !isStunned)
             {
                 canSwing = false;
                 Vector2 mousePos = anchorIndicator.transform.position;
@@ -547,7 +547,7 @@ public class PlayerController : MonoBehaviour
                 // Get the unit vector towards the anchor indicator
                 Vector2 unitVector = (mousePos - ourPos).normalized;
                 // Raycast to first platform hit
-                RaycastHit2D hit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, Mathf.Min((ourPos - mousePos).magnitude + 0.3f, PlayerController.GRAPPLE_RANGE + 0.1f), LayerMask.GetMask("Hookables"));
+                RaycastHit2D hit = Physics2D.CircleCast(ourPos, 0.1f, unitVector, PlayerController.GRAPPLE_RANGE + 0.1f, LayerMask.GetMask("Hookables"));
 
                 if (hit && (!hit.collider.CompareTag("Unhookable")))
                 {
@@ -633,9 +633,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    bool MouseInPlayerRadius()
+    {
+        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
+        return (Vector2.Distance(mouse, ourPos) < 3);
+    }
+
     void HandleAttached()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (MouseInPlayerRadius()) // (Input.GetMouseButtonUp(0))
         {
 
             StartCoroutine(HandleClouds());
@@ -733,7 +740,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (MouseInPlayerRadius()) // (Input.GetMouseButtonUp(0))
         {
             StartCoroutine(HandleClouds());
             swingDelayCoroutine = StartCoroutine(DelaySwing(DELAY_NORMAL));
