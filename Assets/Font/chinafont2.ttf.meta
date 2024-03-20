@@ -11,7 +11,7 @@ TrueTypeFontImporter:
   fontNames:
   - chinafont2
   fallbackFontReferences: []
-  customCharacters: abcdefghijklmnopqrstuvwxyz,!?.
+  customCharacters: 'abcdefghijklmnopqrstuvwxyz,!?. '
   fontRenderingMode: 2
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
