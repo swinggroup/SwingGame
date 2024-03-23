@@ -6,6 +6,7 @@ using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -221,6 +222,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // lock mouse to center radius 
+        if (!MouseInPlayerRadius())
+        {
+            Mouse.current.WarpCursorPosition()
+        } 
+
         if(Input.GetKeyDown(KeyCode.H))
         {
             if (!showingHaiku)
