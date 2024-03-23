@@ -121,15 +121,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: 'tree_ice '
     originalName: 
-    pivot: {x: 0.5488722, y: 0.53956836}
+    pivot: {x: 0.55813956, y: 0.5514706}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 133
-      height: 278
+      width: 129
+      height: 272
     spriteID: ba5337c114a0fd04982266b6bf8643c2
     spriteBone: []
     spriteOutline: []
@@ -151,10 +151,10 @@ ScriptedImporter:
     - name: 'tree_ice '
       frameIndex: 0
       cellRect:
-        x: 27
+        x: 28
         y: 0
-        width: 133
-        height: 278
+        width: 129
+        height: 272
       spriteId: ba5337c114a0fd04982266b6bf8643c2
     linkedCells: []
     parentIndex: -1
