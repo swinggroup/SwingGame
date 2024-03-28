@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
     public static readonly int MAX_BACKJUMP_FRAMES = 30;
     public static readonly float JUMP_FORCE = 8;
     public static readonly float BACKJUMP_FORCE = 7;
+    public static readonly float CURSOR_RADIUS = 3;
+    public static readonly float WORLD_TO_SCREEN = 32;
 
 
     /******************************************************************************************
@@ -226,7 +228,10 @@ public class PlayerController : MonoBehaviour
         // lock mouse to center radius 
         if (!MouseInPlayerRadius())
         {
-            Mouse.current.WarpCursorPosition()
+            var overExtendedMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            var screenCenterVector = new Vector2(Screen.width/2, Screen.height/2);
+            Mouse.current.WarpCursorPosition(screenCenterVector + ((overExtendedMousePos - screenCenterVector).normalized * CURSOR_RADIUS * WORLD_TO_SCREEN));
+            Debug.Log((overExtendedMousePos - screenCenterVector).normalized);
         } 
 
         if(Input.GetKeyDown(KeyCode.H))
@@ -331,8 +336,17 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
-    private void LateUpdate()
+
+    void LateUpdate()
     {
+        // lock mouse to center radius 
+        if (!MouseInPlayerRadius())
+        {
+            var overExtendedMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            var screenCenterVector = new Vector2(Screen.width / 2, Screen.height / 2);
+            Mouse.current.WarpCursorPosition(screenCenterVector + ((overExtendedMousePos - screenCenterVector).normalized * CURSOR_RADIUS * WORLD_TO_SCREEN));
+            Debug.Log((overExtendedMousePos - screenCenterVector).normalized);
+        }
         leftCollision = false;
         rightCollision = false;
         ceilingCollision = false;
@@ -371,6 +385,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+
+
         if (state.Equals(State.Grounded))
         {
             if (rb.velocity.magnitude < 1)
@@ -645,7 +661,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        return (Vector2.Distance(mouse, ourPos) < 3);
+        return Vector2.Distance(mouse, ourPos) <= CURSOR_RADIUS;
     }
 
     void HandleAttached()
