@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     public static readonly float JUMP_FORCE = 8;
     public static readonly float BACKJUMP_FORCE = 7;
     public static readonly float CURSOR_RADIUS = 3;
-    public static readonly float WORLD_TO_SCREEN = 32;
+    public static readonly float WORLD_TO_SCREEN = 16;
 
 
     /******************************************************************************************
@@ -230,8 +230,7 @@ public class PlayerController : MonoBehaviour
         {
             var overExtendedMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             var screenCenterVector = new Vector2(Screen.width/2, Screen.height/2);
-            Mouse.current.WarpCursorPosition(screenCenterVector + ((overExtendedMousePos - screenCenterVector).normalized * CURSOR_RADIUS * WORLD_TO_SCREEN));
-            Debug.Log((overExtendedMousePos - screenCenterVector).normalized);
+            Mouse.current.WarpCursorPosition(screenCenterVector + (CURSOR_RADIUS * WORLD_TO_SCREEN * (overExtendedMousePos - screenCenterVector).normalized));
         } 
 
         if(Input.GetKeyDown(KeyCode.H))
@@ -345,7 +344,6 @@ public class PlayerController : MonoBehaviour
             var overExtendedMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             var screenCenterVector = new Vector2(Screen.width / 2, Screen.height / 2);
             Mouse.current.WarpCursorPosition(screenCenterVector + ((overExtendedMousePos - screenCenterVector).normalized * CURSOR_RADIUS * WORLD_TO_SCREEN));
-            Debug.Log((overExtendedMousePos - screenCenterVector).normalized);
         }
         leftCollision = false;
         rightCollision = false;
