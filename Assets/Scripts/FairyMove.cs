@@ -19,7 +19,17 @@ public class FairyMove : MonoBehaviour
     private bool CursorInRadius()
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-        return Vector3.Distance(screenCenter, transform.position) <= PlayerController.CURSOR_RADIUS;
+        Debug.Log("screenCneter in screen:" + screenCenter);
+        Debug.Log("screenCenter in world: " + Camera.main.ScreenToWorldPoint(screenCenter));
+        Debug.Log("transform.position: " + transform.position);
+        Debug.Log(Vector2.Distance(Camera.main.ScreenToWorldPoint(screenCenter), transform.position));
+        return Vector2.Distance(Camera.main.ScreenToWorldPoint(screenCenter), transform.position) <= PlayerController.CURSOR_RADIUS;
+        
+    }
+
+    private void FixedUpdate()
+    {
+        transform.position += new Vector3(player.rb.velocity.x * Time.fixedDeltaTime, player.rb.velocity.y * Time.fixedDeltaTime);
     }
 
     // Update is called once per frame
@@ -28,14 +38,21 @@ public class FairyMove : MonoBehaviour
         transform.position += new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0);
 
         Debug.Log(transform.position);
+        
 
         if (!CursorInRadius())
         {
             Vector3 cursorScreenSpace = Camera.main.WorldToScreenPoint(transform.position);
+            cursorScreenSpace.z = 0;
             Vector3 centerToCursorScreenSpace = cursorScreenSpace - new Vector3(Screen.width / 2, Screen.height / 2, 0);
-            centerToCursorScreenSpace = cursorScreenSpace.normalized * PixelsPerUnit * PlayerController.CURSOR_RADIUS;
-            transform.position = Camera.main.ScreenToWorldPoint(centerToCursorScreenSpace);
+            Debug.Log("centerToCursorScreenSpace: " + centerToCursorScreenSpace);
+            centerToCursorScreenSpace = centerToCursorScreenSpace.normalized * PixelsPerUnit * PlayerController.CURSOR_RADIUS;
+            Debug.Log("centerToCursorScreenSpace.normalized * PixelsPerUnit * PlayerController.CURSOR_RADIUS: " + centerToCursorScreenSpace);
+            transform.position = player.transform.position + (centerToCursorScreenSpace / PixelsPerUnit);
+            Debug.Log("transform.position (world): " + transform.position);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
+
 
         if (player.state == PlayerController.State.Attached || player.state == PlayerController.State.Swinging)
         {
@@ -49,7 +66,7 @@ public class FairyMove : MonoBehaviour
         {
             hum.Stop();
         }
-
+        Debug.Log("-------------------");
 
     }
 }

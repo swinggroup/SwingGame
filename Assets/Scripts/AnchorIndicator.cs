@@ -7,6 +7,7 @@ using UnityEngine;
 public class AnchorIndicator : MonoBehaviour
 {
     public PlayerController player;
+    public FairyMove cursor;
     // Start is called before the first frame update
     private const float OVERLAP_CIRCLE_RADIUS = 1.8f;
     private Color defaultColor;
@@ -23,7 +24,7 @@ public class AnchorIndicator : MonoBehaviour
         {
             defaultColor = Color.cyan; // was red
         }
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = player.transform.position + (cursor.transform.position - player.transform.position).normalized * PlayerController.GRAPPLE_RANGE;
         Vector2 ourPos = new(player.transform.position.x, player.transform.position.y);
         Vector2 unitVector = (mousePos - ourPos).normalized;
 

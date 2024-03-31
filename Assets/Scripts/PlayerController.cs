@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     public Rope rope;
     public AnchorIndicator anchorIndicator;
     public AudioSource windSource;
+    public FairyMove Cursor;
 
     /******************************************************************************************
      * Constants 
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
     public static readonly float BACKJUMP_FORCE = 7;
     public static readonly float CURSOR_RADIUS = 3;
     public static readonly float WORLD_TO_SCREEN = 16;
+    public static readonly float RELEASE_RADIUS = 2;
 
 
     /******************************************************************************************
@@ -657,9 +659,9 @@ public class PlayerController : MonoBehaviour
 
     bool MouseInPlayerRadius()
     {
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mouse = Cursor.transform.position;
         Vector2 ourPos = new Vector2(this.transform.position.x, this.transform.position.y);
-        return Vector2.Distance(mouse, ourPos) <= CURSOR_RADIUS;
+        return Vector2.Distance(mouse, ourPos) <= RELEASE_RADIUS;
     }
 
     void HandleAttached()
