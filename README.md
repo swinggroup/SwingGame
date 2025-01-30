@@ -1,10 +1,10 @@
 # Swing Game  
-*A physics-based 2D platformer focused on swinging mechanics*  
+Game development is currently WIP
 
-![Swing Game Gif Gameplay](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTAwYnNhNjl0YjNlaTZtdTZ0cHNhcXdlZGRyZmN6ODZsYXdtNThiYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dQr9MySeGq5fKoCzo6/giphy.gif)
+![Swing Game Gif Gameplay](https://github.com/swinggroup/SwingGame/blob/master/Assets/swing_example.gif)
 
 ## 🚀 Overview  
-**Swing Game** is a WIP challenging 2D Foddian platformer where players must navigate creatively designed obstacles using unique swinging mechanics. The game emphasizes precision, momentum, and mastery, requiring players to overcome levels that defy real-world physics.  
+**Swing Game** is a challenging 2D Foddian platformer where players must navigate creatively designed obstacles using unique swinging mechanics. The game emphasizes precision, momentum, and mastery, requiring players to overcome levels that defy real-world physics.  
 
 ![Swing Game Picture 1](https://cdn.discordapp.com/attachments/495413808139862026/1334446569956573265/image.png?ex=679c8fb7&is=679b3e37&hm=2f5821255479627398a0f3c84689e265ed0870e960db600b87f9e85d29fb52d4&)
 ## 🎮 Key Features  
